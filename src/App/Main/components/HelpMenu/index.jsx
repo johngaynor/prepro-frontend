@@ -4,20 +4,15 @@ import {
   Button,
   Card,
   Grid,
-  Form,
-  Message,
   Label,
   Dropdown,
   TextArea,
   GridColumn,
 } from "semantic-ui-react";
-import Spinner from "../Spinner";
 import { useSubmitSupportTicket } from "./actions";
 import useAppStore from "../../../store";
-import toast from "react-hot-toast";
 
 const HelpMenu = ({ isOpen, setOpen }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({ reason: "", details: "" });
 
   const submitSupportTicket = useSubmitSupportTicket();
@@ -46,7 +41,6 @@ const HelpMenu = ({ isOpen, setOpen }) => {
   ];
 
   function submitForm() {
-    console.log("submitting form");
     submitSupportTicket(formValues.reason, formValues.details, user);
     setOpen(false);
   }
@@ -68,7 +62,6 @@ const HelpMenu = ({ isOpen, setOpen }) => {
         Help Menu
       </Modal.Header>
       <Modal.Content style={{ backgroundColor: "#F0F0F0	" }}>
-        {isLoading && <Spinner />}
         <Card fluid>
           <Card.Header
             textAlign="center"
