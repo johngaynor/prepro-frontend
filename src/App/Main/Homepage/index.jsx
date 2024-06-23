@@ -1,15 +1,15 @@
 import React from "react";
 import Dashboard from "./dashboard";
 import Spinner from "../components/Spinner";
-import useAppStore from "../../store";
+import AppContext from "../components/Context/appContext";
 
 const Homepage = ({ startsWith }) => {
-  const { isAuthenticated, userLoading, appsLoading } = useAppStore();
+  const { userLoading, auth, appsLoading } = React.useContext(AppContext);
 
   if (userLoading || appsLoading) {
     return <Spinner />;
   }
-  if (!isAuthenticated) {
+  if (!auth) {
     return (
       <div>
         <div

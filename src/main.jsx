@@ -3,9 +3,12 @@ import ReactDOM from "react-dom/client";
 import App from "./App/App.jsx";
 import "./index.css";
 import "semantic-ui-css/semantic.min.css";
+import { AppProvider } from "./App/Main/components/Context/appContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <AppProvider>
+      <App />
+    </AppProvider>
   </React.StrictMode>
 );

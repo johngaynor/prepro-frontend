@@ -9,12 +9,12 @@ import {
   Transition,
   Container,
 } from "semantic-ui-react";
-import useAppStore from "../../store";
+import AppContext from "../components/Context/appContext";
 
 const Dashboard = ({ startsWith }) => {
   const [search, setSearch] = useState("");
 
-  const { user, apps } = useAppStore();
+  const { user, apps } = React.useContext(AppContext);
   const cardGroup = apps
     .filter(
       (app) =>
@@ -67,7 +67,7 @@ const Dashboard = ({ startsWith }) => {
     );
   }
   return (
-    <div className="header">
+    <div className="header" style={{ marginTop: "80px" }}>
       <Segment basic textAlign="center">
         <Header as="h2" textAlign="center">
           {user.name}

@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Breadcrumb, Icon } from "semantic-ui-react";
-import useAppStore from "../../../store";
+import AppContext from "../Context/appContext";
 
 const BreadCrumb = ({ path }) => {
-  const { isAuthenticated } = useAppStore();
+  const { auth } = React.useContext(AppContext);
   const routeParts = path.split("/");
   let crumbPath = "/";
   const filteredParts = routeParts.filter((part) => part !== "");
@@ -21,7 +21,7 @@ const BreadCrumb = ({ path }) => {
       </Link>
     );
   });
-  if (isAuthenticated) {
+  if (auth) {
     return (
       <Breadcrumb style={{ paddingBottom: "10px" }}>
         <Link to="/">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Button,
@@ -9,14 +9,27 @@ import {
   TextArea,
   GridColumn,
 } from "semantic-ui-react";
-import { useSubmitSupportTicket } from "./actions";
-import useAppStore from "../../../store";
+import { apiCall } from "../../../services/api";
+import { toast } from "react-hot-toast";
+import AppContext from "../Context/appContext";
+import App from "../../../App";
 
 const HelpMenu = ({ isOpen, setOpen }) => {
   const [formValues, setFormValues] = useState({ reason: "", details: "" });
 
-  const submitSupportTicket = useSubmitSupportTicket();
-  const { user } = useAppStore();
+  const { user } = React.useContext(AppContext);
+
+  function submitSupportTicket(user, type, message) {
+    apiCall("post", "/api/support/submit", { user, type, message })
+      .then((res) => {
+        toast.success(
+          "Thanks for submitting a ticket, we will contact you shortly with a solution!"
+        );
+      })
+      .catch((err) => {
+        toast.error(`Error submitting support ticket: ${err}`);
+      });
+  }
 
   const reasonOptions = [
     { key: 1, text: "Ask a Question", value: "Ask a Question" },
@@ -41,7 +54,7 @@ const HelpMenu = ({ isOpen, setOpen }) => {
   ];
 
   function submitForm() {
-    submitSupportTicket(formValues.reason, formValues.details, user);
+    submitSupportTicket(user, formValues.reason, formValues.details);
     setOpen(false);
   }
 
