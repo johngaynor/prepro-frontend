@@ -67,11 +67,11 @@ const Navbar = ({}) => {
     <Menu fixed="top" inverted color="blue" size="tiny">
       <Link to="/" className="normal item">
         {/* <Icon name="image outline" size="large" /> */}
-        <img
+        {/* <img
           src={Logo}
           alt="logo"
           style={{ height: "8rem", width: "8rem", marginRight: "10px" }}
-        />
+        /> */}
       </Link>
       {helpMenuOpen && (
         <HelpMenu isOpen={helpMenuOpen} setOpen={setHelpMenuOpen} />
