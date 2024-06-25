@@ -1,4 +1,4 @@
-import { Grid, Item, Label, Input, TextArea } from "semantic-ui-react";
+import { Grid, Label, Input, TextArea, Dropdown } from "semantic-ui-react";
 
 /**
  * InputField global component
@@ -8,8 +8,9 @@ import { Grid, Item, Label, Input, TextArea } from "semantic-ui-react";
  * @param {string | number} props.value - The value of the input field
  * @param {function} props.onChange - The function to call when the value of the input field changes
  * @param {string} [props.placeholder] - The placeholder text for the input field. Defaults to the label if not provided
- * @param {boolean} [props.disabled=false] - Whether the input field should be disabled
- * @param {boolean} [props.loading=false] - Whether to show a loading indicator in the input field
+ * @param {boolean} [props.disabled] - Whether the input field should be disabled
+ * @param {boolean} [props.loading] - Whether to show a loading indicator in the input field
+ * @param {boolean|string} [props.error=false] - Error message or flag to display error state
  *
  * @returns {JSX.Element} The rendered InputField component
  */
@@ -21,10 +22,15 @@ export const InputField = ({
   placeholder,
   disabled = false,
   loading = false,
+  error = false,
 }) => {
   return (
     <Grid.Column>
-      <Label horizontal style={{ minWidth: "45%", textAlign: "center" }}>
+      <Label
+        horizontal
+        style={{ minWidth: "45%", textAlign: "center" }}
+        color={error ? "red" : null}
+      >
         {label}:
       </Label>
       <Input
@@ -35,9 +41,13 @@ export const InputField = ({
         onChange={onChange}
         disabled={disabled}
         loading={loading}
-      >
-        <input />
-      </Input>
+        error={error ? true : false}
+      />
+      {error && (
+        <div>
+          <div className="ui red pointing label">{error}</div>
+        </div>
+      )}
     </Grid.Column>
   );
 };
@@ -81,6 +91,62 @@ export const TextAreaField = ({
         onChange={onChange}
         disabled={disabled}
       />
+    </Grid.Column>
+  );
+};
+
+/**
+ * DropdownField global component
+ *
+ * @param {string} props.label - The label for the dropdown field
+ * @param {string | number} props.value - The selected value(s) of the dropdown
+ * @param {Function} props.onChange - The callback function triggered on value change
+ * @param {string} [props.placeholder] - The placeholder text for the dropdown
+ * @param {Array<Object>} props.options - The options to display in the dropdown
+ * @param {boolean} [props.multiple=false] - Flag to allow multiple selections
+ * @param {boolean} [props.search=false] - Flag to allow searching within the dropdown options
+ * @param {boolean} [props.allowAdditions=false] - Flag to allow adding new options
+ * @param {boolean|string} [props.error=false] - Error message or flag to display error state
+ *
+ * @returns {JSX.Element} The rendered DropdownField component.
+ */
+export const DropdownField = ({
+  label,
+  value,
+  onChange,
+  placeholder,
+  options,
+  multiple = false,
+  search = false,
+  allowAdditions = false,
+  error = false,
+}) => {
+  return (
+    <Grid.Column>
+      <Label
+        horizontal
+        style={{ minWidth: "45%", textAlign: "center" }}
+        color={error ? "red" : null}
+      >
+        {label}:
+      </Label>
+      <Dropdown
+        clearable
+        selection
+        fluid
+        placeholder={placeholder ?? label}
+        options={options}
+        value={value}
+        onChange={onChange}
+        multiple={multiple}
+        search={search}
+        allowAdditions={allowAdditions}
+      />
+      {error && (
+        <div>
+          <div className="ui red pointing label">{error}</div>
+        </div>
+      )}
     </Grid.Column>
   );
 };
