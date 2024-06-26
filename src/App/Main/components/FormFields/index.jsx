@@ -26,13 +26,16 @@ export const InputField = ({
 }) => {
   return (
     <Grid.Column>
-      <Label
-        horizontal
-        style={{ minWidth: "45%", textAlign: "center" }}
-        color={error ? "red" : null}
-      >
-        {label}:
-      </Label>
+      {label && (
+        <Label
+          horizontal
+          style={{ minWidth: "45%", textAlign: "center" }}
+          color={error ? "red" : null}
+        >
+          {label}:
+        </Label>
+      )}
+
       <Input
         placeholder={placeholder ?? label}
         type={type}

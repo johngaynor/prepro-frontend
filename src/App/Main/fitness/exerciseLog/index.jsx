@@ -4,7 +4,7 @@ import Summary from "./Summary";
 import Exercises from "./Exercises";
 
 const ExerciseLog = () => {
-  const [activeTab, setActiveTab] = React.useState(0);
+  const [activeTab, setActiveTab] = React.useState(1);
 
   return (
     <React.Fragment>
