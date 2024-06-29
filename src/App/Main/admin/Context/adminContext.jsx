@@ -1,36 +1,67 @@
 import React from "react";
+import { apiCall } from "../../../services/api";
+import toast from "react-hot-toast";
 
 export const AdminContext = React.createContext();
 
 export const AdminProvider = ({ children }) => {
-  const [apiUsers, setApiUsers] = React.useState([
-    {
-      id: "103338778199308905720",
-      name: "John Gaynor",
-    },
-    {
-      id: "114883008758552617790",
-      name: "Tyler Goodall",
-    },
-  ]);
-  const [allApps, setAllApps] = React.useState([
-    {
-      id: 1,
-      name: "Test App",
-      link: "/test",
-    },
-    {
-      id: 2,
-      name: "Logs",
-      link: "/logs",
-    },
-  ]);
-  const [appAccess, setAppAccess] = React.useState([
-    { appId: 1, userId: "103338778199308905720" },
-  ]);
+  const [apiUsers, setApiUsers] = React.useState([]);
+  const [allApps, setAllApps] = React.useState([]);
+  const [appAccess, setAppAccess] = React.useState([]);
+
+  function getAllApps() {
+    apiCall("get", "/api/admin/apps", { credentials: "include" })
+      .then((res) => {
+        if (res.result.length) {
+          setAllApps(res.result);
+        } else {
+          toast.error("No apps returned...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting admin apps: ${err}`);
+      });
+  }
+
+  function getAllAccess() {
+    apiCall("get", "/api/admin/access", { credentials: "include" })
+      .then((res) => {
+        if (res.result.length) {
+          setAppAccess(res.result);
+        } else {
+          toast.error("No apps returned...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting all user access: ${err}`);
+      });
+  }
+
+  function getAllUsers() {
+    apiCall("get", "/api/admin/users", { credentials: "include" })
+      .then((res) => {
+        if (res.result.length) {
+          setApiUsers(res.result);
+        } else {
+          toast.error("No apps returned...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting all user access: ${err}`);
+      });
+  }
 
   return (
-    <AdminContext.Provider value={{ apiUsers, allApps, appAccess }}>
+    <AdminContext.Provider
+      value={{
+        apiUsers,
+        allApps,
+        appAccess,
+        getAllApps,
+        getAllAccess,
+        getAllUsers,
+      }}
+    >
       {children}
     </AdminContext.Provider>
   );

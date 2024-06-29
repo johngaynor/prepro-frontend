@@ -7,7 +7,20 @@ import AdminContext from "../Context/adminContext";
 const ManageUsers = () => {
   const [activeUser, setActiveUser] = React.useState(null);
 
-  const { apiUsers, allApps, appAccess } = React.useContext(AdminContext);
+  const {
+    apiUsers,
+    allApps,
+    appAccess,
+    getAllApps,
+    getAllAccess,
+    getAllUsers,
+  } = React.useContext(AdminContext);
+
+  React.useEffect(() => {
+    getAllApps();
+    getAllAccess();
+    getAllUsers();
+  }, []);
 
   const activeUserApps = allApps?.map((app) => {
     const match = appAccess?.find(
@@ -48,7 +61,10 @@ const ManageUsers = () => {
       <DropdownField
         label="Selected User"
         placeholder="Select a user to manage..."
-        options={apiUsers.map((u) => ({ text: u.name, value: u.id }))}
+        options={apiUsers.map((u) => ({
+          text: u.name + " - " + u.email,
+          value: u.id,
+        }))}
         value={activeUser}
         onChange={(e, { value }) => setActiveUser(value)}
       />
