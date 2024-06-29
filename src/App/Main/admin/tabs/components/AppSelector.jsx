@@ -58,7 +58,7 @@ const AppSelector = ({ activeUser, activeUserApps }) => {
           <Card key={i}>
             <Card.Header
               style={{
-                backgroundColor: "#db2828",
+                backgroundColor: "#2185d0",
                 fontWeight: "bold",
                 color: "White",
               }}
