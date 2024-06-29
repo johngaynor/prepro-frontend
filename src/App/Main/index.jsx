@@ -3,7 +3,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Homepage from "./Homepage";
 import BreadCrumb from "./components/Breadcrumb";
 import Logs from "./components/DailyLogs/logs";
-// import LogProvider from "./components/Context/logContext";
+import ExerciseLog from "./fitness/exerciseLog";
+import AdminConsole from "./admin";
 import { LogProvider } from "./components/Context/logContext";
 
 const Main = (props) => {
@@ -15,7 +16,9 @@ const Main = (props) => {
       <LogProvider>
         <Routes>
           <Route path="/" element={<Homepage startsWith={"/"} />} />
+          <Route path="/admin" element={<AdminConsole />} />
           <Route path="/logs" element={<Logs />} />
+          <Route path="/fitness/log" element={<ExerciseLog />} />
           <Route
             path="*"
             element={<Homepage startsWith={location.pathname} />}
