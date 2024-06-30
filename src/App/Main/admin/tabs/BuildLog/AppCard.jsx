@@ -35,7 +35,16 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
             {Object.keys(selectedApps[app.id]).map((text, i) => (
               <Grid.Row key={"app-change" + i} style={{ marginTop: "-20px" }}>
                 <Grid.Column width={2}>
-                  <Button color="red" icon="cancel" type="button" />
+                  <Button
+                    color="red"
+                    icon="cancel"
+                    type="button"
+                    onClick={() => {
+                      const apps = { ...selectedApps };
+                      delete apps[app.id][text];
+                      setSelectedApps(apps);
+                    }}
+                  />
                 </Grid.Column>
                 <Grid.Column width={14}>
                   <InputField
