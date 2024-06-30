@@ -198,6 +198,14 @@ const DailyLogForm = () => {
               />
             </Form.Field>
             <Form.Field>
+              <label>Date</label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </Form.Field>
+            <Form.Field>
               <label>Bodyweight</label>
               <input
                 placeholder="Bodyweight"
@@ -205,14 +213,6 @@ const DailyLogForm = () => {
                 value={formData.pmWeight}
                 name="pmWeight"
                 type="number"
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Date</label>
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
               />
             </Form.Field>
             <Form.Field>
