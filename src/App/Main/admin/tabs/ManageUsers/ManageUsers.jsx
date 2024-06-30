@@ -1,9 +1,9 @@
 import React from "react";
 import { Tab, Header } from "semantic-ui-react";
-import { DropdownField } from "../../components/FormFields";
-import AppSelector from "./components/AppSelector";
-import AdminContext from "../Context/adminContext";
-import Spinner from "../../components/Spinner";
+import { DropdownField } from "../../../components/FormFields";
+import AppSelector from "./AppSelector";
+import AdminContext from "../../Context/adminContext";
+import Spinner from "../../../components/Spinner";
 
 const ManageUsers = () => {
   const [activeUser, setActiveUser] = React.useState(null);

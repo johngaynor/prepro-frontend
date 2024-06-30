@@ -1,6 +1,6 @@
 import Tab from "../components/Tab";
-import ManageUsers from "./tabs/ManageUsers";
-import BuildLog from "./tabs/BuildLog";
+import ManageUsers from "./tabs/ManageUsers/ManageUsers";
+import BuildLog from "./tabs/BuildLog/BuildLog";
 import { AdminProvider } from "./Context/adminContext";
 
 const AdminConsole = () => {

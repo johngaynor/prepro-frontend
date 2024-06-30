@@ -1,12 +1,10 @@
 import React from "react";
 import { Grid, Button, Card, Header, Label } from "semantic-ui-react";
 import { InputField, DropdownField } from "../../../../components/FormFields";
-import toast from "react-hot-toast";
 
 const ExerciseCard = ({ item, id }) => {
   const [exercise, setExercise] = React.useState(item);
 
-  //   console.log(exercise);
   return (
     <Grid.Column
       mobile={16} // < 768
