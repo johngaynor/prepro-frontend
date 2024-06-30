@@ -19,6 +19,7 @@ export const LogProvider = ({ children }) => {
     energy: "",
     workoutComments: "",
     dayComments: "",
+    logType: "",
   });
 
   return (

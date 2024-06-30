@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { LogContext } from "../Context/logContext";
 import { Form, Button, Segment, Header } from "semantic-ui-react";
+import { useNavigate } from "react-router-dom";
+import { Radio } from "semantic-ui-react";
 
 const DailyLogForm = () => {
-  const { logType, formData, setFormData, date, setDate } =
-    React.useContext(LogContext);
+  const navigate = useNavigate();
+
+  const { formData, setFormData, date, setDate } = React.useContext(LogContext);
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -29,13 +32,21 @@ const DailyLogForm = () => {
       });
       const data = await response.json();
       console.log(data);
+      navigate("/logs");
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
+  const handleLogTypeChange = (e, { value }) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      logType: value,
+    }));
+  };
+
   const renderForm = () => {
-    if (logType === "morning") {
+    if (formData.logType === "MORNING") {
       return (
         <Segment>
           <Form onSubmit={handleSubmit}>
@@ -51,6 +62,7 @@ const DailyLogForm = () => {
             <Form.Field>
               <label>Bodyweight</label>
               <input
+                placeholder="Bodyweight"
                 name="amWeight"
                 value={formData.amWeight}
                 onChange={handleChange}
@@ -72,13 +84,13 @@ const DailyLogForm = () => {
               />
             </Form.Field>
             <Form.Field>
-              <label># of Hours</label>
+              <label>Hours of Sleep</label>
               <input
                 name="sleepHours"
                 value={formData.sleepHours}
                 onChange={handleChange}
                 type="number"
-                placeholder="# of hours"
+                placeholder="Hours"
               />
             </Form.Field>
             <Form.Field>
@@ -135,21 +147,74 @@ const DailyLogForm = () => {
           </Form>
         </Segment>
       );
-    } else if (logType === "night") {
+    } else if (formData.logType === "NIGHT") {
       return (
         <Segment>
           <Form onSubmit={handleSubmit}>
             <Header as="h3">Night Log</Header>
-            {/* <Form.Field>
+            <Form.Field>
+              <input
+                type="hidden"
+                name="amWeight"
+                value={(formData.amWeight = 0)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <input
+                type="hidden"
+                name="sleepQuality"
+                value={(formData.sleepQuality = 0)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <input
+                type="hidden"
+                name="sleepHours"
+                value={(formData.sleepHours = 0)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <input
+                type="hidden"
+                name="stress"
+                value={(formData.stress = 0)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <input
+                type="hidden"
+                name="soreness"
+                value={(formData.soreness = 0)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <input type="hidden" name="mood" value={(formData.mood = 0)} />
+            </Form.Field>
+            <Form.Field>
+              <input
+                type="hidden"
+                name="energy"
+                value={(formData.energy = 0)}
+              />
+            </Form.Field>
+            <Form.Field>
               <label>Bodyweight</label>
               <input
                 placeholder="Bodyweight"
                 onChange={handleChange}
                 value={formData.pmWeight}
-                name="amWeight"
+                name="pmWeight"
                 type="number"
               />
-            </Form.Field> */}
+            </Form.Field>
+            <Form.Field>
+              <label>Date</label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </Form.Field>
             <Form.Field>
               <label>Workout Summary</label>
               <input
@@ -175,13 +240,16 @@ const DailyLogForm = () => {
         </Segment>
       );
     } else {
-      return <div>Invalid log type</div>; // Fallback for invalid log type
+      return <div>Invalid log type</div>;
     }
   };
 
   return (
     <div>
-      <h1>{logType.charAt(0).toUpperCase() + logType.slice(1)} Log Form</h1>
+      <h1>
+        {formData.logType.charAt(0).toUpperCase() + formData.logType.slice(1)}{" "}
+        Log Form
+      </h1>
       {renderForm()}
     </div>
   );

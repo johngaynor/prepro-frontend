@@ -24,10 +24,11 @@ const Logs = () => {
     setLogs,
     logsLoading,
     setLogsLoading,
-    logType,
     setLogType,
     selectedLog,
     setSelectedLog,
+    formData,
+    setFormData,
   } = React.useContext(LogContext);
 
   const handleLogClick = (log) => {
@@ -54,22 +55,52 @@ const Logs = () => {
 
   console.log(logs);
 
-  const handleLogTypeChange = (e, { value }) => setLogType(value);
+  const handleLogTypeChange = (e, { value }) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      logType: value,
+    }));
+  };
 
   return (
-    <div style={{ width: "70%", height: "100%", margin: "5rem auto" }}>
-      <Header as="h1">Logs</Header>
-      <Segment>
+    <div
+      style={{
+        width: "70%",
+        height: "100%",
+        margin: "5rem auto",
+        // backgroundColor: "#f9f9f9",
+        padding: "20px",
+        borderRadius: "8px",
+      }}
+    >
+      <Segment
+        style={{
+          backgroundColor: "#fff",
+          padding: "20px",
+          borderRadius: "8px",
+        }}
+      >
         <Grid>
           <Grid.Row>
-            <Grid.Column width={16}>
-              <Container style={{ padding: "20px" }}>
+            <Grid.Column>
+              <Container style={{ padding: "30px" }}>
                 <Card.Group>
-                  <Header>Create New Log</Header>
+                  <Header
+                    as="h2"
+                    style={{ marginBottom: "20px", textAlign: "center" }}
+                  >
+                    Create New Log
+                  </Header>
                   <div
                     style={{
                       display: "flex",
                       flexDirection: "column",
+                      backgroundColor: "#e8e8e8",
+                      padding: "20px",
+                      width: "100%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "8px",
                     }}
                   >
                     <div
@@ -80,28 +111,37 @@ const Logs = () => {
                       <Radio
                         label="Morning Log"
                         name="logType"
-                        value="morning"
-                        checked={logType === "morning"}
+                        value="MORNING"
+                        checked={formData.logType === "MORNING"}
                         onChange={handleLogTypeChange}
                         style={{
-                          marginRight: "10px",
+                          marginRight: "80px",
                         }}
                       />
                       <Radio
                         label="Night Log"
                         name="logType"
-                        value="night"
-                        checked={logType === "night"}
+                        value="NIGHT"
+                        checked={formData.logType === "NIGHT"}
                         onChange={handleLogTypeChange}
                       />
                     </div>
 
                     <Button
                       as={Link}
-                      to={`/logs/new/${logType}`}
+                      to={`/logs/new/${formData.logType}`}
                       style={{
                         margin: "10px",
+                        backgroundColor: "#2185d0",
+                        color: "white",
+                        width: "40%",
                       }}
+                      onMouseOver={(e) =>
+                        (e.currentTarget.style.backgroundColor = "blue")
+                      }
+                      onMouseOut={(e) =>
+                        (e.currentTarget.style.backgroundColor = "#2185d0")
+                      }
                     >
                       <Button.Content>Create</Button.Content>
                     </Button>
@@ -114,65 +154,127 @@ const Logs = () => {
             <Grid.Column width={16}>
               <Container
                 style={{
-                  padding: "20px",
+                  padding: "30px",
                   display: "flex",
                   flexWrap: "wrap",
                 }}
               >
                 <Card.Group>
-                  <Header>Log History</Header>
-                  <Container style={{ padding: "20px" }}>
-                    {logs.map((log) => (
-                      <Card key={log.id} onClick={() => handleLogClick(log)}>
-                        <Card.Content>
-                          <Card.Header>{log.date}</Card.Header>
-                          <Card.Description>{log.amWeight}</Card.Description>
-                        </Card.Content>
-                      </Card>
-                    ))}
-                    {selectedLog && (
-                      <Form
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          padding: "20px",
-                          width: "300px",
-                        }}
-                      >
-                        <Form.Field>
-                          <label>Date</label>
-                          <Input value={selectedLog.date} readOnly />
-                        </Form.Field>
-                        <Form.Field>
-                          <label>AM Weight</label>
-                          <Input value={selectedLog.amWeight} readOnly />
-                        </Form.Field>
-                        <Form.Field>
-                          <label>Sleep Quality</label>
-                          <Input value={selectedLog.sleepQuality} readOnly />
-                        </Form.Field>
-                        <Form.Field>
-                          <label>Sleep Hours</label>
-                          <Input value={selectedLog.sleepHours} readOnly />
-                        </Form.Field>
-                        <Form.Field>
-                          <label>Stress</label>
-                          <Input value={selectedLog.stress} readOnly />
-                        </Form.Field>
-                        <Form.Field>
-                          <label>Soreness</label>
-                          <Input value={selectedLog.soreness} readOnly />
-                        </Form.Field>
-                        <Form.Field>
-                          <label>Mood</label>
-                          <Input value={selectedLog.mood} readOnly />
-                        </Form.Field>
-                        <Form.Field>
-                          <label>Energy</label>
-                          <Input value={selectedLog.energy} readOnly />
-                        </Form.Field>
-                      </Form>
-                    )}
+                  <Header as="h2" style={{ margin: "20px 100px" }}>
+                    Log History
+                  </Header>
+                  <Container style={{ padding: "20px", width: "100%" }}>
+                    {logs
+                      .sort((a, b) => new Date(b.date) - new Date(a.date))
+                      .map((log) => {
+                        const dateObj = new Date(log.date);
+                        const formattedDate = new Intl.DateTimeFormat("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        }).format(dateObj);
+
+                        return (
+                          <Card
+                            key={log.id}
+                            onClick={() => handleLogClick(log)}
+                            style={{
+                              backgroundColor: "#f0f0f0",
+                              margin: "10px",
+                              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                              transition: "transform 0.2s",
+                            }}
+                            onMouseOver={(e) =>
+                              (e.currentTarget.style.transform = "scale(1.05)")
+                            }
+                            onMouseOut={(e) =>
+                              (e.currentTarget.style.transform = "scale(1)")
+                            }
+                          >
+                            <Card.Content>
+                              <Card.Header
+                                style={{
+                                  color: "#333",
+                                  fontSize: "18px",
+                                  fontWeight: "bold",
+                                  lineHeight: "1.5",
+                                }}
+                              >
+                                {formattedDate}
+                              </Card.Header>
+                              <Card.Meta
+                                style={{
+                                  color: "#666",
+                                  fontSize: "16px",
+                                  lineHeight: "1.4",
+                                  textTransform: "capitalize",
+                                }}
+                              >
+                                <strong>Log Type: </strong>
+                                {log.logType}
+                              </Card.Meta>
+                              <Card.Description
+                                style={{
+                                  color: "#666",
+                                  fontSize: "16px",
+                                  lineHeight: "1.4",
+                                }}
+                              >
+                                {log.amWeight && (
+                                  <p>
+                                    <strong>Morning Weight:</strong>{" "}
+                                    {log.amWeight}
+                                  </p>
+                                )}
+                                {log.sleepQuality && (
+                                  <p>
+                                    <strong>Sleep Quality:</strong>{" "}
+                                    {log.sleepQuality}
+                                  </p>
+                                )}
+                                {log.sleepHours && (
+                                  <p>
+                                    <strong>Sleep Hours:</strong>{" "}
+                                    {log.sleepHours}
+                                  </p>
+                                )}
+                                {log.stress && (
+                                  <p>
+                                    <strong>Stress:</strong> {log.stress}
+                                  </p>
+                                )}
+                                {log.soreness && (
+                                  <p>
+                                    <strong>Soreness:</strong> {log.soreness}
+                                  </p>
+                                )}
+                                {log.mood && (
+                                  <p>
+                                    <strong>Mood:</strong> {log.mood}
+                                  </p>
+                                )}
+                                {log.energy && (
+                                  <p>
+                                    <strong>Energy:</strong> {log.energy}
+                                  </p>
+                                )}
+                                {log.workoutComments && (
+                                  <p>
+                                    <strong>Workout Comments:</strong>{" "}
+                                    {log.workoutComments}
+                                  </p>
+                                )}
+                                {log.dayComments && (
+                                  <p>
+                                    <strong>Day Comments:</strong>{" "}
+                                    {log.dayComments}
+                                  </p>
+                                )}
+                              </Card.Description>
+                            </Card.Content>
+                          </Card>
+                        );
+                      })}
                   </Container>
                 </Card.Group>
               </Container>
