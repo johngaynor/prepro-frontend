@@ -35,7 +35,7 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
             {Object.keys(selectedApps[app.id]).map((text, i) => (
               <Grid.Row key={"app-change" + i} style={{ marginTop: "-20px" }}>
                 <Grid.Column width={2}>
-                  <Button color="red" icon="cancel" />
+                  <Button color="red" icon="cancel" type="button" />
                 </Grid.Column>
                 <Grid.Column width={14}>
                   <InputField
@@ -71,6 +71,7 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
                   [app.id]: { ...selectedApps[app.id], [orderId]: "" },
                 });
               }}
+              type="button"
             />
           </Container>
         </Card.Content>

@@ -26,8 +26,6 @@ const ManageUsers = () => {
     if (!appAccess && !accessLoading) getAllAccess();
   });
 
-  console.log(allApps, appAccess);
-
   const activeUserApps = allApps?.map((app) => {
     const match = appAccess?.find(
       (a) => a.appId === app.id && a.userId === activeUser

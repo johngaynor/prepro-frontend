@@ -1,17 +1,37 @@
 import React from "react";
-import { Grid, Header, Tab } from "semantic-ui-react";
+import { Grid, Header, Tab, Button, Container, Form } from "semantic-ui-react";
 import { DropdownField, InputField } from "../../../components/FormFields";
 import AdminContext from "../../Context/adminContext";
 import AppCard from "./AppCard";
+import Spinner from "../../../components/Spinner";
+import toast from "react-hot-toast";
 
 const BuildLog = () => {
   const [selectedApps, setSelectedApps] = React.useState({});
   const [version, setVersion] = React.useState("");
-  const { allApps, appsLoading, getAllApps } = React.useContext(AdminContext);
+  const [formErrors, setFormErrors] = React.useState({});
+
+  const { allApps, appsLoading, getAllApps, publishBuild, buildLoading } =
+    React.useContext(AdminContext);
 
   React.useEffect(() => {
     if (!allApps && !appsLoading) getAllApps();
   });
+
+  const validateForm = (vals) => {
+    const errors = {
+      version: false,
+    };
+
+    if (!vals.version)
+      errors.version = "Please enter a version number for this build.";
+    if (errors.version) {
+      setFormErrors(errors);
+      return false;
+    }
+
+    return true;
+  };
 
   const handleAppChange = (vals) => {
     const newState = { ...selectedApps };
@@ -31,53 +51,104 @@ const BuildLog = () => {
     setSelectedApps(newState);
   };
 
+  const handleSubmitBuild = () => {
+    const changes = Object.keys(selectedApps).reduce((acc, app) => {
+      const retArr = [...acc];
+
+      const appId = parseInt(app);
+
+      Object.keys(selectedApps[appId]).forEach((t) => {
+        if (selectedApps[appId][t] !== "")
+          retArr.push({
+            appId,
+            textId: parseInt(t),
+            text: selectedApps[appId][t],
+          });
+      });
+
+      return retArr;
+    }, []);
+
+    if (!changes.length) {
+      toast.error("Please add app changes before publishing this build.");
+    } else publishBuild(version, changes);
+  };
+
   return (
     <Tab.Pane>
+      {(appsLoading || buildLoading) && <Spinner />}
       <Header as="h4">Run a Build:</Header>
-      <Grid columns={2}>
-        <DropdownField
-          label="Select Apps"
-          placeholder="Select apps to add build notes to..."
-          options={
-            allApps
-              ? allApps.map((u) => ({
-                  text: u.name,
-                  value: u.id,
-                }))
-              : []
+      <Form
+        onSubmit={() => {
+          const valid = validateForm({ version, apps: selectedApps });
+          if (valid) {
+            setFormErrors({});
+            handleSubmitBuild();
           }
-          multiple
-          search
-          value={Object.keys(selectedApps).map((a) => parseInt(a))}
-          onChange={(e, { value }) => handleAppChange(value)}
-        />
-        <InputField
-          value={version}
-          onChange={(e, { value }) => setVersion(value)}
-          label="Version"
-          placeholder="Enter a version number..."
-          type="string"
-        />
-      </Grid>
-      {!Object.keys(selectedApps).length ? (
-        <Header as="h5">
-          <em>Please select an app for the build.</em>
-        </Header>
-      ) : (
-        <>
-          <Header as="h4">Apps:</Header>
-          <Grid>
-            {Object.keys(selectedApps).map((app, i) => (
-              <AppCard
-                key={"app" + i}
-                app={allApps.find((a) => a.id === parseInt(app))}
-                selectedApps={selectedApps}
-                setSelectedApps={setSelectedApps}
+        }}
+      >
+        <Grid columns={2}>
+          <DropdownField
+            label="Select Apps"
+            placeholder="Select apps to add build notes to..."
+            options={
+              allApps
+                ? allApps.map((u) => ({
+                    text: u.name,
+                    value: u.id,
+                  }))
+                : []
+            }
+            multiple
+            search
+            value={Object.keys(selectedApps).map((a) => parseInt(a))}
+            onChange={(e, { value }) => handleAppChange(value)}
+          />
+          <InputField
+            value={version}
+            onChange={(e, { value }) => setVersion(value)}
+            label="Version"
+            placeholder="Enter a version number..."
+            type="string"
+            error={formErrors.version}
+          />
+        </Grid>
+        {!Object.keys(selectedApps).length ? (
+          <Header as="h5">
+            <em>Please select an app for the build.</em>
+          </Header>
+        ) : (
+          <>
+            <Header as="h4">Apps:</Header>
+            <Grid>
+              {Object.keys(selectedApps).map((app, i) => (
+                <AppCard
+                  key={"app" + i}
+                  app={allApps.find((a) => a.id === parseInt(app))}
+                  selectedApps={selectedApps}
+                  setSelectedApps={setSelectedApps}
+                />
+              ))}
+            </Grid>
+            <Container
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "20px",
+                width: "100%",
+              }}
+            >
+              <Button
+                style={{ marginRight: 0 }}
+                color="blue"
+                icon="save"
+                content="Submit"
+                type="submit"
               />
-            ))}
-          </Grid>
-        </>
-      )}
+            </Container>
+          </>
+        )}
+      </Form>
     </Tab.Pane>
   );
 };
