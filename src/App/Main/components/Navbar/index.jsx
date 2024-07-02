@@ -6,9 +6,11 @@ import Logo from "../../../images/logo-3.png";
 import { apiCall } from "../../../services/api";
 import { toast } from "react-hot-toast";
 import AppContext from "../Context/appContext";
+import ChangeLog from "../ChangeLog";
 
 const Navbar = ({}) => {
   const [helpMenuOpen, setHelpMenuOpen] = useState(false);
+  const [logOpen, setLogOpen] = useState(true);
   const isMobile = false; // this wil get modified later to adjust for window dimensions
 
   const {
@@ -21,6 +23,9 @@ const Navbar = ({}) => {
     setApps,
     appsLoading,
     setAppsLoading,
+    changeLog,
+    logLoading,
+    getChangeLog,
   } = React.useContext(AppContext);
 
   function authUser() {
@@ -58,8 +63,9 @@ const Navbar = ({}) => {
         setApps([]);
       }
       authUser();
-    } else if (!apps.length && !appsLoading) {
-      getApps();
+    } else {
+      if (!apps.length && !appsLoading) getApps();
+      if (!changeLog && !logLoading) getChangeLog();
     }
   }, [auth, authUser]);
 
@@ -75,6 +81,13 @@ const Navbar = ({}) => {
       </Link>
       {helpMenuOpen && (
         <HelpMenu isOpen={helpMenuOpen} setOpen={setHelpMenuOpen} />
+      )}
+      {changeLog && changeLog.length && (
+        <ChangeLog
+          logOpen={logOpen}
+          setLogOpen={setLogOpen}
+          changeLog={changeLog}
+        />
       )}
       <Menu.Item position="right">
         {auth ? (
