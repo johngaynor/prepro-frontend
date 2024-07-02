@@ -109,19 +109,17 @@ export const AdminProvider = ({ children }) => {
     }
   }
 
-  function publishBuild(version, changes) {
+  function publishBuild(version, changes, affectedUsers) {
     setBuildLoading(true);
+    const users = Array.from(new Set(affectedUsers));
     apiCall("post", "/api/admin/build", {
       credentials: "include",
       version,
       changes,
+      users,
     })
       .then((res) => {
-        if (res.result) {
-          toast.success("Successfully published build " + version);
-        } else {
-          toast.error("No apps returned...");
-        }
+        toast.success("Successfully published build " + version);
       })
       .catch((err) => {
         toast.error(`Error publishing build: ${err}`);

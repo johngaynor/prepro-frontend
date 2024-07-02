@@ -20,6 +20,7 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
       <Card fluid>
         <Card.Header textAlign="left">
           <Header as="h3">{app.name}</Header>
+          <p>{app.description}</p>
         </Card.Header>
         <Card.Content textAlign="left">
           <Grid columns={2}>

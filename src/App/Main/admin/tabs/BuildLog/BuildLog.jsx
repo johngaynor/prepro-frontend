@@ -8,14 +8,27 @@ import toast from "react-hot-toast";
 
 const BuildLog = () => {
   const [selectedApps, setSelectedApps] = React.useState({});
-  const [version, setVersion] = React.useState("");
+  const [version, setVersion] = React.useState("0.0.0");
   const [formErrors, setFormErrors] = React.useState({});
 
-  const { allApps, appsLoading, getAllApps, publishBuild, buildLoading } =
-    React.useContext(AdminContext);
+  const {
+    allApps,
+    appsLoading,
+    getAllApps,
+    publishBuild,
+    buildLoading,
+    appAccess,
+    accessLoading,
+    getAllAccess,
+    apiUsers,
+    usersLoading,
+    getAllUsers,
+  } = React.useContext(AdminContext);
 
   React.useEffect(() => {
     if (!allApps && !appsLoading) getAllApps();
+    if (!appAccess && !accessLoading) getAllAccess();
+    if (!apiUsers && !usersLoading) getAllUsers();
   });
 
   const validateForm = (vals) => {
@@ -52,31 +65,47 @@ const BuildLog = () => {
   };
 
   const handleSubmitBuild = () => {
-    const changes = Object.keys(selectedApps).reduce((acc, app) => {
-      const retArr = [...acc];
+    const buildObj = Object.keys(selectedApps).reduce(
+      (acc, app) => {
+        const retObj = { ...acc };
 
-      const appId = parseInt(app);
+        const appId = parseInt(app);
 
-      Object.keys(selectedApps[appId]).forEach((t) => {
-        if (selectedApps[appId][t] !== "")
-          retArr.push({
-            appId,
-            textId: parseInt(t),
-            text: selectedApps[appId][t],
+        // add in comments for each app
+        Object.keys(selectedApps[appId]).forEach((t) => {
+          if (selectedApps[appId][t] !== "")
+            retObj.changes.push({
+              appId,
+              textId: parseInt(t),
+              text: selectedApps[appId][t],
+            });
+        });
+
+        // add affected users
+        const allUsers = allApps.find((a) => a.id === appId)?.allUsers;
+        if (allUsers) {
+          apiUsers.forEach((u) => {
+            retObj.affectedUsers.push(u.id);
           });
-      });
+        } else {
+          appAccess.forEach((a) => {
+            if (a.appId === appId) retObj.affectedUsers.push(a.userId);
+          });
+        }
 
-      return retArr;
-    }, []);
+        return retObj;
+      },
+      { changes: [], affectedUsers: [] }
+    );
 
-    if (!changes.length) {
+    if (!buildObj.changes.length) {
       toast.error("Please add app changes before publishing this build.");
-    } else publishBuild(version, changes);
+    } else publishBuild(version, buildObj.changes, buildObj.affectedUsers);
   };
 
   return (
     <Tab.Pane>
-      {(appsLoading || buildLoading) && <Spinner />}
+      {(appsLoading || buildLoading || accessLoading) && <Spinner />}
       <Header as="h4">Run a Build:</Header>
       <Form
         onSubmit={() => {
