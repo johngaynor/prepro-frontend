@@ -7,15 +7,13 @@ import {
   Label,
   Container,
 } from "semantic-ui-react";
-import { InputField } from "../../../components/FormFields";
+import { DropdownField, InputField } from "../../../components/FormFields";
 
 const AppCard = ({ app, selectedApps, setSelectedApps }) => {
   return (
     <Grid.Column
-      mobile={16} // < 768
-      tablet={8} // 768-991
+      tablet={16} // 768-991
       computer={8} // 992-1199
-      largeScreen={5} // 1200+
     >
       <Card fluid>
         <Card.Header textAlign="left">
@@ -23,9 +21,9 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
           <p>{app.description}</p>
         </Card.Header>
         <Card.Content textAlign="left">
-          <Grid columns={2}>
+          <Grid columns={3}>
             <Grid.Column width={2} />
-            <Grid.Column>
+            <Grid.Column width={9}>
               <Label
                 horizontal
                 style={{ minWidth: "45%", textAlign: "center" }}
@@ -33,7 +31,15 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
                 Changes:
               </Label>
             </Grid.Column>
-            {Object.keys(selectedApps[app.id]).map((text, i) => (
+            <Grid.Column width={5}>
+              <Label
+                horizontal
+                style={{ minWidth: "45%", textAlign: "center" }}
+              >
+                Type:
+              </Label>
+            </Grid.Column>
+            {Object.keys(selectedApps[app.id]).map((item, i) => (
               <Grid.Row key={"app-change" + i} style={{ marginTop: "-20px" }}>
                 <Grid.Column width={2}>
                   <Button
@@ -42,19 +48,56 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
                     type="button"
                     onClick={() => {
                       const apps = { ...selectedApps };
-                      delete apps[app.id][text];
+                      delete apps[app.id][item];
                       setSelectedApps(apps);
                     }}
                   />
                 </Grid.Column>
-                <Grid.Column width={14}>
+                <Grid.Column width={9}>
                   <InputField
-                    value={selectedApps[app.id][text]}
+                    value={selectedApps[app.id][item].text}
                     placeholder="notes"
                     onChange={(e, { value }) =>
                       setSelectedApps({
                         ...selectedApps,
-                        [app.id]: { ...selectedApps[app.id], [text]: value },
+                        [app.id]: {
+                          ...selectedApps[app.id],
+                          [item]: {
+                            ...selectedApps[app.id][item],
+                            text: value,
+                          },
+                        },
+                      })
+                    }
+                  />
+                </Grid.Column>
+                <Grid.Column width={5}>
+                  <DropdownField
+                    options={[
+                      {
+                        text: "Bug Fix",
+                        value: "bug",
+                      },
+                      {
+                        text: "New Feature",
+                        value: "new",
+                      },
+                      {
+                        text: "Reverted Feature",
+                        value: "reverted",
+                      },
+                    ]}
+                    value={selectedApps[app.id][item].type}
+                    onChange={(e, { value }) =>
+                      setSelectedApps({
+                        ...selectedApps,
+                        [app.id]: {
+                          ...selectedApps[app.id],
+                          [item]: {
+                            ...selectedApps[app.id][item],
+                            bug: value,
+                          },
+                        },
                       })
                     }
                   />
@@ -78,7 +121,10 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
                   Math.max(...Object.keys(selectedApps[app.id])) + 1;
                 setSelectedApps({
                   ...selectedApps,
-                  [app.id]: { ...selectedApps[app.id], [orderId]: "" },
+                  [app.id]: {
+                    ...selectedApps[app.id],
+                    [orderId]: { text: "", type: "bug" },
+                  },
                 });
               }}
               type="button"

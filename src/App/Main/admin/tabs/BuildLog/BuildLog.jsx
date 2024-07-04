@@ -5,6 +5,7 @@ import AdminContext from "../../Context/adminContext";
 import AppCard from "./AppCard";
 import Spinner from "../../../components/Spinner";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const BuildLog = () => {
   const [selectedApps, setSelectedApps] = React.useState({});
@@ -31,6 +32,8 @@ const BuildLog = () => {
     if (!apiUsers && !usersLoading) getAllUsers();
   });
 
+  const navigate = useNavigate();
+
   const validateForm = (vals) => {
     const errors = {
       version: false,
@@ -52,7 +55,7 @@ const BuildLog = () => {
     vals.forEach((val, i) => {
       const app = parseInt(val);
       if (!newState[app]) {
-        newState[app] = { 0: "" };
+        newState[app] = { 0: { text: "", type: "bug" } };
       }
     });
     // remove any old ones
@@ -77,7 +80,8 @@ const BuildLog = () => {
             retObj.changes.push({
               appId,
               textId: parseInt(t),
-              text: selectedApps[appId][t],
+              text: selectedApps[appId][t].text,
+              type: selectedApps[appId][t].type,
             });
         });
 
@@ -100,7 +104,10 @@ const BuildLog = () => {
 
     if (!buildObj.changes.length) {
       toast.error("Please add app changes before publishing this build.");
-    } else publishBuild(version, buildObj.changes, buildObj.affectedUsers);
+    } else {
+      publishBuild(version, buildObj.changes, buildObj.affectedUsers);
+      navigate("/");
+    }
   };
 
   return (
