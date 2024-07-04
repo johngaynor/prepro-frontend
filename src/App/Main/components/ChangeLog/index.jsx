@@ -7,6 +7,7 @@ import {
   Button,
   Header,
   Modal,
+  Container,
 } from "semantic-ui-react";
 import AppContext from "../Context/appContext";
 
@@ -43,12 +44,12 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
                 {Object.keys(logObj[version])
                   .filter((a) => a !== "versionId")
                   .map((app, i) => (
-                    <>
+                    <Container key={"app-" + i}>
                       <Header as="h4">{app}</Header>
                       {logObj[version][app].map((text) => (
                         <p>{text.text}</p>
                       ))}
-                    </>
+                    </Container>
                   ))}
               </>
             ))}
