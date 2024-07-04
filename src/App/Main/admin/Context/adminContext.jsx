@@ -109,17 +109,17 @@ export const AdminProvider = ({ children }) => {
     }
   }
 
-  function publishBuild(version, changes, affectedUsers) {
+  function publishBuild(versionType, changes, affectedUsers) {
     setBuildLoading(true);
     const users = Array.from(new Set(affectedUsers));
     apiCall("post", "/api/admin/build", {
       credentials: "include",
-      version,
+      versionType,
       changes,
       users,
     })
       .then((res) => {
-        toast.success("Successfully published build " + version);
+        toast.success("Successfully published build #" + res.versionId);
       })
       .catch((err) => {
         toast.error(`Error publishing build: ${err}`);

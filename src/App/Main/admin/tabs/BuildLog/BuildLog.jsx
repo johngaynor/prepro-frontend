@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Header, Tab, Button, Container, Form } from "semantic-ui-react";
-import { DropdownField, InputField } from "../../../components/FormFields";
+import { DropdownField } from "../../../components/FormFields";
 import AdminContext from "../../Context/adminContext";
 import AppCard from "./AppCard";
 import Spinner from "../../../components/Spinner";
@@ -9,8 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const BuildLog = () => {
   const [selectedApps, setSelectedApps] = React.useState({});
-  const [version, setVersion] = React.useState("");
-  const [formErrors, setFormErrors] = React.useState({});
+  const [version, setVersion] = React.useState("patch");
 
   const {
     allApps,
@@ -33,21 +32,6 @@ const BuildLog = () => {
   });
 
   const navigate = useNavigate();
-
-  const validateForm = (vals) => {
-    const errors = {
-      version: false,
-    };
-
-    if (!vals.version)
-      errors.version = "Please enter a version number for this build.";
-    if (errors.version) {
-      setFormErrors(errors);
-      return false;
-    }
-
-    return true;
-  };
 
   const handleAppChange = (vals) => {
     const newState = { ...selectedApps };
@@ -114,15 +98,7 @@ const BuildLog = () => {
     <Tab.Pane>
       {(appsLoading || buildLoading || accessLoading) && <Spinner />}
       <Header as="h4">Run a Build:</Header>
-      <Form
-        onSubmit={() => {
-          const valid = validateForm({ version, apps: selectedApps });
-          if (valid) {
-            setFormErrors({});
-            handleSubmitBuild();
-          }
-        }}
-      >
+      <Form onSubmit={handleSubmitBuild}>
         <Grid columns={2}>
           <DropdownField
             label="Select Apps"
@@ -140,13 +116,15 @@ const BuildLog = () => {
             value={Object.keys(selectedApps).map((a) => parseInt(a))}
             onChange={(e, { value }) => handleAppChange(value)}
           />
-          <InputField
+          <DropdownField
+            label="Build Severity"
             value={version}
             onChange={(e, { value }) => setVersion(value)}
-            label="Version"
-            placeholder="Enter a version number..."
-            type="string"
-            error={formErrors.version}
+            options={[
+              { text: "Patch (bug fixes)", value: "patch" },
+              { text: "Minor (new features)", value: "minor" },
+              { text: "Major (new app or overhaul) ", value: "major" },
+            ]}
           />
         </Grid>
         {!Object.keys(selectedApps).length ? (

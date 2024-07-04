@@ -33,9 +33,7 @@ export const AppProvider = ({ children }) => {
 
   function clearLog(versions) {
     apiCall("post", "/api/dashboard/changelog", { versions })
-      .then((res) => {
-        toast.success("cleared log");
-      })
+      .then((res) => {})
       .catch((err) => {
         toast.error(`Error updating change log: ${err}`);
       });

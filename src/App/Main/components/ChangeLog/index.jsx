@@ -15,7 +15,7 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
   const logObj = changeLog.reduce((acc, val) => {
     const retObj = { ...acc };
 
-    if (!retObj[val.version]) retObj[val.version] = {}; // add version key to obj
+    if (!retObj[val.version]) retObj[val.version] = { versionId: val.id }; // add version key to obj
     if (!retObj[val.version][val.name]) retObj[val.version][val.name] = []; // add app name to version
 
     retObj[val.version][val.name].push({ order: val.textId, text: val.text });
@@ -25,7 +25,8 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
 
   const handleConfirmLog = () => {
     const versions = Object.keys(logObj);
-    clearLog(versions);
+    const versionIds = versions.map((v) => logObj[v].versionId);
+    clearLog(versionIds);
     setLogOpen(false);
   };
 
@@ -39,14 +40,16 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
             .map((version) => (
               <>
                 <Header as="h3">{version}</Header>
-                {Object.keys(logObj[version]).map((app, i) => (
-                  <>
-                    <Header as="h4">{app}</Header>
-                    {logObj[version][app].map((text) => (
-                      <p>{text.text}</p>
-                    ))}
-                  </>
-                ))}
+                {Object.keys(logObj[version])
+                  .filter((a) => a !== "versionId")
+                  .map((app, i) => (
+                    <>
+                      <Header as="h4">{app}</Header>
+                      {logObj[version][app].map((text) => (
+                        <p>{text.text}</p>
+                      ))}
+                    </>
+                  ))}
               </>
             ))}
         </ModalDescription>
