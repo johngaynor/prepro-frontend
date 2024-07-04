@@ -13,6 +13,7 @@ export const AdminProvider = ({ children }) => {
   const [appsLoading, setAppsLoading] = React.useState(false);
   const [accessLoading, setAccessLoading] = React.useState(false);
   const [accessChanging, setAccessChanging] = React.useState(false);
+  const [buildLoading, setBuildLoading] = React.useState(false);
 
   // api calls
   function getAllApps() {
@@ -108,6 +109,24 @@ export const AdminProvider = ({ children }) => {
     }
   }
 
+  function publishBuild(versionType, changes, affectedUsers) {
+    setBuildLoading(true);
+    const users = Array.from(new Set(affectedUsers));
+    apiCall("post", "/api/admin/build", {
+      credentials: "include",
+      versionType,
+      changes,
+      users,
+    })
+      .then((res) => {
+        toast.success("Successfully published build #" + res.versionId);
+      })
+      .catch((err) => {
+        toast.error(`Error publishing build: ${err}`);
+      })
+      .finally(() => setBuildLoading(false));
+  }
+
   return (
     <AdminContext.Provider
       value={{
@@ -122,6 +141,8 @@ export const AdminProvider = ({ children }) => {
         accessLoading,
         toggleUserAppAccess,
         accessChanging,
+        buildLoading,
+        publishBuild,
       }}
     >
       {children}
