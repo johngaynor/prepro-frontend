@@ -1,5 +1,6 @@
 import React from "react";
 import { apiCall } from "../../../services/api";
+import toast from "react-hot-toast";
 
 export const AppContext = React.createContext();
 
@@ -30,6 +31,16 @@ export const AppProvider = ({ children }) => {
       .finally(() => setLogLoading(false));
   }
 
+  function clearLog(versions) {
+    apiCall("post", "/api/dashboard/changelog", { versions })
+      .then((res) => {
+        toast.success("cleared log");
+      })
+      .catch((err) => {
+        toast.error(`Error updating change log: ${err}`);
+      });
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -46,6 +57,7 @@ export const AppProvider = ({ children }) => {
         changeLog,
         logLoading,
         getChangeLog,
+        clearLog,
       }}
     >
       {children}

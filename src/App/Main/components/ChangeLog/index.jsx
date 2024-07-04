@@ -6,11 +6,12 @@ import {
   ModalActions,
   Button,
   Header,
-  Image,
   Modal,
 } from "semantic-ui-react";
+import AppContext from "../Context/appContext";
 
 const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
+  const { clearLog } = React.useContext(AppContext);
   const logObj = changeLog.reduce((acc, val) => {
     const retObj = { ...acc };
 
@@ -22,7 +23,12 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
     return retObj;
   }, {});
 
-  console.log(changeLog);
+  const handleConfirmLog = () => {
+    const versions = Object.keys(logObj);
+    clearLog(versions);
+    setLogOpen(false);
+  };
+
   return (
     <Modal onClose={() => setLogOpen(false)} open={logOpen}>
       <ModalHeader>Change Log</ModalHeader>
@@ -33,7 +39,7 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
             .map((version) => (
               <>
                 <Header as="h3">{version}</Header>
-                {Object.keys(logObj[version]).map((app) => (
+                {Object.keys(logObj[version]).map((app, i) => (
                   <>
                     <Header as="h4">{app}</Header>
                     {logObj[version][app].map((text) => (
@@ -46,14 +52,14 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
         </ModalDescription>
       </ModalContent>
       <ModalActions>
-        <Button color="black" onClick={() => setLogOpen(false)}>
+        {/* <Button color="black" onClick={() => setLogOpen(false)}>
           Nope
-        </Button>
+        </Button> */}
         <Button
-          content="Yep, that's me"
+          content="Confirm"
           labelPosition="right"
           icon="checkmark"
-          onClick={() => setLogOpen(false)}
+          onClick={handleConfirmLog}
           positive
         />
       </ModalActions>

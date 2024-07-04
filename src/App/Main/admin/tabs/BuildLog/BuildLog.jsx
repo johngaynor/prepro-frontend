@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 const BuildLog = () => {
   const [selectedApps, setSelectedApps] = React.useState({});
-  const [version, setVersion] = React.useState("0.0.0");
+  const [version, setVersion] = React.useState("");
   const [formErrors, setFormErrors] = React.useState({});
 
   const {
