@@ -5,12 +5,12 @@ import {
   TextAreaField,
   DropdownField,
 } from "../../../../components/FormFields";
-import { exerciseTypes } from "../../../components/dropdownOptions";
-import toast from "react-hot-toast";
 import FitnessContext from "../../../Context/fitnessContext";
+import Spinner from "../../../../components/Spinner";
 
-const Summary = () => {
+const Summary = ({ setActiveTab }) => {
   const [formValues, setFormValues] = React.useState({
+    workoutId: null,
     comments: "",
     type: "",
     date: `${new Date().getFullYear()}-${String(
@@ -20,7 +20,8 @@ const Summary = () => {
   });
   const [formErrors, setFormErrors] = React.useState({});
 
-  const { workoutTypes } = React.useContext(FitnessContext);
+  const { workoutTypes, editLoading, editWorkoutSummary } =
+    React.useContext(FitnessContext);
 
   function validateForm(vals) {
     const errors = {
@@ -46,12 +47,13 @@ const Summary = () => {
       onSubmit={() => {
         const valid = validateForm(formValues);
         if (valid) {
-          toast.success("Valid form entries!");
           setFormErrors({});
-          // do whatever submissions
+          editWorkoutSummary(formValues);
+          setActiveTab(1);
         }
       }}
     >
+      {editLoading && <Spinner />}
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
         <InputField
           type="date"

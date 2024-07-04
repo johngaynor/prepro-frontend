@@ -8,6 +8,7 @@ export const FitnessProvider = ({ children }) => {
   const [workoutTypes, setWorkoutTypes] = React.useState(null);
   // loading states
   const [workoutTypesLoading, setWorkoutTypesLoading] = React.useState(false);
+  const [editLoading, setEditLoading] = React.useState(false);
 
   function getWorkoutTypes() {
     setWorkoutTypesLoading(true);
@@ -25,12 +26,26 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setWorkoutTypesLoading(false));
   }
 
+  function editWorkoutSummary(values) {
+    setEditLoading(true);
+    apiCall("post", "/api/fitness/logs/workout", { ...values })
+      .then((res) => {})
+      .catch((err) => {
+        toast.error(
+          `Error ${values.workoutId ? "updating" : "adding"} workout: ${err}`
+        );
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <FitnessContext.Provider
       value={{
         workoutTypes,
         workoutTypesLoading,
         getWorkoutTypes,
+        editLoading,
+        editWorkoutSummary,
       }}
     >
       {children}

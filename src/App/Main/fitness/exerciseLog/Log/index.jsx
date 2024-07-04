@@ -31,7 +31,7 @@ const Log = () => {
           Workout Information
         </Accordion.Title>
         <Accordion.Content active={activeTab === 0}>
-          <Summary />
+          <Summary setActiveTab={setActiveTab} />
         </Accordion.Content>
         <Accordion.Title
           active={activeTab === 1}
