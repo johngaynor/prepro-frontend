@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { LogContext } from "../Context/logContext";
 import { Form, Button, Segment, Header } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ const DailyLogForm = () => {
 
   const { formData, setFormData, date, setDate } = React.useContext(LogContext);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setDate(today);
   }, [setDate]);

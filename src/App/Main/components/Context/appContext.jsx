@@ -13,7 +13,40 @@ export const AppProvider = ({ children }) => {
   const [changeLog, setChangeLog] = React.useState(null);
   const [logLoading, setLogLoading] = React.useState(false);
 
-  // console.log(user); // user.id
+  function authUser() {
+    apiCall("get", "/api/auth/user", { credentials: "include" })
+      .then((res) => {
+        if (res.user) {
+          setUserLoading(false);
+          setAuth(true);
+          setUser(res.user);
+        } else {
+          toast.error("Unknown error occurred...");
+          setUser({});
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error authenticating user: ${err}`);
+      });
+  }
+
+  function getApps() {
+    setAppsLoading(true);
+    apiCall("get", "/api/dashboard/apps")
+      .then((res) => {
+        setApps(res.result);
+      })
+      .catch((err) => {
+        toast.error(`Error getting user apps: ${err}`);
+      });
+    setAppsLoading(false);
+  }
+
+  function clearApps() {
+    setAppsLoading(true);
+    setApps([]);
+    setAppsLoading(false);
+  }
 
   function getChangeLog() {
     setLogLoading(true);
@@ -43,19 +76,17 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         user,
-        setUser,
         userLoading,
-        setUserLoading,
         auth,
-        setAuth,
         apps,
-        setApps,
         appsLoading,
-        setAppsLoading,
         changeLog,
         logLoading,
         getChangeLog,
         clearLog,
+        authUser,
+        getApps,
+        clearApps,
       }}
     >
       {children}

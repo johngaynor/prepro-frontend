@@ -5,31 +5,36 @@ import {
   TextAreaField,
   DropdownField,
 } from "../../../components/FormFields";
-import { exerciseTypes } from "../../components/dropdownOptions";
-import toast from "react-hot-toast";
+import FitnessContext from "../../Context/fitnessContext";
+import Spinner from "../../../components/Spinner";
 
-const Summary = () => {
+const Summary = ({ setActiveTab }) => {
   const [formValues, setFormValues] = React.useState({
+    workoutId: null,
     comments: "",
     type: "",
-    timeStarted: "",
+    date: `${new Date().getFullYear()}-${String(
+      new Date().getMonth() + 1
+    ).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
     timeCompleted: "",
   });
   const [formErrors, setFormErrors] = React.useState({});
 
+  const { workoutTypes, editLoading, editWorkoutSummary } =
+    React.useContext(FitnessContext);
+
   function validateForm(vals) {
     const errors = {
       type: false,
-      timeStarted: false,
+      date: false,
       timeCompleted: false,
     };
     if (!vals.type) errors.type = "Please select a valid option.";
-    if (!vals.timeStarted)
-      errors.timeStarted = "Please enter the time you started the workout.";
     if (!vals.timeCompleted)
       errors.timeCompleted = "Please enter the time you ended the workout.";
+    if (!vals.date) errors.date = "Please select a date for the workout.";
 
-    if (errors.type || errors.timeStarted || errors.timeCompleted) {
+    if (errors.type || errors.date || errors.timeCompleted) {
       setFormErrors(errors);
       return false;
     }
@@ -42,29 +47,34 @@ const Summary = () => {
       onSubmit={() => {
         const valid = validateForm(formValues);
         if (valid) {
-          toast.success("Valid form entries!");
           setFormErrors({});
-          // do whatever submissions
+          editWorkoutSummary(formValues);
+          setActiveTab(1);
         }
       }}
     >
+      {editLoading && <Spinner />}
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
+        <InputField
+          type="date"
+          label="Date"
+          onChange={(e, { value }) =>
+            setFormValues({ ...formValues, date: value })
+          }
+          error={formErrors.date}
+        />
         <DropdownField
-          options={exerciseTypes}
+          options={
+            workoutTypes
+              ? workoutTypes.map((t) => ({ value: t.id, text: t.name }))
+              : []
+          }
           label="Workout Type"
           value={formValues.type}
           onChange={(e, { value }) =>
             setFormValues({ ...formValues, type: value })
           }
           error={formErrors.type}
-        />
-        <InputField
-          type="time"
-          label="Time Started"
-          onChange={(e, { value }) =>
-            setFormValues({ ...formValues, timeStarted: value })
-          }
-          error={formErrors.timeStarted}
         />
         <InputField
           type="time"

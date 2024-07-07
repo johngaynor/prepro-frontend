@@ -2,13 +2,23 @@ import React from "react";
 import { Accordion, Icon } from "semantic-ui-react";
 import Summary from "./Summary";
 import Exercises from "./Exercises";
+import FitnessContext, { FitnessProvider } from "../Context/fitnessContext";
+import Spinner from "../../components/Spinner";
 
-const ExerciseLog = () => {
-  const [activeTab, setActiveTab] = React.useState(1);
+const Log = () => {
+  const [activeTab, setActiveTab] = React.useState(0);
+
+  const { workoutTypes, workoutTypesLoading, getWorkoutTypes } =
+    React.useContext(FitnessContext);
+
+  React.useEffect(() => {
+    if (!workoutTypes && !workoutTypesLoading) getWorkoutTypes();
+  }, [workoutTypes]);
 
   return (
     <React.Fragment>
       <Accordion fluid styled>
+        {workoutTypesLoading && <Spinner />}
         <Accordion.Title
           active={activeTab === 0}
           onClick={() => {
@@ -21,7 +31,7 @@ const ExerciseLog = () => {
           Workout Information
         </Accordion.Title>
         <Accordion.Content active={activeTab === 0}>
-          <Summary />
+          <Summary setActiveTab={setActiveTab} />
         </Accordion.Content>
         <Accordion.Title
           active={activeTab === 1}
@@ -39,6 +49,14 @@ const ExerciseLog = () => {
         </Accordion.Content>
       </Accordion>
     </React.Fragment>
+  );
+};
+
+const ExerciseLog = () => {
+  return (
+    <FitnessProvider>
+      <Log />
+    </FitnessProvider>
   );
 };
 
