@@ -47,13 +47,11 @@ const Logs = () => {
     setLogsLoading(false);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!logs.length && !logsLoading) {
       getLogs();
     }
-  }, []);
-
-  console.log(logs);
+  }, [logs, logsLoading]);
 
   const handleLogTypeChange = (e, { value }) => {
     setFormData((prevFormData) => ({

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Menu, Button, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import HelpMenu from "../HelpMenu";
@@ -9,8 +9,8 @@ import AppContext from "../Context/appContext";
 import ChangeLog from "../ChangeLog";
 
 const Navbar = ({}) => {
-  const [helpMenuOpen, setHelpMenuOpen] = useState(false);
-  const [logOpen, setLogOpen] = useState(true);
+  const [helpMenuOpen, setHelpMenuOpen] = React.useState(false);
+  const [logOpen, setLogOpen] = React.useState(true);
   const isMobile = false; // this wil get modified later to adjust for window dimensions
 
   const {
@@ -57,7 +57,7 @@ const Navbar = ({}) => {
     setAppsLoading(false);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!auth) {
       if (apps.length) {
         setApps([]);
@@ -67,7 +67,7 @@ const Navbar = ({}) => {
       if (!apps.length && !appsLoading) getApps();
       if (!changeLog && !logLoading) getChangeLog();
     }
-  }, [auth, authUser]);
+  }, [auth, apps, changeLog]);
 
   return (
     <Menu fixed="top" inverted color="blue" size="tiny">

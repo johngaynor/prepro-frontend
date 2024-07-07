@@ -13,7 +13,7 @@ const Log = () => {
 
   React.useEffect(() => {
     if (!workoutTypes && !workoutTypesLoading) getWorkoutTypes();
-  }, []);
+  }, [workoutTypes]);
 
   return (
     <React.Fragment>

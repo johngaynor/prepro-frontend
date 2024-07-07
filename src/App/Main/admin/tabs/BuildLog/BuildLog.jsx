@@ -29,7 +29,7 @@ const BuildLog = () => {
     if (!allApps && !appsLoading) getAllApps();
     if (!appAccess && !accessLoading) getAllAccess();
     if (!apiUsers && !usersLoading) getAllUsers();
-  });
+  }, [apiUsers, allApps, appAccess]);
 
   const navigate = useNavigate();
 

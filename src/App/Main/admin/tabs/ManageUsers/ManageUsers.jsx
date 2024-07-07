@@ -24,7 +24,7 @@ const ManageUsers = () => {
     if (!apiUsers && !usersLoading) getAllUsers();
     if (!allApps && !appsLoading) getAllApps();
     if (!appAccess && !accessLoading) getAllAccess();
-  });
+  }, [apiUsers, allApps, appAccess]);
 
   const activeUserApps = allApps?.map((app) => {
     const match = appAccess?.find(
