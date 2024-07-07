@@ -4,9 +4,9 @@ import {
   InputField,
   TextAreaField,
   DropdownField,
-} from "../../../../components/FormFields";
-import FitnessContext from "../../../Context/fitnessContext";
-import Spinner from "../../../../components/Spinner";
+} from "../../../components/FormFields";
+import FitnessContext from "../../Context/fitnessContext";
+import Spinner from "../../../components/Spinner";
 
 const Summary = ({ setActiveTab }) => {
   const [formValues, setFormValues] = React.useState({

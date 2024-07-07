@@ -1,9 +1,6 @@
 import React from "react";
 import { Grid, Button, Card, Header, Label } from "semantic-ui-react";
-import {
-  InputField,
-  DropdownField,
-} from "../../../../../components/FormFields";
+import { InputField, DropdownField } from "../../../../components/FormFields";
 
 const ExerciseCard = ({ item, id }) => {
   const [exercise, setExercise] = React.useState(item);

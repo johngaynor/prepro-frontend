@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import { exercisesTest } from "../../../components/dropdownOptions";
+import { exercisesTest } from "../../components/dropdownOptions";
 import ExerciseCard from "./components/ExerciseCard";
 
 const Exercises = () => {

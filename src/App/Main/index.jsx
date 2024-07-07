@@ -20,14 +20,17 @@ const Main = (props) => {
     if (match) {
       return <Component {...props} />;
     } else {
-      return (
-        <Segment>
-          <h4>
-            You do not have access to this app. Please contact your coach or
-            account manager to grant access.
-          </h4>
-        </Segment>
-      );
+      if (!user || !apps.length) {
+        return <Spinner />;
+      } else
+        return (
+          <Segment>
+            <h4>
+              You do not have access to this app. Please contact your coach or
+              account manager to grant access.
+            </h4>
+          </Segment>
+        );
     }
   };
 
