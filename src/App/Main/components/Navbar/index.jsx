@@ -3,8 +3,6 @@ import { Menu, Button, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import HelpMenu from "../HelpMenu";
 import Logo from "../../../images/logo-3.png";
-import { apiCall } from "../../../services/api";
-import { toast } from "react-hot-toast";
 import AppContext from "../Context/appContext";
 import ChangeLog from "../ChangeLog";
 
@@ -14,53 +12,21 @@ const Navbar = ({}) => {
   const isMobile = false; // this wil get modified later to adjust for window dimensions
 
   const {
-    user,
-    setUser,
-    setUserLoading,
     auth,
-    setAuth,
     apps,
-    setApps,
     appsLoading,
-    setAppsLoading,
     changeLog,
     logLoading,
     getChangeLog,
+    authUser,
+    getApps,
+    clearApps,
   } = React.useContext(AppContext);
-
-  function authUser() {
-    apiCall("get", "/api/auth/user", { credentials: "include" })
-      .then((res) => {
-        if (res.user) {
-          setUserLoading(false);
-          setAuth(true);
-          setUser(res.user);
-        } else {
-          toast.error("Unknown error occurred...");
-          setUser({});
-        }
-      })
-      .catch((err) => {
-        toast.error(`Error authenticating user: ${err}`);
-      });
-  }
-
-  function getApps() {
-    setAppsLoading(true);
-    apiCall("get", "/api/dashboard/apps")
-      .then((res) => {
-        setApps(res.result);
-      })
-      .catch((err) => {
-        toast.error(`Error getting user apps: ${err}`);
-      });
-    setAppsLoading(false);
-  }
 
   React.useEffect(() => {
     if (!auth) {
       if (apps.length) {
-        setApps([]);
+        clearApps();
       }
       authUser();
     } else {
