@@ -9,6 +9,8 @@ export const FitnessProvider = ({ children }) => {
   // loading states
   const [workoutTypesLoading, setWorkoutTypesLoading] = React.useState(false);
   const [editLoading, setEditLoading] = React.useState(false);
+  const [workoutLogs, setWorkoutLogs] = React.useState(null);
+  const [logsLoading, setLogsLoading] = React.useState(false);
 
   function getWorkoutTypes() {
     setWorkoutTypesLoading(true);
@@ -38,6 +40,22 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  function getWorkoutLogs() {
+    setLogsLoading(true);
+    apiCall("get", "/api/fitness/logs/workouts")
+      .then((res) => {
+        if (res.result) {
+          setWorkoutLogs(res.result);
+        } else {
+          throw new Error("No result from API call...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting workout logs: ${err.message}`);
+      })
+      .finally(() => setLogsLoading(false));
+  }
+
   return (
     <FitnessContext.Provider
       value={{
@@ -46,6 +64,9 @@ export const FitnessProvider = ({ children }) => {
         getWorkoutTypes,
         editLoading,
         editWorkoutSummary,
+        logsLoading,
+        workoutLogs,
+        getWorkoutLogs,
       }}
     >
       {children}
