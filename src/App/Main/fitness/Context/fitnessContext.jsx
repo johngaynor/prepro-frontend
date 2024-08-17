@@ -23,7 +23,7 @@ export const FitnessProvider = ({ children }) => {
         }
       })
       .catch((err) => {
-        toast.error(`Error getting workout types: ${err}`);
+        toast.error(`Error getting workout types: ${err.message}`);
       })
       .finally(() => setWorkoutTypesLoading(false));
   }
@@ -31,10 +31,15 @@ export const FitnessProvider = ({ children }) => {
   function editWorkoutSummary(values) {
     setEditLoading(true);
     apiCall("post", "/api/fitness/logs/workout", { ...values })
-      .then((res) => {})
+      .then((res) => {
+        setWorkoutLogs(null);
+        toast.success("Successfully edited workout log!");
+      })
       .catch((err) => {
         toast.error(
-          `Error ${values.workoutId ? "updating" : "adding"} workout: ${err}`
+          `Error ${values.workoutId ? "updating" : "adding"} workout: ${
+            err.message
+          }`
         );
       })
       .finally(() => setEditLoading(false));

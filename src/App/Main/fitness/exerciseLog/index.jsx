@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Accordion, Icon } from "semantic-ui-react";
 import Summary from "./Summary";
 import Exercises from "./Exercises";
@@ -8,8 +8,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 
 const Log = () => {
-  const [activeTab, setActiveTab] = React.useState(1);
-  const [editMode, setEditMode] = React.useState(1);
+  const [activeTab, setActiveTab] = useState(1);
+  const [editMode, setEditMode] = useState(false);
 
   const {
     workoutTypes,
@@ -18,23 +18,19 @@ const Log = () => {
     workoutLogs,
     logsLoading,
     getWorkoutLogs,
-  } = React.useContext(FitnessContext);
+  } = useContext(FitnessContext);
 
   useEffect(() => {
-    getWorkoutLogs();
-  }, []);
-
-  console.log(workoutLogs);
-
-  React.useEffect(() => {
     if (!workoutTypes && !workoutTypesLoading) getWorkoutTypes();
-  }, [workoutTypes]);
+    if (!workoutLogs && !logsLoading) getWorkoutLogs();
+  }, [workoutTypes, workoutTypesLoading, workoutLogs, logsLoading]);
 
   const { date } = useParams();
   const navigate = useNavigate();
 
+  // set the date in params if there isn't one given or if the date is invalid
   useEffect(() => {
-    if (!date) {
+    if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       const currentDate = DateTime.now().toFormat("yyyy-MM-dd");
       navigate(`/fitness/log/${currentDate}`);
     }
@@ -56,10 +52,14 @@ const Log = () => {
           Workout Information
         </Accordion.Title>
         <Accordion.Content active={activeTab === 1}>
-          <Summary setActiveTab={setActiveTab} />
+          <Summary
+            setActiveTab={setActiveTab}
+            editMode={editMode}
+            setEditMode={setEditMode}
+          />
         </Accordion.Content>
         {/* exercise section */}
-        {!editMode && editMode !== 2 && (
+        {!editMode && (
           <>
             <Accordion.Title
               active={activeTab === 2}
