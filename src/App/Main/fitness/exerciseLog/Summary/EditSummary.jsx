@@ -14,7 +14,7 @@ const EditSummary = ({ selectedLog, setEditMode, setActiveTab, date }) => {
     date,
     workoutId: selectedLog?.id || null,
     comments: selectedLog?.comments || "",
-    type: selectedLog?.typeId || "",
+    type: selectedLog?.type || "",
     timeCompleted: selectedLog?.timeCompleted.slice(0, -3) || "",
   });
   const [formErrors, setFormErrors] = useState({});
@@ -22,8 +22,7 @@ const EditSummary = ({ selectedLog, setEditMode, setActiveTab, date }) => {
   const navigate = useNavigate();
   const params = useParams();
 
-  const { workoutTypes, editLoading, editWorkoutSummary } =
-    React.useContext(FitnessContext);
+  const { editLoading, editWorkoutSummary } = React.useContext(FitnessContext);
 
   function validateForm(vals) {
     const errors = {
@@ -69,11 +68,10 @@ const EditSummary = ({ selectedLog, setEditMode, setActiveTab, date }) => {
           error={formErrors.date}
         />
         <DropdownField
-          options={
-            workoutTypes
-              ? workoutTypes.map((t) => ({ value: t.id, text: t.name }))
-              : []
-          }
+          options={[
+            { value: "Cardio", text: "Cardio" },
+            { value: "Weight Training", text: "Weight Training" },
+          ]}
           label="Workout Type"
           value={formValues.type}
           onChange={(e, { value }) =>

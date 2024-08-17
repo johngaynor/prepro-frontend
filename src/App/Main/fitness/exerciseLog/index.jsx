@@ -11,19 +11,12 @@ const Log = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [editMode, setEditMode] = useState(false);
 
-  const {
-    workoutTypes,
-    workoutTypesLoading,
-    getWorkoutTypes,
-    workoutLogs,
-    logsLoading,
-    getWorkoutLogs,
-  } = useContext(FitnessContext);
+  const { workoutLogs, logsLoading, getWorkoutLogs, editLoading } =
+    useContext(FitnessContext);
 
   useEffect(() => {
-    if (!workoutTypes && !workoutTypesLoading) getWorkoutTypes();
     if (!workoutLogs && !logsLoading) getWorkoutLogs();
-  }, [workoutTypes, workoutTypesLoading, workoutLogs, logsLoading]);
+  }, [workoutLogs, logsLoading]);
 
   const { date } = useParams();
   const navigate = useNavigate();
@@ -39,7 +32,7 @@ const Log = () => {
   return (
     <React.Fragment>
       <Accordion fluid styled>
-        {workoutTypesLoading && <Spinner />}
+        {(logsLoading || editLoading) && <Spinner />}
         <Accordion.Title
           active={activeTab === 1}
           onClick={() => {

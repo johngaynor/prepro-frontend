@@ -16,11 +16,7 @@ const ViewSummary = ({ selectedLog, setEditMode }) => {
           value={DateTime.fromISO(selectedLog.date).toFormat("yyyy-MM-dd")}
           onChange={(e, { value }) => navigate(`/fitness/log/${value}`)}
         />
-        <ViewInput
-          // value={selectedLog.type}
-          value={"--------------------"}
-          label="Workout Type"
-        />
+        <ViewInput value={selectedLog.type} label="Workout Type" />
         <ViewInput
           value={DateTime.fromFormat(
             selectedLog.timeCompleted,
