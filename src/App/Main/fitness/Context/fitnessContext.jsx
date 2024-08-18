@@ -1,14 +1,16 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import { apiCall } from "../../../services/api";
 import toast from "react-hot-toast";
 
-export const FitnessContext = React.createContext();
+export const FitnessContext = createContext();
 
 export const FitnessProvider = ({ children }) => {
-  const [workoutLogs, setWorkoutLogs] = React.useState(null);
+  const [workoutLogs, setWorkoutLogs] = useState(null);
+  const [exerciseTypes, setExerciseTypes] = useState(null);
   // loading states
-  const [editLoading, setEditLoading] = React.useState(false);
-  const [logsLoading, setLogsLoading] = React.useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+  const [logsLoading, setLogsLoading] = useState(false);
+  const [exerciseTypesLoading, setExerciseTypesLoading] = useState(false);
 
   function editWorkoutSummary(values) {
     setEditLoading(true);
@@ -43,6 +45,22 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setLogsLoading(false));
   }
 
+  function getExerciseTypes() {
+    setExerciseTypesLoading(true);
+    apiCall("get", "/api/fitness/exercises/types")
+      .then((res) => {
+        if (res.result) {
+          setExerciseTypes(res.result);
+        } else {
+          throw new Error("No result from API call...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting exercise types: ${err.message}`);
+      })
+      .finally(() => setExerciseTypesLoading(false));
+  }
+
   return (
     <FitnessContext.Provider
       value={{
@@ -51,6 +69,9 @@ export const FitnessProvider = ({ children }) => {
         logsLoading,
         workoutLogs,
         getWorkoutLogs,
+        exerciseTypes,
+        exerciseTypesLoading,
+        getExerciseTypes,
       }}
     >
       {children}

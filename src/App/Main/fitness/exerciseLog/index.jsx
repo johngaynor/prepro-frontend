@@ -11,12 +11,20 @@ const Log = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [editMode, setEditMode] = useState(false);
 
-  const { workoutLogs, logsLoading, getWorkoutLogs, editLoading } =
-    useContext(FitnessContext);
+  const {
+    workoutLogs,
+    logsLoading,
+    getWorkoutLogs,
+    editLoading,
+    exerciseTypes,
+    exerciseTypesLoading,
+    getExerciseTypes,
+  } = useContext(FitnessContext);
 
   useEffect(() => {
     if (!workoutLogs && !logsLoading) getWorkoutLogs();
-  }, [workoutLogs, logsLoading]);
+    if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
+  }, [workoutLogs, logsLoading, exerciseTypes, exerciseTypesLoading]);
 
   const { date } = useParams();
   const navigate = useNavigate();
