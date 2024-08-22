@@ -2,14 +2,16 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Homepage from "./Homepage";
 import BreadCrumb from "./components/Breadcrumb";
+import { LogProvider } from "./components/Context/logContext";
+import Spinner from "./components/Spinner";
+import { Segment } from "semantic-ui-react";
+// page imports
 import Logs from "./components/DailyLogs/logs";
 import ExerciseLog from "./fitness/exerciseLog";
 import DailyLogForm from "./components/DailyLogForm/DailyLogForm";
 import AdminConsole from "./admin";
 import AppContext from "./components/Context/appContext";
-import { LogProvider } from "./components/Context/logContext";
-import Spinner from "./components/Spinner";
-import { Segment } from "semantic-ui-react";
+import ExerciseManager from "./fitness/exercises";
 
 const Main = (props) => {
   const location = useLocation();
@@ -48,6 +50,10 @@ const Main = (props) => {
           <Route
             path="/logs/new/:logType"
             element={withAuth(DailyLogForm, 3)}
+          />
+          <Route
+            path="/fitness/exercises"
+            element={withAuth(ExerciseManager, 4)}
           />
           <Route
             path="*"
