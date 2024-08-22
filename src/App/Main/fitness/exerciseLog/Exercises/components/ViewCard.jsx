@@ -10,10 +10,9 @@ import {
 import { ViewInput } from "../../../../components/FormFields/view";
 import { FitnessContext } from "../../../Context/fitnessContext";
 
-const ViewCard = ({ exercise, id }) => {
+const ViewCard = ({ exercise, id, setEditMode }) => {
   const { exerciseTypes } = useContext(FitnessContext);
 
-  console.log(exercise);
   return (
     <Grid.Column
       mobile={16} // < 768
@@ -29,6 +28,7 @@ const ViewCard = ({ exercise, id }) => {
             floated="right"
             size="small"
             color="orange"
+            onClick={() => setEditMode(exercise.id)}
           ></Button>
           <Header as="h4">Exercise #{id + 1}</Header>
         </Card.Header>

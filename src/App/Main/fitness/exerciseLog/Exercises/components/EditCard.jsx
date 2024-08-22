@@ -9,8 +9,13 @@ import {
 } from "semantic-ui-react";
 import { InputField, DropdownField } from "../../../../components/FormFields";
 
-const ExerciseCard = ({ item, id }) => {
+const ExerciseCard = ({ item, id, setEditMode }) => {
   const [exercise, setExercise] = React.useState(item);
+
+  function handleSubmit() {
+    setEditMode(false);
+    console.log("attempting to submit for", exercise);
+  }
 
   return (
     <Grid.Column
@@ -159,7 +164,7 @@ const ExerciseCard = ({ item, id }) => {
               icon="save"
               content="Save"
               color="blue"
-              onClick={() => console.log(exercise)}
+              onClick={handleSubmit}
             />
           </Container>
         </Card.Content>
