@@ -1,7 +1,8 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import { exercisesTest } from "../../components/dropdownOptions";
-import ExerciseCard from "./components/ExerciseCard";
+import EditCard from "./components/EditCard";
+import ViewCard from "./components/ViewCard";
 
 const Exercises = () => {
   const [exercises, setExercises] = React.useState([]);
@@ -13,7 +14,8 @@ const Exercises = () => {
   return (
     <Grid stackable columns={3}>
       {exercises.map((e, i) => (
-        <ExerciseCard key={"exercise" + i} item={e} id={i} />
+        <EditCard key={"exercise" + i} item={e} id={i} />
+        // <ViewCard key={"exercise" + i} item={e} id={i} />
       ))}
     </Grid>
   );

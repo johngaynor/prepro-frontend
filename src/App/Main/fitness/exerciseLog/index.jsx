@@ -8,7 +8,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 
 const Log = () => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(2);
   const [editMode, setEditMode] = useState(false);
 
   const {

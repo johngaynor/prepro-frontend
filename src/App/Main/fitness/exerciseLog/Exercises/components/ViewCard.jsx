@@ -1,8 +1,15 @@
 import React from "react";
-import { Grid, Button, Card, Header, Label } from "semantic-ui-react";
-import { InputField, DropdownField } from "../../../../components/FormFields";
+import {
+  Grid,
+  Button,
+  Card,
+  Header,
+  Label,
+  Container,
+} from "semantic-ui-react";
+import { ViewInput } from "../../../../components/FormFields/view";
 
-const ExerciseCard = ({ item, id }) => {
+const ViewCard = ({ item, id }) => {
   const [exercise, setExercise] = React.useState(item);
 
   return (
@@ -15,34 +22,18 @@ const ExerciseCard = ({ item, id }) => {
       <Card fluid>
         <Card.Header textAlign="left">
           <Button
-            icon="trash"
+            icon="pencil"
             type="button"
             floated="right"
             size="small"
-            color="red"
+            color="orange"
           ></Button>
           <Header as="h4">Exercise #{id + 1}</Header>
         </Card.Header>
         <Card.Content textAlign="left">
-          <DropdownField
-            label="Exercise"
-            options={[
-              { text: "lat pulldowns", value: "lat pulldowns" },
-              { text: "chest fly", value: "chest fly" },
-              { text: "db press", value: "db press" },
-              { text: "tricep pushdowns", value: "tricep pushdowns" },
-              { text: "bb curls", value: "bb curls" },
-              { text: "leg extension", value: "leg extension" },
-            ]}
-            search
-            value={exercise?.name}
-            onChange={(e, { value }) =>
-              setExercise({ ...exercise, name: value })
-            }
-          />
+          <ViewInput label="Exercise" value={exercise?.name} />
           <Grid columns={4} style={{ marginTop: "10px" }}>
             <Grid.Row>
-              <Grid.Column width={1} />
               <Grid.Column width={4} style={{ marginLeft: "10px" }}>
                 <Label
                   horizontal
@@ -73,22 +64,11 @@ const ExerciseCard = ({ item, id }) => {
               .sort((a, b) => a - b)
               .map((s, i) => (
                 <Grid.Row style={{ marginTop: "-26px" }} key={"set" + i}>
-                  <Grid.Column width={1}>
-                    <Button
-                      icon="trash"
-                      color="red"
-                      onClick={() => {
-                        const sets = { ...exercise.sets };
-                        delete sets[s];
-                        setExercise({ ...exercise, sets });
-                      }}
-                    />
-                  </Grid.Column>
                   <Grid.Column width={4} style={{ marginLeft: "10px" }}>
-                    <InputField placeholder="Set #" value={i + 1} disabled />
+                    <ViewInput placeholder="Set #" value={i + 1} disabled />
                   </Grid.Column>
                   <Grid.Column width={5}>
-                    <InputField
+                    <ViewInput
                       placeholder="Weight"
                       type="number"
                       value={exercise.sets[s].weight}
@@ -107,7 +87,7 @@ const ExerciseCard = ({ item, id }) => {
                     />
                   </Grid.Column>
                   <Grid.Column width={5}>
-                    <InputField
+                    <ViewInput
                       placeholder="Reps"
                       value={exercise.sets[s].reps}
                       onChange={(e, { value }) =>
@@ -127,27 +107,10 @@ const ExerciseCard = ({ item, id }) => {
                 </Grid.Row>
               ))}
           </Grid>
-          <Button
-            icon="plus"
-            color="green"
-            onClick={() => {
-              const orderId = Math.max(...Object.keys(exercise.sets)) + 1;
-              setExercise({
-                ...exercise,
-                sets: { ...exercise.sets, [orderId]: { weight: "", reps: "" } },
-              });
-            }}
-          />
-          <Button
-            icon="save"
-            content="Save"
-            color="blue"
-            onClick={() => console.log(exercise)}
-          />
         </Card.Content>
       </Card>
     </Grid.Column>
   );
 };
 
-export default ExerciseCard;
+export default ViewCard;
