@@ -6,7 +6,6 @@ import ViewCard from "./components/ViewCard";
 const Exercises = ({ selectedWorkout }) => {
   const [editMode, setEditMode] = useState(null);
 
-  console.log("edit", editMode);
   return (
     <Grid stackable columns={3}>
       {selectedWorkout?.exercises.map((e, i) => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Grid,
   Button,
@@ -8,9 +8,12 @@ import {
   Container,
 } from "semantic-ui-react";
 import { InputField, DropdownField } from "../../../../components/FormFields";
+import FitnessContext from "../../../Context/fitnessContext";
 
 const ExerciseCard = ({ item, id, setEditMode }) => {
   const [exercise, setExercise] = React.useState(item);
+
+  const { deleteWorkoutExercise } = useContext(FitnessContext);
 
   function handleSubmit() {
     setEditMode(false);
@@ -32,7 +35,8 @@ const ExerciseCard = ({ item, id, setEditMode }) => {
             floated="right"
             size="small"
             color="red"
-          ></Button>
+            onClick={() => deleteWorkoutExercise(item.id)}
+          />
           <Header as="h4">Exercise #{id + 1}</Header>
         </Card.Header>
         <Card.Content textAlign="left">

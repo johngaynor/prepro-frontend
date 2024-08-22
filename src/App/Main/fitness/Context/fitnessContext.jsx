@@ -62,6 +62,20 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setExerciseTypesLoading(false));
   }
 
+  // better handling for this so that the whole page doesn't have to refresh and reset tab status
+  function deleteWorkoutExercise(id) {
+    setEditLoading(true);
+    apiCall("delete", `/api/fitness/logs/workout/exercise/${id}`)
+      .then((res) => {
+        setWorkoutLogs(null);
+        toast.success("Successfully deleted workout exercise!");
+      })
+      .catch((err) => {
+        toast.error(`Error deleting workout exercise: ${err.message}`);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <FitnessContext.Provider
       value={{
@@ -73,6 +87,7 @@ export const FitnessProvider = ({ children }) => {
         workoutLogs,
         logsLoading,
         getWorkoutLogs,
+        deleteWorkoutExercise,
       }}
     >
       {children}
