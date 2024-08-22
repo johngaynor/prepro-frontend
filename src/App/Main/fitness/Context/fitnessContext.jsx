@@ -5,18 +5,19 @@ import toast from "react-hot-toast";
 export const FitnessContext = createContext();
 
 export const FitnessProvider = ({ children }) => {
-  const [workoutSummaries, setWorkoutSummaries] = useState(null);
+  const [period, setPeriod] = useState(null); // will be used later to only grab logs within a certain period
+  const [workoutLogs, setWorkoutLogs] = useState(null);
   const [exerciseTypes, setExerciseTypes] = useState(null);
   // loading states
+  const [logsLoading, setLogsLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
-  const [summariesLoading, setSummariesLoading] = useState(false);
   const [exerciseTypesLoading, setExerciseTypesLoading] = useState(false);
 
   function editWorkoutSummary(values) {
     setEditLoading(true);
     apiCall("post", "/api/fitness/logs/workout", { ...values })
       .then((res) => {
-        setWorkoutSummaries(null);
+        setWorkoutLogs(null);
         toast.success("Successfully edited workout log!");
       })
       .catch((err) => {
@@ -29,12 +30,12 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
-  function getWorkoutSummaries() {
-    setSummariesLoading(true);
+  function getWorkoutLogs() {
+    setLogsLoading(true);
     apiCall("get", "/api/fitness/logs/workouts")
       .then((res) => {
         if (res.result) {
-          setWorkoutSummaries(res.result);
+          setWorkoutLogs(res.result);
         } else {
           throw new Error("No result from API call...");
         }
@@ -42,7 +43,7 @@ export const FitnessProvider = ({ children }) => {
       .catch((err) => {
         toast.error(`Error getting workout logs: ${err.message}`);
       })
-      .finally(() => setSummariesLoading(false));
+      .finally(() => setLogsLoading(false));
   }
 
   function getExerciseTypes() {
@@ -66,12 +67,12 @@ export const FitnessProvider = ({ children }) => {
       value={{
         editLoading,
         editWorkoutSummary,
-        summariesLoading,
-        workoutSummaries,
-        getWorkoutSummaries,
         exerciseTypes,
         exerciseTypesLoading,
         getExerciseTypes,
+        workoutLogs,
+        logsLoading,
+        getWorkoutLogs,
       }}
     >
       {children}

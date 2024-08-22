@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Grid,
   Button,
@@ -8,10 +8,12 @@ import {
   Container,
 } from "semantic-ui-react";
 import { ViewInput } from "../../../../components/FormFields/view";
+import { FitnessContext } from "../../../Context/fitnessContext";
 
-const ViewCard = ({ item, id }) => {
-  const [exercise, setExercise] = React.useState(item);
+const ViewCard = ({ exercise, id }) => {
+  const { exerciseTypes } = useContext(FitnessContext);
 
+  console.log(exercise);
   return (
     <Grid.Column
       mobile={16} // < 768
@@ -31,7 +33,12 @@ const ViewCard = ({ item, id }) => {
           <Header as="h4">Exercise #{id + 1}</Header>
         </Card.Header>
         <Card.Content textAlign="left">
-          <ViewInput label="Exercise" value={exercise?.name} />
+          <ViewInput
+            label="Exercise"
+            value={
+              exerciseTypes?.find((e) => e.id === exercise.exerciseId).name
+            }
+          />
           <Grid columns={4} style={{ marginTop: "10px" }}>
             <Grid.Row>
               <Grid.Column width={4} style={{ marginLeft: "10px" }}>
@@ -60,49 +67,21 @@ const ViewCard = ({ item, id }) => {
               </Grid.Column>
             </Grid.Row>
 
-            {Object.keys(exercise.sets)
-              .sort((a, b) => a - b)
+            {exercise.sets
+              .sort((a, b) => a.orderId - b.orderId)
               .map((s, i) => (
-                <Grid.Row style={{ marginTop: "-26px" }} key={"set" + i}>
+                <Grid.Row
+                  style={{ marginTop: "-26px" }}
+                  key={"exercise-" + id + "-set" + i}
+                >
                   <Grid.Column width={4} style={{ marginLeft: "10px" }}>
                     <ViewInput placeholder="Set #" value={i + 1} disabled />
                   </Grid.Column>
                   <Grid.Column width={5}>
-                    <ViewInput
-                      placeholder="Weight"
-                      type="number"
-                      value={exercise.sets[s].weight}
-                      onChange={(e, { value }) =>
-                        setExercise({
-                          ...exercise,
-                          sets: {
-                            ...exercise.sets,
-                            [s]: {
-                              ...exercise.sets[s],
-                              weight: parseFloat(value),
-                            },
-                          },
-                        })
-                      }
-                    />
+                    <ViewInput value={s.weight} />
                   </Grid.Column>
                   <Grid.Column width={5}>
-                    <ViewInput
-                      placeholder="Reps"
-                      value={exercise.sets[s].reps}
-                      onChange={(e, { value }) =>
-                        setExercise({
-                          ...exercise,
-                          sets: {
-                            ...exercise.sets,
-                            [s]: {
-                              ...exercise.sets[s],
-                              reps: parseFloat(value),
-                            },
-                          },
-                        })
-                      }
-                    />
+                    <ViewInput value={s.reps} />
                   </Grid.Column>
                 </Grid.Row>
               ))}

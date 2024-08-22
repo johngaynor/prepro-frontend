@@ -12,19 +12,19 @@ const Log = () => {
   const [editMode, setEditMode] = useState(false);
 
   const {
-    workoutSummaries,
-    summariesLoading,
-    getWorkoutSummaries,
     editLoading,
     exerciseTypes,
     exerciseTypesLoading,
     getExerciseTypes,
+    workoutLogs,
+    logsLoading,
+    getWorkoutLogs,
   } = useContext(FitnessContext);
 
   useEffect(() => {
-    if (!workoutSummaries && !summariesLoading) getWorkoutSummaries();
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
-  }, [workoutSummaries, summariesLoading, exerciseTypes, exerciseTypesLoading]);
+    if (!workoutLogs && !logsLoading) getWorkoutLogs();
+  }, [exerciseTypes, exerciseTypesLoading, workoutLogs, logsLoading]);
 
   const { date } = useParams();
   const navigate = useNavigate();
@@ -37,10 +37,13 @@ const Log = () => {
     }
   });
 
+  const rawDate = DateTime.fromISO(date).toUTC().toISO();
+  const selectedWorkout = workoutLogs?.find((l) => l.date === rawDate);
+
   return (
     <React.Fragment>
       <Accordion fluid styled>
-        {(summariesLoading || editLoading) && <Spinner />}
+        {(logsLoading || editLoading) && <Spinner />}
         <Accordion.Title
           active={activeTab === 1}
           onClick={() => {
@@ -54,6 +57,7 @@ const Log = () => {
         </Accordion.Title>
         <Accordion.Content active={activeTab === 1}>
           <Summary
+            selectedWorkout={selectedWorkout}
             setActiveTab={setActiveTab}
             editMode={editMode}
             setEditMode={setEditMode}
@@ -74,7 +78,7 @@ const Log = () => {
               Workout Exercises
             </Accordion.Title>
             <Accordion.Content active={activeTab === 2}>
-              <Exercises editMode={editMode} setEditMode={setEditMode} />
+              <Exercises selectedWorkout={selectedWorkout} />
             </Accordion.Content>
           </>
         )}
