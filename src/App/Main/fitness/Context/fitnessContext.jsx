@@ -76,6 +76,19 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  function deleteExerciseType(id) {
+    setEditLoading(true);
+    apiCall("delete", `/api/fitness/exercises/types/${id}`)
+      .then((res) => {
+        setExerciseTypes(null);
+        toast.success("Successfully deleted exercise type!");
+      })
+      .catch((err) => {
+        toast.error(`Error deleting exercise type: ${err.message}`);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <FitnessContext.Provider
       value={{
@@ -88,6 +101,7 @@ export const FitnessProvider = ({ children }) => {
         logsLoading,
         getWorkoutLogs,
         deleteWorkoutExercise,
+        deleteExerciseType,
       }}
     >
       {children}

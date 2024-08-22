@@ -29,7 +29,7 @@ const ViewCard = ({ exercise, id, setEditMode }) => {
             size="small"
             color="orange"
             onClick={() => setEditMode(exercise.id)}
-          ></Button>
+          />
           <Header as="h4">Exercise #{id + 1}</Header>
         </Card.Header>
         <Card.Content textAlign="left">
