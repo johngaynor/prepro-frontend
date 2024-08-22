@@ -28,9 +28,9 @@ const AppSelector = ({ activeUser, activeUserApps }) => {
         <List.Content floated="right">
           <Checkbox
             toggle
-            checked={!!app.access || app.allUsers}
+            checked={!!app.access || !!app.allUsers}
             onChange={(e) => toggleUserAppAccess(activeUser, app)}
-            disabled={app.restricted || app.allUsers}
+            disabled={!!app.restricted || !!app.allUsers}
           />
         </List.Content>
       </List.Item>
