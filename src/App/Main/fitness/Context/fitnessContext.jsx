@@ -5,18 +5,18 @@ import toast from "react-hot-toast";
 export const FitnessContext = createContext();
 
 export const FitnessProvider = ({ children }) => {
-  const [workoutLogs, setWorkoutLogs] = useState(null);
+  const [workoutSummaries, setWorkoutSummaries] = useState(null);
   const [exerciseTypes, setExerciseTypes] = useState(null);
   // loading states
   const [editLoading, setEditLoading] = useState(false);
-  const [logsLoading, setLogsLoading] = useState(false);
+  const [summariesLoading, setSummariesLoading] = useState(false);
   const [exerciseTypesLoading, setExerciseTypesLoading] = useState(false);
 
   function editWorkoutSummary(values) {
     setEditLoading(true);
     apiCall("post", "/api/fitness/logs/workout", { ...values })
       .then((res) => {
-        setWorkoutLogs(null);
+        setWorkoutSummaries(null);
         toast.success("Successfully edited workout log!");
       })
       .catch((err) => {
@@ -29,12 +29,12 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
-  function getWorkoutLogs() {
-    setLogsLoading(true);
+  function getWorkoutSummaries() {
+    setSummariesLoading(true);
     apiCall("get", "/api/fitness/logs/workouts")
       .then((res) => {
         if (res.result) {
-          setWorkoutLogs(res.result);
+          setWorkoutSummaries(res.result);
         } else {
           throw new Error("No result from API call...");
         }
@@ -42,7 +42,7 @@ export const FitnessProvider = ({ children }) => {
       .catch((err) => {
         toast.error(`Error getting workout logs: ${err.message}`);
       })
-      .finally(() => setLogsLoading(false));
+      .finally(() => setSummariesLoading(false));
   }
 
   function getExerciseTypes() {
@@ -66,9 +66,9 @@ export const FitnessProvider = ({ children }) => {
       value={{
         editLoading,
         editWorkoutSummary,
-        logsLoading,
-        workoutLogs,
-        getWorkoutLogs,
+        summariesLoading,
+        workoutSummaries,
+        getWorkoutSummaries,
         exerciseTypes,
         exerciseTypesLoading,
         getExerciseTypes,

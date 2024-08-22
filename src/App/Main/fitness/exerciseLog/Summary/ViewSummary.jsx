@@ -5,7 +5,7 @@ import { Grid, Button, Container } from "semantic-ui-react";
 import { DateTime } from "luxon";
 import { useNavigate } from "react-router-dom";
 
-const ViewSummary = ({ selectedLog, setEditMode }) => {
+const ViewSummary = ({ selectedSummary, setEditMode }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -13,19 +13,19 @@ const ViewSummary = ({ selectedLog, setEditMode }) => {
         <InputField
           type="date"
           label="Date"
-          value={DateTime.fromISO(selectedLog.date).toFormat("yyyy-MM-dd")}
+          value={DateTime.fromISO(selectedSummary.date).toFormat("yyyy-MM-dd")}
           onChange={(e, { value }) => navigate(`/fitness/log/${value}`)}
         />
-        <ViewInput value={selectedLog.type} label="Workout Type" />
+        <ViewInput value={selectedSummary.type} label="Workout Type" />
         <ViewInput
           value={DateTime.fromFormat(
-            selectedLog.timeCompleted,
+            selectedSummary.timeCompleted,
             "HH:mm:ss"
           ).toFormat("hh:mm a")}
           label="Time Completed"
         />
         <ViewInput
-          value={selectedLog.comments}
+          value={selectedSummary.comments}
           label="Workout Comments"
           fullRow
           height={90}

@@ -8,17 +8,22 @@ import EditSummary from "./EditSummary";
 const Summary = ({ setActiveTab, editMode, setEditMode }) => {
   const { date } = useParams();
 
-  const { workoutLogs } = React.useContext(FitnessContext);
+  const { workoutSummaries } = React.useContext(FitnessContext);
 
   const rawDate = DateTime.fromISO(date).toUTC().toISO();
-  const selectedLog = workoutLogs?.find((l) => l.date === rawDate);
+  const selectedSummary = workoutSummaries?.find((l) => l.date === rawDate);
 
-  if (selectedLog && !editMode) {
-    return <ViewSummary selectedLog={selectedLog} setEditMode={setEditMode} />;
+  if (selectedSummary && !editMode) {
+    return (
+      <ViewSummary
+        selectedSummary={selectedSummary}
+        setEditMode={setEditMode}
+      />
+    );
   } else {
     return (
       <EditSummary
-        selectedLog={selectedLog}
+        selectedSummary={selectedSummary}
         setEditMode={setEditMode}
         setActiveTab={setActiveTab}
         date={date}

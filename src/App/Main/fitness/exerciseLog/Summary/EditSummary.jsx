@@ -9,13 +9,13 @@ import FitnessContext from "../../Context/fitnessContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 
-const EditSummary = ({ selectedLog, setEditMode, setActiveTab, date }) => {
+const EditSummary = ({ selectedSummary, setEditMode, setActiveTab, date }) => {
   const [formValues, setFormValues] = useState({
     date,
-    workoutId: selectedLog?.id || null,
-    comments: selectedLog?.comments || "",
-    type: selectedLog?.type || "",
-    timeCompleted: selectedLog?.timeCompleted.slice(0, -3) || "",
+    workoutId: selectedSummary?.id || null,
+    comments: selectedSummary?.comments || "",
+    type: selectedSummary?.type || "",
+    timeCompleted: selectedSummary?.timeCompleted.slice(0, -3) || "",
   });
   const [formErrors, setFormErrors] = useState({});
 
@@ -50,7 +50,7 @@ const EditSummary = ({ selectedLog, setEditMode, setActiveTab, date }) => {
           setFormErrors({});
           editWorkoutSummary(formValues);
 
-          if (selectedLog) {
+          if (selectedSummary) {
             setEditMode(false);
           } else {
             setActiveTab(2);
@@ -104,7 +104,7 @@ const EditSummary = ({ selectedLog, setEditMode, setActiveTab, date }) => {
           justifyContent: "flex-end",
         }}
       >
-        {selectedLog && (
+        {selectedSummary && (
           <Button
             type="button"
             content="Cancel"
