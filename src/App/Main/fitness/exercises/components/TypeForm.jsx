@@ -12,14 +12,13 @@ import {
 
 const TypeForm = ({ open, onCancel, onConfirm }) => {
   const [name, setName] = useState("");
+
+  function handleCancel() {
+    setName("");
+    onCancel();
+  }
   return (
-    <Modal
-      onClose={() => {
-        setName("");
-        onCancel();
-      }}
-      open={open}
-    >
+    <Modal onClose={handleCancel} open={open}>
       <ModalHeader>Add New Exercise Type</ModalHeader>
       <ModalContent>
         <ModalDescription>
@@ -31,14 +30,17 @@ const TypeForm = ({ open, onCancel, onConfirm }) => {
         </ModalDescription>
       </ModalContent>
       <ModalActions>
-        <Button color="red" onClick={onCancel}>
+        <Button color="red" onClick={handleCancel}>
           Cancel
         </Button>
         <Button
           content="Submit"
           labelPosition="right"
           icon="checkmark"
-          onClick={() => onConfirm(name)}
+          onClick={() => {
+            onConfirm(name);
+            setName("");
+          }}
           positive
         />
       </ModalActions>
