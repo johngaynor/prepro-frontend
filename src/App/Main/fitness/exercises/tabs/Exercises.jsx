@@ -15,6 +15,7 @@ const Exercises = () => {
     exerciseTypesLoading,
     getExerciseTypes,
     deleteExerciseType,
+    addExerciseType,
   } = useContext(FitnessContext);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const Exercises = () => {
         open={addOpen}
         onCancel={() => setAddOpen(false)}
         onConfirm={(name) => {
-          console.log("submitting", name);
+          addExerciseType(name);
           setAddOpen(false);
         }}
       />

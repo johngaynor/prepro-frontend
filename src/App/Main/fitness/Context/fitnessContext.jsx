@@ -89,6 +89,19 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  function addExerciseType(name) {
+    setEditLoading(true);
+    apiCall("post", "/api/fitness/exercises/types", { name })
+      .then((res) => {
+        setExerciseTypes(null);
+        toast.success("Successfully added exercise type!");
+      })
+      .catch((err) => {
+        toast.error(`Error adding exercise type: ${err.message}`);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <FitnessContext.Provider
       value={{
@@ -102,6 +115,7 @@ export const FitnessProvider = ({ children }) => {
         getWorkoutLogs,
         deleteWorkoutExercise,
         deleteExerciseType,
+        addExerciseType,
       }}
     >
       {children}
