@@ -1,8 +1,7 @@
 import React from "react";
 import { Grid, Button, Card, Header } from "semantic-ui-react";
-import FitnessContext from "../../Context/fitnessContext";
 
-const ExerciseCard = ({ exercise, deleteExerciseType }) => {
+const ExerciseCard = ({ exercise, onDelete }) => {
   return (
     <Grid.Column
       mobile={16} // < 768
@@ -18,7 +17,7 @@ const ExerciseCard = ({ exercise, deleteExerciseType }) => {
             floated="right"
             size="small"
             color="red"
-            onClick={() => deleteExerciseType(exercise.id)}
+            onClick={onDelete}
           />
           <Header as="h4">{exercise.name}</Header>
         </Card.Header>
