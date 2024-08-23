@@ -24,32 +24,30 @@ const defaultValues = {
   sets: [{ weight: "", reps: "" }],
 };
 
-const NewExercise = ({ open, onCancel, selectedWorkout }) => {
+const EditExerciseModal = ({
+  open,
+  exercise,
+  handleCancel,
+  handleSubmit,
+  parentId,
+}) => {
   const [formValues, setFormValues] = useState({
-    exerciseId: null,
-    restTime: "",
-    comments: "",
-    sets: [{ weight: "", reps: "" }],
+    exerciseId: exercise.id,
+    restTime: exercise.restTime || "",
+    comments: exercise.comments || "",
+    sets: exercise.sets || [{ weight: "", reps: "" }],
   });
 
-  const { exerciseTypes, editWorkoutExercises } = useContext(FitnessContext);
+  const { exerciseTypes } = useContext(FitnessContext);
 
-  function handleCancel() {
-    setFormValues(defaultValues);
-    onCancel();
-  }
-
-  function handleConfirm() {
-    if (!formValues.exerciseId || !selectedWorkout?.id) {
-      alert("criteria not met");
-    } else {
-      editWorkoutExercises({ ...formValues, workoutId: selectedWorkout.id });
-      setFormValues(defaultValues);
-      onCancel();
-    }
-  }
   return (
-    <Modal onClose={handleCancel} open={open}>
+    <Modal
+      onClose={() => {
+        handleCancel();
+        setFormValues(defaultValues);
+      }}
+      open={open}
+    >
       <ModalHeader>Add Exercise</ModalHeader>
       <ModalContent>
         <ModalDescription>
@@ -179,14 +177,21 @@ const NewExercise = ({ open, onCancel, selectedWorkout }) => {
         </ModalDescription>
       </ModalContent>
       <ModalActions>
-        <Button color="red" onClick={handleCancel}>
+        <Button
+          color="red"
+          onClick={() => {
+            handleCancel();
+            setFormValues(defaultValues);
+          }}
+        >
           Cancel
         </Button>
         <Button
           content="Submit"
           labelPosition="right"
           icon="checkmark"
-          onClick={handleConfirm}
+          onClick={() => handleSubmit({ ...formValues, parentId })}
+          // will need to add validation here at some point
           positive
         />
       </ModalActions>
@@ -194,4 +199,4 @@ const NewExercise = ({ open, onCancel, selectedWorkout }) => {
   );
 };
 
-export default NewExercise;
+export default EditExerciseModal;

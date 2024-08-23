@@ -3,6 +3,7 @@ import { FitnessProvider } from "../Context/fitnessContext";
 import Tab from "../../components/Tab";
 import Exercises from "./tabs/Exercises";
 import Gyms from "./tabs/Gyms";
+import Workouts from "./tabs/Workouts";
 
 const ExerciseManager = () => {
   const mainPanes = [
@@ -10,6 +11,12 @@ const ExerciseManager = () => {
       menuItem: "Manage Exercises",
       render: () => {
         return <Exercises />;
+      },
+    },
+    {
+      menuItem: "Manage Workouts",
+      render: () => {
+        return <Workouts />;
       },
     },
     {
