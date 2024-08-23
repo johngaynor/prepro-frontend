@@ -24,6 +24,8 @@ const defaultValues = {
   sets: [{ weight: "", reps: "" }],
 };
 
+console.log("test");
+
 const NewExercise = ({ open, onCancel, selectedWorkout }) => {
   const [formValues, setFormValues] = useState({
     exerciseId: null,
