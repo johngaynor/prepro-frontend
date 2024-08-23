@@ -23,6 +23,7 @@ const TypeForm = ({ open, onCancel, onConfirm }) => {
       <ModalContent>
         <ModalDescription>
           <InputField
+            type="text"
             placeholder="Exercise Name..."
             value={name}
             onChange={(e, { value }) => setName(value)}

@@ -15,7 +15,7 @@ import { Grid, Label, Input, TextArea, Dropdown } from "semantic-ui-react";
  * @returns {JSX.Element} The rendered InputField component
  */
 export const InputField = ({
-  type,
+  type = "text",
   label,
   value,
   onChange,

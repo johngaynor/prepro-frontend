@@ -55,6 +55,7 @@ const AppCard = ({ app, selectedApps, setSelectedApps }) => {
                 </Grid.Column>
                 <Grid.Column width={9}>
                   <InputField
+                  type='text'
                     value={selectedApps[app.id][item].text}
                     placeholder="notes"
                     onChange={(e, { value }) =>

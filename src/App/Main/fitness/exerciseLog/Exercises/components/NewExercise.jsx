@@ -70,6 +70,7 @@ const NewExercise = ({ open, onCancel, selectedWorkout }) => {
                 search
               />
               <InputField
+                type="text"
                 label="Rest Time"
                 value={formValues.restTime}
                 onChange={(e, { value }) =>
@@ -120,7 +121,7 @@ const NewExercise = ({ open, onCancel, selectedWorkout }) => {
                       />
                     </Grid.Column>
                     <Grid.Column width={4} style={{ marginLeft: "10px" }}>
-                      <InputField placeholder="Set #" value={i + 1} disabled />
+                      <InputField placeholder="Set #" value={i + 1} disabled type='number' />
                     </Grid.Column>
                     <Grid.Column width={5}>
                       <InputField
@@ -137,6 +138,7 @@ const NewExercise = ({ open, onCancel, selectedWorkout }) => {
                     <Grid.Column width={5}>
                       <InputField
                         placeholder="Reps"
+                        type='number'
                         value={s.reps}
                         onChange={(e, { value }) => {
                           const newSets = [...formValues.sets];

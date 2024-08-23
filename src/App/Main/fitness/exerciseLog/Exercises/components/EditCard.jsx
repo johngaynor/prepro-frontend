@@ -97,7 +97,12 @@ const ExerciseCard = ({ item, id, setEditMode }) => {
                     />
                   </Grid.Column>
                   <Grid.Column width={4} style={{ marginLeft: "10px" }}>
-                    <InputField placeholder="Set #" value={i + 1} disabled />
+                    <InputField
+                      placeholder="Set #"
+                      value={i + 1}
+                      disabled
+                      type="number"
+                    />
                   </Grid.Column>
                   <Grid.Column width={5}>
                     <InputField
@@ -120,6 +125,7 @@ const ExerciseCard = ({ item, id, setEditMode }) => {
                   </Grid.Column>
                   <Grid.Column width={5}>
                     <InputField
+                      type="number"
                       placeholder="Reps"
                       value={exercise.sets[s].reps}
                       onChange={(e, { value }) =>

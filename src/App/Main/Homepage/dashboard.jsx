@@ -27,12 +27,12 @@ const Dashboard = ({ startsWith }) => {
           to={app.link}
           key={app.id}
           style={{ margin: 0, padding: 0 }}
-          onClick={() => {
-            window.dataLayer.push({
-              appId: app.id,
-              userId: currentUser.user.id,
-            });
-          }}
+          // onClick={() => {
+          //   window.dataLayer.push({
+          //     appId: app.id,
+          //     userId: currentUser.user.id,
+          //   });
+          // }}
           className="appTile"
         >
           <Card>
