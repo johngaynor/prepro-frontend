@@ -6,11 +6,15 @@ import NewExercise from "./components/NewExercise";
 
 const Exercises = ({ selectedWorkout }) => {
   const [editMode, setEditMode] = useState(null);
-  const [addOpen, setAddOpen] = useState(true);
+  const [addOpen, setAddOpen] = useState(false);
 
   return (
     <>
-      <NewExercise open={addOpen} onCancel={() => setAddOpen(false)} />
+      <NewExercise
+        open={addOpen}
+        onCancel={() => setAddOpen(false)}
+        selectedWorkout={selectedWorkout}
+      />
       <Grid stackable columns={3}>
         {selectedWorkout?.exercises.map((e, i) => {
           if (e.id === editMode) {
@@ -39,6 +43,7 @@ const Exercises = ({ selectedWorkout }) => {
         type="button"
         onClick={() => setAddOpen(true)}
         color="green"
+        style={{ marginTop: 20 }}
       />
     </>
   );

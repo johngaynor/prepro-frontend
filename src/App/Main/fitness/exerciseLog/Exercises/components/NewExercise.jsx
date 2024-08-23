@@ -13,6 +13,7 @@ import {
   Modal,
   Grid,
   Form,
+  Label,
 } from "semantic-ui-react";
 import FitnessContext from "../../../Context/fitnessContext";
 
@@ -20,18 +21,18 @@ const defaultValues = {
   exerciseId: null,
   restTime: "",
   comments: "",
-  sets: [],
+  sets: [{ weight: "", reps: "" }],
 };
 
-const NewExercise = ({ open, onCancel }) => {
+const NewExercise = ({ open, onCancel, selectedWorkout }) => {
   const [formValues, setFormValues] = useState({
     exerciseId: null,
     restTime: "",
     comments: "",
-    sets: [],
+    sets: [{ weight: "", reps: "" }],
   });
 
-  const { exerciseTypes } = useContext(FitnessContext);
+  const { exerciseTypes, editWorkoutExercises } = useContext(FitnessContext);
 
   function handleCancel() {
     setFormValues(defaultValues);
@@ -39,12 +40,17 @@ const NewExercise = ({ open, onCancel }) => {
   }
 
   function handleConfirm() {
-    setFormValues(defaultValues);
-    onCancel();
+    if (!formValues.exerciseId || !selectedWorkout?.id) {
+      alert("criteria not met");
+    } else {
+      editWorkoutExercises({ ...formValues, workoutId: selectedWorkout.id });
+      setFormValues(defaultValues);
+      onCancel();
+    }
   }
   return (
     <Modal onClose={handleCancel} open={open}>
-      <ModalHeader>Add New Exercise Type</ModalHeader>
+      <ModalHeader>Add Exercise</ModalHeader>
       <ModalContent>
         <ModalDescription>
           <Form>
@@ -68,7 +74,93 @@ const NewExercise = ({ open, onCancel }) => {
                   setFormValues({ ...formValues, restTime: value })
                 }
               />
+              <Grid.Row>
+                <Grid.Column width={1} />
+                <Grid.Column width={4} style={{ marginLeft: "10px" }}>
+                  <Label
+                    horizontal
+                    style={{ minWidth: "45%", textAlign: "center" }}
+                  >
+                    Set #:
+                  </Label>
+                </Grid.Column>
+                <Grid.Column width={5}>
+                  <Label
+                    horizontal
+                    style={{ minWidth: "45%", textAlign: "center" }}
+                  >
+                    Weight:
+                  </Label>
+                </Grid.Column>
+                <Grid.Column width={5}>
+                  <Label
+                    horizontal
+                    style={{ minWidth: "45%", textAlign: "center" }}
+                  >
+                    Reps:
+                  </Label>
+                </Grid.Column>
+              </Grid.Row>
+              {/* Sets */}
+              {formValues.sets
+                // .sort((a, b) => a.orderId - b.orderId)
+                .map((s, i) => (
+                  <Grid.Row style={{ marginTop: "-26px" }} key={"set" + i}>
+                    <Grid.Column width={1}>
+                      <Button
+                        icon="trash"
+                        color="red"
+                        onClick={() => {
+                          const newSets = [...formValues.sets];
+                          newSets.splice(i, 1);
+                          setFormValues({ ...formValues, sets: newSets });
+                        }}
+                      />
+                    </Grid.Column>
+                    <Grid.Column width={4} style={{ marginLeft: "10px" }}>
+                      <InputField placeholder="Set #" value={i + 1} disabled />
+                    </Grid.Column>
+                    <Grid.Column width={5}>
+                      <InputField
+                        placeholder="Weight"
+                        type="number"
+                        value={s.weight}
+                        onChange={(e, { value }) => {
+                          const newSets = [...formValues.sets];
+                          newSets[i].weight = value;
+                          setFormValues({ ...formValues, sets: newSets });
+                        }}
+                      />
+                    </Grid.Column>
+                    <Grid.Column width={5}>
+                      <InputField
+                        placeholder="Reps"
+                        value={s.reps}
+                        onChange={(e, { value }) => {
+                          const newSets = [...formValues.sets];
+                          newSets[i].reps = value;
+                          setFormValues({ ...formValues, sets: newSets });
+                        }}
+                      />
+                    </Grid.Column>
+                  </Grid.Row>
+                ))}
+              <Grid.Row style={{ marginTop: "-20px" }}>
+                <Grid.Column width={2}>
+                  <Button
+                    icon="plus"
+                    color="green"
+                    onClick={() =>
+                      setFormValues({
+                        ...formValues,
+                        sets: [...formValues.sets, { weight: "", reps: "" }],
+                      })
+                    }
+                  />
+                </Grid.Column>
+              </Grid.Row>
               <TextAreaField
+                fullWidth
                 label="comments"
                 value={formValues.comments}
                 onChange={(e, { value }) =>

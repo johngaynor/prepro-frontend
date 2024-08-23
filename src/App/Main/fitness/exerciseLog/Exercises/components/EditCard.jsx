@@ -13,7 +13,7 @@ import FitnessContext from "../../../Context/fitnessContext";
 const ExerciseCard = ({ item, id, setEditMode }) => {
   const [exercise, setExercise] = React.useState(item);
 
-  const { deleteWorkoutExercise } = useContext(FitnessContext);
+  const { deleteWorkoutExercise, exerciseTypes } = useContext(FitnessContext);
 
   function handleSubmit() {
     setEditMode(false);
@@ -42,16 +42,12 @@ const ExerciseCard = ({ item, id, setEditMode }) => {
         <Card.Content textAlign="left">
           <DropdownField
             label="Exercise"
-            options={[
-              { text: "lat pulldowns", value: "lat pulldowns" },
-              { text: "chest fly", value: "chest fly" },
-              { text: "db press", value: "db press" },
-              { text: "tricep pushdowns", value: "tricep pushdowns" },
-              { text: "bb curls", value: "bb curls" },
-              { text: "leg extension", value: "leg extension" },
-            ]}
+            options={exerciseTypes?.map((e) => ({
+              text: e.name,
+              value: e.id,
+            }))}
             search
-            value={exercise?.name}
+            value={exercise?.exerciseId}
             onChange={(e, { value }) =>
               setExercise({ ...exercise, name: value })
             }
