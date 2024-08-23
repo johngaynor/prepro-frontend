@@ -21,6 +21,8 @@ const Log = () => {
     getWorkoutLogs,
   } = useContext(FitnessContext);
 
+  console.log("logs", workoutLogs);
+
   useEffect(() => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
     if (!workoutLogs && !logsLoading) getWorkoutLogs();
@@ -39,6 +41,9 @@ const Log = () => {
 
   const rawDate = DateTime.fromISO(date).toUTC().toISO();
   const selectedWorkout = workoutLogs?.find((l) => l.date === rawDate);
+
+  console.log("selectedWorkout", selectedWorkout);
+  console.log("rawDate", rawDate);
 
   return (
     <React.Fragment>
