@@ -17,7 +17,7 @@ export const FitnessProvider = ({ children }) => {
 
   function editWorkoutSummary(values) {
     setEditLoading(true);
-    apiCall("post", "/api/fitness/logs/workout", { ...values })
+    apiCall("post", "/api/fitness/logs/summary", { ...values })
       .then((res) => {
         setWorkoutLogs(null);
         toast.success("Successfully edited workout log!");
@@ -34,7 +34,7 @@ export const FitnessProvider = ({ children }) => {
 
   function getWorkoutLogs() {
     setLogsLoading(true);
-    apiCall("get", "/api/fitness/logs/workouts")
+    apiCall("get", "/api/fitness/logs")
       .then((res) => {
         if (res.result) {
           setWorkoutLogs(res.result);
@@ -106,7 +106,7 @@ export const FitnessProvider = ({ children }) => {
 
   function editWorkoutExercises(values) {
     setEditLoading(true);
-    apiCall("post", "/api/fitness/logs/workout/exercises", { ...values })
+    apiCall("post", "/api/fitness/logs/exercises", { ...values })
       .then((res) => {
         setWorkoutLogs(null);
         toast.success("Successfully edited workout exercise!");
