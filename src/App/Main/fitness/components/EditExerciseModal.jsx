@@ -3,7 +3,7 @@ import {
   DropdownField,
   InputField,
   TextAreaField,
-} from "../../../../components/FormFields";
+} from "../../components/FormFields";
 import {
   ModalHeader,
   ModalDescription,
@@ -15,7 +15,7 @@ import {
   Form,
   Label,
 } from "semantic-ui-react";
-import FitnessContext from "../../../Context/fitnessContext";
+import FitnessContext from "../Context/fitnessContext";
 
 const defaultValues = {
   exerciseId: null,

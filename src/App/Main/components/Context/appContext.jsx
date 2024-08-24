@@ -1,17 +1,17 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import { apiCall } from "../../../services/api";
 import toast from "react-hot-toast";
 
-export const AppContext = React.createContext();
+export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [user, setUser] = React.useState({});
-  const [userLoading, setUserLoading] = React.useState(true);
-  const [auth, setAuth] = React.useState(false);
-  const [apps, setApps] = React.useState([]);
-  const [appsLoading, setAppsLoading] = React.useState(false);
-  const [changeLog, setChangeLog] = React.useState(null);
-  const [logLoading, setLogLoading] = React.useState(false);
+  const [user, setUser] = useState({});
+  const [userLoading, setUserLoading] = useState(true);
+  const [auth, setAuth] = useState(false);
+  const [apps, setApps] = useState([]);
+  const [appsLoading, setAppsLoading] = useState(false);
+  const [changeLog, setChangeLog] = useState(null);
+  const [logLoading, setLogLoading] = useState(false);
 
   function authUser() {
     apiCall("get", "/api/auth/user", { credentials: "include" })
@@ -21,8 +21,7 @@ export const AppProvider = ({ children }) => {
           setAuth(true);
           setUser(res.user);
         } else {
-          toast.error("Unknown error occurred...");
-          setUser({});
+          throw new Error("No user is signed in...");
         }
       })
       .catch((err) => {
