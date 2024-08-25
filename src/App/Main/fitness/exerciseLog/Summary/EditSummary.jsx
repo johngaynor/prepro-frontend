@@ -1,18 +1,26 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Grid, Form, Button, Container } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../../components/FormFields";
 import FitnessContext from "../../Context/fitnessContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 
+const defaultValues = {
+  workoutId: null,
+  comments: "",
+  timeStarted: "",
+  timeCompleted: "",
+};
+
 const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
-  const [formValues, setFormValues] = useState({
-    workoutId: selectedWorkout?.id || null,
-    comments: selectedWorkout?.comments || "",
-    timeStarted: selectedWorkout?.timeStarted.slice(0, -3) || "",
-    timeCompleted: selectedWorkout?.timeCompleted.slice(0, -3) || "",
-  });
+  const [formValues, setFormValues] = useState(defaultValues);
   const [formErrors, setFormErrors] = useState({});
+
+  useEffect(() => {
+    if (selectedWorkout) {
+      setFormValues(selectedWorkout);
+    }
+  }, [selectedWorkout]);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -84,7 +92,11 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
           fullWidth
           value={formValues.comments}
           onChange={(e, { value }) =>
-            setFormValues({ ...formValues, comments: value })
+            setFormValues({
+              ...formValues,
+              comments: value,
+              workoutId: selectedWorkout.id,
+            })
           }
         />
       </Grid>
@@ -110,12 +122,7 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
               color="red"
               onClick={() => {
                 deleteWorkoutSummary(selectedWorkout.id);
-                setFormValues({
-                  workoutId: null,
-                  comments: "",
-                  timeStarted: "",
-                  timeCompleted: "",
-                });
+                setFormValues(defaultValues);
               }}
             />
           </>

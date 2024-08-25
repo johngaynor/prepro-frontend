@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 export const FitnessContext = createContext();
 
 export const FitnessProvider = ({ children }) => {
-  const [period, setPeriod] = useState(null); // will be used later to only grab logs within a certain period
+  // const [period, setPeriod] = useState(null); // will be used later to only grab logs within a certain period
   const [workoutLogs, setWorkoutLogs] = useState(null);
   const [exerciseTypes, setExerciseTypes] = useState(null);
   const [workoutTemplates, setWorkoutTemplates] = useState(null);

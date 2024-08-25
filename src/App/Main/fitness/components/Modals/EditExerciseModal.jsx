@@ -20,7 +20,6 @@ import {
 import FitnessContext from "../../Context/fitnessContext";
 
 const defaultValues = {
-  id: null,
   exerciseId: "",
   restTime: "",
   comments: "",
@@ -132,55 +131,53 @@ const EditExerciseModal = ({
                 </Grid.Column>
               </Grid.Row>
               {/* Sets */}
-              {formValues.sets
-                // .sort((a, b) => a.orderId - b.orderId)
-                .map((s, i) => (
-                  <Grid.Row style={{ marginTop: "-26px" }} key={"set" + i}>
-                    <Grid.Column width={1}>
-                      <Button
-                        icon="trash"
-                        color="red"
-                        onClick={() => {
-                          const newSets = [...formValues.sets];
-                          newSets.splice(i, 1);
-                          setFormValues({ ...formValues, sets: newSets });
-                        }}
-                      />
-                    </Grid.Column>
-                    <Grid.Column width={4} style={{ marginLeft: "10px" }}>
-                      <InputField
-                        placeholder="Set #"
-                        value={i + 1}
-                        disabled
-                        type="number"
-                      />
-                    </Grid.Column>
-                    <Grid.Column width={5}>
-                      <InputField
-                        placeholder="Weight"
-                        type="number"
-                        value={s.weight}
-                        onChange={(e, { value }) => {
-                          const newSets = [...formValues.sets];
-                          newSets[i].weight = value;
-                          setFormValues({ ...formValues, sets: newSets });
-                        }}
-                      />
-                    </Grid.Column>
-                    <Grid.Column width={5}>
-                      <InputField
-                        placeholder="Reps"
-                        type="number"
-                        value={s.reps}
-                        onChange={(e, { value }) => {
-                          const newSets = [...formValues.sets];
-                          newSets[i].reps = value;
-                          setFormValues({ ...formValues, sets: newSets });
-                        }}
-                      />
-                    </Grid.Column>
-                  </Grid.Row>
-                ))}
+              {formValues.sets.map((s, i) => (
+                <Grid.Row style={{ marginTop: "-26px" }} key={"set" + i}>
+                  <Grid.Column width={1}>
+                    <Button
+                      icon="trash"
+                      color="red"
+                      onClick={() => {
+                        const newSets = [...formValues.sets];
+                        newSets.splice(i, 1);
+                        setFormValues({ ...formValues, sets: newSets });
+                      }}
+                    />
+                  </Grid.Column>
+                  <Grid.Column width={4} style={{ marginLeft: "10px" }}>
+                    <InputField
+                      placeholder="Set #"
+                      value={i + 1}
+                      disabled
+                      type="number"
+                    />
+                  </Grid.Column>
+                  <Grid.Column width={5}>
+                    <InputField
+                      placeholder="Weight"
+                      type="number"
+                      value={s.weight || ""}
+                      onChange={(e, { value }) => {
+                        const newSets = [...formValues.sets];
+                        newSets[i].weight = value;
+                        setFormValues({ ...formValues, sets: newSets });
+                      }}
+                    />
+                  </Grid.Column>
+                  <Grid.Column width={5}>
+                    <InputField
+                      placeholder="Reps"
+                      type="number"
+                      value={s.reps}
+                      onChange={(e, { value }) => {
+                        const newSets = [...formValues.sets];
+                        newSets[i].reps = value;
+                        setFormValues({ ...formValues, sets: newSets });
+                      }}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              ))}
               <Grid.Row style={{ marginTop: "-20px" }}>
                 <Grid.Column width={2}>
                   <Button
