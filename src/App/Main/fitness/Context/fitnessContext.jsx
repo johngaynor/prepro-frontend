@@ -100,9 +100,9 @@ export const FitnessProvider = ({ children }) => {
   }
 
   // add new exercise type
-  function addExerciseType(name) {
+  function addExerciseType(name, target) {
     setEditLoading(true);
-    apiCall("post", "/api/fitness/exercises/types", { name })
+    apiCall("post", "/api/fitness/exercises/types", { name, target })
       .then((res) => {
         setExerciseTypes(null);
         toast.success("Successfully added exercise type!");

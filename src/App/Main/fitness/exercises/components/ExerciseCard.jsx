@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid, Button, Card, Header } from "semantic-ui-react";
+import { exerciseTargets } from "./ExerciseTargets";
 
 const ExerciseCard = ({ exercise, onDelete }) => {
   return (
@@ -24,6 +25,10 @@ const ExerciseCard = ({ exercise, onDelete }) => {
         <Card.Content textAlign="left">
           <p>
             <strong>id:</strong> {exercise.id}
+          </p>
+          <p>
+            <strong>Type:</strong>{" "}
+            {exerciseTargets.find((t) => t.id === exercise.target).name}
           </p>
         </Card.Content>
       </Card>

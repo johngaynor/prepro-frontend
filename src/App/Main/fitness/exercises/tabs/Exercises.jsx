@@ -22,14 +22,16 @@ const Exercises = () => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
   }, [exerciseTypes, exerciseTypesLoading]);
 
+  console.log(exerciseTypes);
+
   return (
     <Tab.Pane>
       {editLoading && <Spinner />}
       <TypeForm
         open={addOpen}
         onCancel={() => setAddOpen(false)}
-        onConfirm={(name) => {
-          addExerciseType(name);
+        onConfirm={(name, target) => {
+          addExerciseType(name, target);
           setAddOpen(false);
         }}
       />
