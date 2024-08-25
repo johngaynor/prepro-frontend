@@ -22,8 +22,6 @@ const Exercises = () => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
   }, [exerciseTypes, exerciseTypesLoading]);
 
-  console.log(exerciseTypes);
-
   return (
     <Tab.Pane>
       {editLoading && <Spinner />}

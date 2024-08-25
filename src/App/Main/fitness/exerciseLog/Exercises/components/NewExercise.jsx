@@ -41,7 +41,7 @@ const NewExercise = ({ open, onCancel, selectedWorkout }) => {
 
   function handleConfirm() {
     if (!formValues.exerciseId || !selectedWorkout?.id) {
-      alert("criteria not met");
+      alert("NO exercise or log in yet");
     } else {
       editWorkoutExercises({ ...formValues, workoutId: selectedWorkout.id });
       setFormValues(defaultValues);

@@ -45,6 +45,7 @@ const TypeForm = ({ open, onCancel, onConfirm }) => {
             />
             <DropdownField
               label="Primary Muscle Group"
+              search
               options={exerciseTargets.map((t) => ({
                 text: t.name,
                 value: t.id,

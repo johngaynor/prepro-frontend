@@ -13,7 +13,7 @@ const Workouts = () => {
   const {
     workoutTemplates,
     templatesLoading,
-    getTemplates,
+    getWorkoutTemplates,
     exerciseTypes,
     exerciseTypesLoading,
     getExerciseTypes,
@@ -22,7 +22,7 @@ const Workouts = () => {
   } = useContext(FitnessContext);
 
   useEffect(() => {
-    if (!workoutTemplates && !templatesLoading) getTemplates();
+    if (!workoutTemplates && !templatesLoading) getWorkoutTemplates();
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
   }, [workoutTemplates, templatesLoading]);
 
@@ -75,7 +75,7 @@ const Workouts = () => {
 
       {activeTemplate ? (
         <>
-          <Header as="h5">{activeTemplate.name}</Header>
+          <Header as="h5">{template?.name}</Header>
           <Grid columns={3}>
             {template?.exercises?.map((e, i) => (
               <ViewExerciseCard

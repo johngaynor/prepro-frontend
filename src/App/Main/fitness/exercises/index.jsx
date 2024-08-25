@@ -8,17 +8,18 @@ import Workouts from "./tabs/Workouts";
 const ExerciseManager = () => {
   const mainPanes = [
     {
-      menuItem: "Manage Exercises",
-      render: () => {
-        return <Exercises />;
-      },
-    },
-    {
       menuItem: "Manage Workouts",
       render: () => {
         return <Workouts />;
       },
     },
+    {
+      menuItem: "Manage Exercises",
+      render: () => {
+        return <Exercises />;
+      },
+    },
+
     {
       menuItem: "Manage Gyms",
       render: () => {

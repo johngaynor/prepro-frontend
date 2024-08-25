@@ -128,7 +128,7 @@ export const FitnessProvider = ({ children }) => {
   }
 
   // get exercise templates
-  function getTemplates() {
+  function getWorkoutTemplates() {
     setTemplatesLoading(true);
     apiCall("get", "/api/fitness/templates")
       .then((res) => {
@@ -174,6 +174,20 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  // copy workout from template
+  function copyWorkoutFromTemplate(workoutId, templateId) {
+    setEditLoading(true);
+    apiCall("post", "/api/fitness/logs/copy", { workoutId, templateId })
+      .then((res) => {
+        setWorkoutLogs(null);
+        toast.success("Successfully copied workout template!");
+      })
+      .catch((err) => {
+        toast.error(`Error copying workout from template: ${err.message}`);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <FitnessContext.Provider
       value={{
@@ -189,11 +203,12 @@ export const FitnessProvider = ({ children }) => {
         deleteExerciseType,
         addExerciseType,
         editWorkoutExercises,
-        getTemplates,
+        getWorkoutTemplates,
         workoutTemplates,
         templatesLoading,
         editTemplateExercises,
         deleteTemplateExercise,
+        copyWorkoutFromTemplate,
       }}
     >
       {children}

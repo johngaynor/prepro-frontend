@@ -19,12 +19,23 @@ const Log = () => {
     workoutLogs,
     logsLoading,
     getWorkoutLogs,
+    workoutTemplates,
+    templatesLoading,
+    getWorkoutTemplates,
   } = useContext(FitnessContext);
 
   useEffect(() => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
     if (!workoutLogs && !logsLoading) getWorkoutLogs();
-  }, [exerciseTypes, exerciseTypesLoading, workoutLogs, logsLoading]);
+    if (!workoutTemplates && !templatesLoading) getWorkoutTemplates();
+  }, [
+    exerciseTypes,
+    exerciseTypesLoading,
+    workoutLogs,
+    logsLoading,
+    workoutTemplates,
+    templatesLoading,
+  ]);
 
   const { date } = useParams();
   const navigate = useNavigate();
