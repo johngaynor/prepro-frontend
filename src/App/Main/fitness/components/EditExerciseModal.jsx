@@ -14,6 +14,8 @@ import {
   Grid,
   Form,
   Label,
+  Container,
+  Header,
 } from "semantic-ui-react";
 import FitnessContext from "../Context/fitnessContext";
 
@@ -29,13 +31,14 @@ const EditExerciseModal = ({
   exercise,
   handleCancel,
   handleSubmit,
+  handleDelete,
   parentId,
 }) => {
   const [formValues, setFormValues] = useState({
-    exerciseId: exercise.id,
-    restTime: exercise.restTime || "",
-    comments: exercise.comments || "",
-    sets: exercise.sets || [{ weight: "", reps: "" }],
+    exerciseId: exercise?.exerciseId,
+    restTime: exercise?.restTime || "",
+    comments: exercise?.comments || "",
+    sets: exercise?.sets || [{ weight: "", reps: "" }],
   });
 
   const { exerciseTypes } = useContext(FitnessContext);
@@ -48,7 +51,18 @@ const EditExerciseModal = ({
       }}
       open={open}
     >
-      <ModalHeader>Add Exercise</ModalHeader>
+      <ModalHeader>
+        <Container style={{ display: "flex", justifyContent: "space-between" }}>
+          <Header>{exercise ? "Edit" : "Add"} Exercise</Header>
+          {exercise && (
+            <Button
+              color="red"
+              icon="trash"
+              onClick={() => handleDelete(exercise?.id)}
+            />
+          )}
+        </Container>
+      </ModalHeader>
       <ModalContent>
         <ModalDescription>
           <Form>
@@ -190,7 +204,13 @@ const EditExerciseModal = ({
           content="Submit"
           labelPosition="right"
           icon="checkmark"
-          onClick={() => handleSubmit({ ...formValues, parentId })}
+          onClick={() =>
+            handleSubmit({
+              ...formValues,
+              templateExerciseId: exercise?.id,
+              templateId: parentId,
+            })
+          }
           // will need to add validation here at some point
           positive
         />

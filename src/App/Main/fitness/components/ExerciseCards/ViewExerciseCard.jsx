@@ -84,7 +84,7 @@ const ViewExerciseCard = ({ exercise, index, handleEdit }) => {
               ?.map((s, i) => (
                 <Grid.Row
                   style={{ marginTop: "-26px" }}
-                  key={"exercise-" + id + "-set" + i}
+                  key={"exercise-" + index + "-set" + i}
                 >
                   <Grid.Column width={4} style={{ marginLeft: "10px" }}>
                     <ViewInput placeholder="Set #" value={i + 1} disabled />
@@ -97,6 +97,12 @@ const ViewExerciseCard = ({ exercise, index, handleEdit }) => {
                   </Grid.Column>
                 </Grid.Row>
               ))}
+            <ViewInput
+              value={exercise.comments}
+              label="Comments"
+              fullRow
+              height={90}
+            />
           </Grid>
         </Card.Content>
       </Card>
