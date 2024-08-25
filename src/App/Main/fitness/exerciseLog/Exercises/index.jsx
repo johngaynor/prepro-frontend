@@ -1,21 +1,39 @@
 import React, { useState } from "react";
 import { Grid, Button } from "semantic-ui-react";
-import EditCard from "./components/EditCard";
-import ViewCard from "./components/ViewCard";
-import NewExercise from "./components/NewExercise";
 import CopyFromTemplate from "./components/CopyFromTemplate";
+import EditExerciseModal from "../../components/Modals/EditExerciseModal";
+import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";
 
 const Exercises = ({ selectedWorkout }) => {
-  const [editMode, setEditMode] = useState(null);
-  const [addOpen, setAddOpen] = useState(false);
   const [copyOpen, setCopyOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [activeExercise, setActiveExercise] = useState(null);
+
+  function editWorkoutExercise(vals) {
+    console.log("attempting to edit", vals);
+  }
+
+  function deleteWorkoutExercise(id) {
+    console.log("attempting to delete for id", id);
+  }
+
+  function handleEdit(id) {
+    setActiveExercise(id);
+    setEditOpen(true);
+  }
 
   return (
     <>
-      <NewExercise
-        open={addOpen}
-        onCancel={() => setAddOpen(false)}
-        selectedWorkout={selectedWorkout}
+      <EditExerciseModal
+        modalOpen={editOpen}
+        setModalOpen={setEditOpen}
+        exercise={selectedWorkout?.exercises?.find(
+          (e) => e.id === activeExercise
+        )}
+        setActiveExercise={setActiveExercise}
+        handleSubmit={editWorkoutExercise}
+        handleDelete={deleteWorkoutExercise}
+        parentId={selectedWorkout.id}
       />
       <CopyFromTemplate
         open={copyOpen}
@@ -31,32 +49,19 @@ const Exercises = ({ selectedWorkout }) => {
           />
         )}
         <Grid stackable columns={3}>
-          {selectedWorkout?.exercises.map((e, i) => {
-            if (e.id === editMode) {
-              return (
-                <EditCard
-                  key={"exercise" + i}
-                  item={e}
-                  id={i}
-                  setEditMode={setEditMode}
-                />
-              );
-            } else {
-              return (
-                <ViewCard
-                  key={"exercise-view-" + i}
-                  exercise={e}
-                  id={i}
-                  setEditMode={setEditMode}
-                />
-              );
-            }
-          })}
+          {selectedWorkout?.exercises.map((e, i) => (
+            <ViewExerciseCard
+              exercise={e}
+              index={i}
+              handleEdit={() => handleEdit(e.id)}
+              key={"workout-exercise-view-" + i}
+            />
+          ))}
         </Grid>
         <Button
           icon="plus"
           type="button"
-          onClick={() => setAddOpen(true)}
+          onClick={() => setEditOpen(true)}
           color="green"
           style={{ marginTop: selectedWorkout.exercises.length ? 20 : 40 }}
         />

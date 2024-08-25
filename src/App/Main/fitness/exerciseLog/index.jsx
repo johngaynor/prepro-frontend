@@ -73,7 +73,6 @@ const Log = () => {
             setEditMode={setEditMode}
           />
         </Accordion.Content>
-        {/* exercise section */}
         {!editMode && selectedWorkout && (
           <>
             <Accordion.Title

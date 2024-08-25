@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   DropdownField,
   InputField,
   TextAreaField,
-} from "../../components/FormFields";
+} from "../../../components/FormFields";
 import {
   ModalHeader,
   ModalDescription,
@@ -17,40 +17,57 @@ import {
   Container,
   Header,
 } from "semantic-ui-react";
-import FitnessContext from "../Context/fitnessContext";
+import FitnessContext from "../../Context/fitnessContext";
 
 const defaultValues = {
-  exerciseId: null,
+  id: null,
+  exerciseId: "",
   restTime: "",
   comments: "",
   sets: [{ weight: "", reps: "" }],
 };
 
 const EditExerciseModal = ({
-  open,
+  modalOpen,
+  setModalOpen,
   exercise,
-  handleCancel,
+  setActiveExercise,
   handleSubmit,
   handleDelete,
   parentId,
 }) => {
-  const [formValues, setFormValues] = useState({
-    exerciseId: exercise?.exerciseId,
-    restTime: exercise?.restTime || "",
-    comments: exercise?.comments || "",
-    sets: exercise?.sets || [{ weight: "", reps: "" }],
-  });
+  const [formValues, setFormValues] = useState(defaultValues);
+
+  useEffect(() => {
+    if (exercise) {
+      setFormValues(exercise);
+    }
+  }, [exercise]);
 
   const { exerciseTypes } = useContext(FitnessContext);
 
+  function handleCloseModal() {
+    setModalOpen(false);
+    setActiveExercise(null);
+    setFormValues(defaultValues);
+  }
+
+  function handleSubmitModal() {
+    // add in validation later
+    handleSubmit({
+      ...formValues,
+      parentId,
+    });
+    handleCloseModal(); // close modal afterwards
+  }
+
+  function handleDeleteModal(id) {
+    handleDelete(id);
+    handleCloseModal(); // close modal afterwards
+  }
+
   return (
-    <Modal
-      onClose={() => {
-        handleCancel();
-        setFormValues(defaultValues);
-      }}
-      open={open}
-    >
+    <Modal onClose={handleCloseModal} open={modalOpen}>
       <ModalHeader>
         <Container style={{ display: "flex", justifyContent: "space-between" }}>
           <Header>{exercise ? "Edit" : "Add"} Exercise</Header>
@@ -58,7 +75,7 @@ const EditExerciseModal = ({
             <Button
               color="red"
               icon="trash"
-              onClick={() => handleDelete(exercise?.id)}
+              onClick={() => handleDeleteModal(exercise.id)}
             />
           )}
         </Container>
@@ -191,27 +208,14 @@ const EditExerciseModal = ({
         </ModalDescription>
       </ModalContent>
       <ModalActions>
-        <Button
-          color="red"
-          onClick={() => {
-            handleCancel();
-            setFormValues(defaultValues);
-          }}
-        >
+        <Button color="red" onClick={handleCloseModal}>
           Cancel
         </Button>
         <Button
           content="Submit"
           labelPosition="right"
           icon="checkmark"
-          onClick={() =>
-            handleSubmit({
-              ...formValues,
-              templateExerciseId: exercise?.id,
-              templateId: parentId,
-            })
-          }
-          // will need to add validation here at some point
+          onClick={handleSubmitModal}
           positive
         />
       </ModalActions>

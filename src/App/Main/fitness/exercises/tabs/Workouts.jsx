@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Grid, Header, Tab } from "semantic-ui-react";
 import FitnessContext from "../../Context/fitnessContext";
 import { DropdownField } from "../../../components/FormFields";
-import EditExerciseModal from "../../components/EditExerciseModal";
-import ViewExerciseCard from "../../components/ExerciseCards/ViewExerciseCard";
+import EditExerciseModal from "../../components/Modals/EditExerciseModal";
+import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";
 
 const Workouts = () => {
   const [activeTemplate, setActiveTemplate] = useState(null);
@@ -28,26 +28,9 @@ const Workouts = () => {
 
   const template = workoutTemplates?.find((t) => t.id === activeTemplate);
 
-  function handleCloseModal() {
-    setEditOpen(false);
-    setActiveExercise(null);
-  }
-
   function handleOpenModal(id) {
     setEditOpen(true);
     setActiveExercise(id);
-  }
-
-  function handleSubmitModal(vals) {
-    editTemplateExercises(vals);
-    setEditOpen(false);
-    setActiveExercise(null);
-  }
-
-  function handleDeleteModal(id) {
-    deleteTemplateExercise(id);
-    setActiveExercise(null);
-    setEditOpen(false);
   }
 
   return (
@@ -62,19 +45,17 @@ const Workouts = () => {
         }
         onChange={(e, { value }) => setActiveTemplate(value)}
       />
-      {editOpen && (
-        <EditExerciseModal
-          open={true}
-          handleSubmit={handleSubmitModal}
-          handleCancel={handleCloseModal}
-          handleDelete={handleDeleteModal}
-          exercise={template?.exercises?.find((e) => e.id === activeExercise)}
-          parentId={template?.id}
-        />
-      )}
-
-      {activeTemplate ? (
+      {template ? (
         <>
+          <EditExerciseModal
+            modalOpen={editOpen}
+            setModalOpen={setEditOpen}
+            exercise={template.exercises?.find((e) => e.id === activeExercise)}
+            setActiveExercise={setActiveExercise}
+            handleSubmit={editTemplateExercises}
+            handleDelete={deleteTemplateExercise}
+            parentId={template.id}
+          />
           <Header as="h5">{template?.name}</Header>
           <Grid columns={3}>
             {template?.exercises?.map((e, i) => (
