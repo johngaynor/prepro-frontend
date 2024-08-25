@@ -36,7 +36,7 @@ export const FitnessProvider = ({ children }) => {
   function editWorkoutSummary(values) {
     setEditLoading(true);
     apiCall("post", "/api/fitness/logs/summary", { ...values })
-      .then((res) => {
+      .then(() => {
         setWorkoutLogs(null);
         toast.success("Successfully edited workout log!");
       })
@@ -54,7 +54,7 @@ export const FitnessProvider = ({ children }) => {
   function editWorkoutExercises(values) {
     setEditLoading(true);
     apiCall("post", "/api/fitness/logs/exercises", { ...values })
-      .then((res) => {
+      .then(() => {
         setWorkoutLogs(null);
         toast.success("Successfully edited workout exercise!");
       })
@@ -72,7 +72,7 @@ export const FitnessProvider = ({ children }) => {
   function deleteWorkoutSummary(id) {
     setEditLoading(true);
     apiCall("delete", `/api/fitness/logs/summary/${id}`)
-      .then((res) => {
+      .then(() => {
         setWorkoutLogs(null);
         toast.success("Successfully deleted workout summary!");
       })
@@ -86,7 +86,7 @@ export const FitnessProvider = ({ children }) => {
   function deleteWorkoutExercise(id) {
     setEditLoading(true);
     apiCall("delete", `/api/fitness/logs/exercise/${id}`)
-      .then((res) => {
+      .then(() => {
         setWorkoutLogs(null);
         toast.success("Successfully deleted workout exercise!");
       })
@@ -117,7 +117,7 @@ export const FitnessProvider = ({ children }) => {
   function addExerciseType(name, target) {
     setEditLoading(true);
     apiCall("post", "/api/fitness/exercises/types", { name, target })
-      .then((res) => {
+      .then(() => {
         setExerciseTypes(null);
         toast.success("Successfully added exercise type!");
       })
@@ -131,7 +131,7 @@ export const FitnessProvider = ({ children }) => {
   function deleteExerciseType(id) {
     setEditLoading(true);
     apiCall("delete", `/api/fitness/exercises/types/${id}`)
-      .then((res) => {
+      .then(() => {
         setExerciseTypes(null);
         toast.success("Successfully deleted exercise type!");
       })
@@ -162,7 +162,7 @@ export const FitnessProvider = ({ children }) => {
   function editTemplateExercises(values) {
     setEditLoading(true);
     apiCall("post", "/api/fitness/templates/exercise", { ...values })
-      .then((res) => {
+      .then(() => {
         setWorkoutTemplates(null);
         toast.success("Successfully edited workout template!");
       })
@@ -178,7 +178,7 @@ export const FitnessProvider = ({ children }) => {
   function deleteTemplateExercise(id) {
     setEditLoading(true);
     apiCall("delete", `/api/fitness/templates/exercise/${id}`)
-      .then((res) => {
+      .then(() => {
         setWorkoutTemplates(null);
         toast.success("Successfully deleted template exercise!");
       })
@@ -192,7 +192,7 @@ export const FitnessProvider = ({ children }) => {
   function copyWorkoutFromTemplate(workoutId, templateId) {
     setEditLoading(true);
     apiCall("post", "/api/fitness/logs/copy", { workoutId, templateId })
-      .then((res) => {
+      .then(() => {
         setWorkoutLogs(null);
         toast.success("Successfully copied workout template!");
       })

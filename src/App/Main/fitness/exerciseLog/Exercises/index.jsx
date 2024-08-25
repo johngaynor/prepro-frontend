@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Grid, Button } from "semantic-ui-react";
+import FitnessContext from "../../Context/fitnessContext";
 import CopyFromTemplate from "./components/CopyFromTemplate";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
 import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";
@@ -9,13 +10,8 @@ const Exercises = ({ selectedWorkout }) => {
   const [editOpen, setEditOpen] = useState(false);
   const [activeExercise, setActiveExercise] = useState(null);
 
-  function editWorkoutExercise(vals) {
-    console.log("attempting to edit", vals);
-  }
-
-  function deleteWorkoutExercise(id) {
-    console.log("attempting to delete for id", id);
-  }
+  const { editWorkoutExercises, deleteWorkoutExercise } =
+    useContext(FitnessContext);
 
   function handleEdit(id) {
     setActiveExercise(id);
@@ -31,7 +27,7 @@ const Exercises = ({ selectedWorkout }) => {
           (e) => e.id === activeExercise
         )}
         setActiveExercise={setActiveExercise}
-        handleSubmit={editWorkoutExercise}
+        handleSubmit={editWorkoutExercises}
         handleDelete={deleteWorkoutExercise}
         parentId={selectedWorkout.id}
       />
