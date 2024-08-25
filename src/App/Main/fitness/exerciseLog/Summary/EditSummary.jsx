@@ -7,7 +7,6 @@ import Spinner from "../../../components/Spinner";
 
 const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
   const [formValues, setFormValues] = useState({
-    date,
     workoutId: selectedWorkout?.id || null,
     comments: selectedWorkout?.comments || "",
     timeStarted: selectedWorkout?.timeStarted.slice(0, -3) || "",
@@ -23,7 +22,6 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
 
   function validateForm(vals) {
     const errors = {
-      date: false,
       timeStarted: false,
       timeCompleted: false,
     };
@@ -31,9 +29,8 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
       errors.timeStarted = "Please enter the time you started the workout.";
     if (!vals.timeCompleted)
       errors.timeCompleted = "Please enter the time you ended the workout.";
-    if (!vals.date) errors.date = "Please select a date for the workout.";
 
-    if (errors.timeStarted || errors.date || errors.timeCompleted) {
+    if (errors.timeStarted || errors.timeCompleted) {
       setFormErrors(errors);
       return false;
     }
@@ -46,7 +43,7 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
         const valid = validateForm(formValues);
         if (valid) {
           setFormErrors({});
-          editWorkoutSummary(formValues);
+          editWorkoutSummary({ ...formValues, date });
 
           if (selectedWorkout) {
             setEditMode(false);
@@ -63,7 +60,6 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
           label="Date"
           value={params.date}
           onChange={(e, { value }) => navigate(`/fitness/log/${value}`)}
-          error={formErrors.date}
         />
         <InputField
           type="time"
