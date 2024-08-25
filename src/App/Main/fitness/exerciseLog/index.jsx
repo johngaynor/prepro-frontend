@@ -74,7 +74,7 @@ const Log = () => {
           />
         </Accordion.Content>
         {/* exercise section */}
-        {!editMode && (
+        {!editMode && selectedWorkout && (
           <>
             <Accordion.Title
               active={activeTab === 2}

@@ -1,10 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Grid, Form, Button, Container } from "semantic-ui-react";
-import {
-  InputField,
-  TextAreaField,
-  DropdownField,
-} from "../../../components/FormFields";
+import { InputField, TextAreaField } from "../../../components/FormFields";
 import FitnessContext from "../../Context/fitnessContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
@@ -14,7 +10,7 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
     date,
     workoutId: selectedWorkout?.id || null,
     comments: selectedWorkout?.comments || "",
-    type: selectedWorkout?.type || "",
+    timeStarted: selectedWorkout?.timeStarted.slice(0, -3) || "",
     timeCompleted: selectedWorkout?.timeCompleted.slice(0, -3) || "",
   });
   const [formErrors, setFormErrors] = useState({});
@@ -22,20 +18,22 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
   const navigate = useNavigate();
   const params = useParams();
 
-  const { editLoading, editWorkoutSummary } = React.useContext(FitnessContext);
+  const { editLoading, editWorkoutSummary, deleteWorkoutSummary } =
+    useContext(FitnessContext);
 
   function validateForm(vals) {
     const errors = {
-      type: false,
       date: false,
+      timeStarted: false,
       timeCompleted: false,
     };
-    if (!vals.type) errors.type = "Please select a valid option.";
+    if (!vals.timeStarted)
+      errors.timeStarted = "Please enter the time you started the workout.";
     if (!vals.timeCompleted)
       errors.timeCompleted = "Please enter the time you ended the workout.";
     if (!vals.date) errors.date = "Please select a date for the workout.";
 
-    if (errors.type || errors.date || errors.timeCompleted) {
+    if (errors.timeStarted || errors.date || errors.timeCompleted) {
       setFormErrors(errors);
       return false;
     }
@@ -67,17 +65,14 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
           onChange={(e, { value }) => navigate(`/fitness/log/${value}`)}
           error={formErrors.date}
         />
-        <DropdownField
-          options={[
-            { value: "Cardio", text: "Cardio" },
-            { value: "Weight Training", text: "Weight Training" },
-          ]}
-          label="Workout Type"
-          value={formValues.type}
+        <InputField
+          type="time"
+          label="Time Started"
+          value={formValues.timeStarted}
           onChange={(e, { value }) =>
-            setFormValues({ ...formValues, type: value })
+            setFormValues({ ...formValues, timeStarted: value })
           }
-          error={formErrors.type}
+          error={formErrors.timeStarted}
         />
         <InputField
           type="time"
@@ -105,13 +100,29 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
         }}
       >
         {selectedWorkout && (
-          <Button
-            type="button"
-            content="Cancel"
-            icon="cancel"
-            color="red"
-            onClick={() => setEditMode(false)}
-          />
+          <>
+            <Button
+              type="button"
+              content="Cancel"
+              icon="cancel"
+              color="red"
+              onClick={() => setEditMode(false)}
+            />
+            <Button
+              type="button"
+              icon="trash"
+              color="red"
+              onClick={() => {
+                deleteWorkoutSummary(selectedWorkout.id);
+                setFormValues({
+                  workoutId: null,
+                  comments: "",
+                  timeStarted: "",
+                  timeCompleted: "",
+                });
+              }}
+            />
+          </>
         )}
         <Button type="submit" content="Save" icon="save" color="blue" />
       </Container>

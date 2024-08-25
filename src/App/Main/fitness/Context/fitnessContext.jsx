@@ -68,10 +68,24 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  // delete workout summary
+  function deleteWorkoutSummary(id) {
+    setEditLoading(true);
+    apiCall("delete", `/api/fitness/logs/summary/${id}`)
+      .then((res) => {
+        setWorkoutLogs(null);
+        toast.success("Successfully deleted workout summary!");
+      })
+      .catch((err) => {
+        toast.error(`Error deleting workout summary: ${err.message}`);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   // delete workout exercise/sets
   function deleteWorkoutExercise(id) {
     setEditLoading(true);
-    apiCall("delete", `/api/fitness/logs/workout/exercise/${id}`)
+    apiCall("delete", `/api/fitness/logs/exercise/${id}`)
       .then((res) => {
         setWorkoutLogs(null);
         toast.success("Successfully deleted workout exercise!");
@@ -209,6 +223,7 @@ export const FitnessProvider = ({ children }) => {
         editTemplateExercises,
         deleteTemplateExercise,
         copyWorkoutFromTemplate,
+        deleteWorkoutSummary,
       }}
     >
       {children}

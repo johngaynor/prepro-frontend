@@ -22,49 +22,45 @@ const Exercises = ({ selectedWorkout }) => {
         setOpen={setCopyOpen}
         selectedWorkout={selectedWorkout}
       />
-      {selectedWorkout ? (
-        <>
-          {!selectedWorkout.exercises.length && (
-            <Button
-              color="blue"
-              content="Copy from Template"
-              onClick={() => setCopyOpen(true)}
-            />
-          )}
-          <Grid stackable columns={3}>
-            {selectedWorkout?.exercises.map((e, i) => {
-              if (e.id === editMode) {
-                return (
-                  <EditCard
-                    key={"exercise" + i}
-                    item={e}
-                    id={i}
-                    setEditMode={setEditMode}
-                  />
-                );
-              } else {
-                return (
-                  <ViewCard
-                    key={"exercise-view-" + i}
-                    exercise={e}
-                    id={i}
-                    setEditMode={setEditMode}
-                  />
-                );
-              }
-            })}
-          </Grid>
+      <>
+        {!selectedWorkout.exercises.length && (
           <Button
-            icon="plus"
-            type="button"
-            onClick={() => setAddOpen(true)}
-            color="green"
-            style={{ marginTop: 20 }}
+            color="blue"
+            content="Copy from Template"
+            onClick={() => setCopyOpen(true)}
           />
-        </>
-      ) : (
-        <em>Please enter the summary details first.</em>
-      )}
+        )}
+        <Grid stackable columns={3}>
+          {selectedWorkout?.exercises.map((e, i) => {
+            if (e.id === editMode) {
+              return (
+                <EditCard
+                  key={"exercise" + i}
+                  item={e}
+                  id={i}
+                  setEditMode={setEditMode}
+                />
+              );
+            } else {
+              return (
+                <ViewCard
+                  key={"exercise-view-" + i}
+                  exercise={e}
+                  id={i}
+                  setEditMode={setEditMode}
+                />
+              );
+            }
+          })}
+        </Grid>
+        <Button
+          icon="plus"
+          type="button"
+          onClick={() => setAddOpen(true)}
+          color="green"
+          style={{ marginTop: selectedWorkout.exercises.length ? 20 : 40 }}
+        />
+      </>
     </>
   );
 };

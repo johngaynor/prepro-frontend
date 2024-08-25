@@ -16,7 +16,13 @@ const ViewSummary = ({ selectedWorkout, setEditMode }) => {
           value={DateTime.fromISO(selectedWorkout.date).toFormat("yyyy-MM-dd")}
           onChange={(e, { value }) => navigate(`/fitness/log/${value}`)}
         />
-        <ViewInput value={selectedWorkout.type} label="Workout Type" />
+        <ViewInput
+          value={DateTime.fromFormat(
+            selectedWorkout.timeStarted,
+            "HH:mm:ss"
+          ).toFormat("hh:mm a")}
+          label="Time Started"
+        />
         <ViewInput
           value={DateTime.fromFormat(
             selectedWorkout.timeCompleted,
