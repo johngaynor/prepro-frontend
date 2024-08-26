@@ -66,7 +66,7 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
         <InputField
           type="date"
           label="Date"
-          value={params.date}
+          value={params.date || ""}
           onChange={(e, { value }) => navigate(`/fitness/log/${value}`)}
         />
         <InputField
@@ -95,7 +95,6 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
             setFormValues({
               ...formValues,
               comments: value,
-              workoutId: selectedWorkout.id,
             })
           }
         />
