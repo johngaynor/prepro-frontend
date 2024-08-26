@@ -35,10 +35,8 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
     };
     if (!vals.timeStarted)
       errors.timeStarted = "Please enter the time you started the workout.";
-    if (!vals.timeCompleted)
-      errors.timeCompleted = "Please enter the time you ended the workout.";
 
-    if (errors.timeStarted || errors.timeCompleted) {
+    if (errors.timeStarted) {
       setFormErrors(errors);
       return false;
     }
@@ -85,7 +83,6 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
           onChange={(e, { value }) =>
             setFormValues({ ...formValues, timeCompleted: value })
           }
-          error={formErrors.timeCompleted}
         />
         <TextAreaField
           label="Workout Comments"
