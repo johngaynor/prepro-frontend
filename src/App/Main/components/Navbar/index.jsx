@@ -1,14 +1,14 @@
 import React from "react";
-import { Menu, Button, Icon } from "semantic-ui-react";
+import { Menu, Button, Icon, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import HelpMenu from "../HelpMenu";
-import Logo from "../../../images/logo-3.png";
+// import Logo from "../../../images/logo-3.png";
 import AppContext from "../Context/appContext";
-import ChangeLog from "../ChangeLog";
+// import ChangeLog from "../ChangeLog";
 
 const Navbar = ({}) => {
   const [helpMenuOpen, setHelpMenuOpen] = React.useState(false);
-  const [logOpen, setLogOpen] = React.useState(true);
+  // const [logOpen, setLogOpen] = React.useState(true);
   const isMobile = false; // this wil get modified later to adjust for window dimensions
 
   const {
@@ -44,17 +44,21 @@ const Navbar = ({}) => {
           alt="logo"
           style={{ height: "8rem", width: "8rem", marginRight: "10px" }}
         /> */}
+        <Header as="h4" style={{ color: "white" }}>
+          PrePro Labs
+        </Header>
       </Link>
       {helpMenuOpen && (
         <HelpMenu isOpen={helpMenuOpen} setOpen={setHelpMenuOpen} />
       )}
-      {changeLog && changeLog.length && (
+      {/* Removed changelog temporarily, showing up as a 0 for some reason */}
+      {/* {changeLog && changeLog.length && (
         <ChangeLog
           logOpen={logOpen}
           setLogOpen={setLogOpen}
           changeLog={changeLog}
         />
-      )}
+      )} */}
       <Menu.Item position="right">
         {auth ? (
           <Button

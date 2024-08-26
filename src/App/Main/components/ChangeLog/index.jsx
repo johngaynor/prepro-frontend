@@ -56,9 +56,6 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
         </ModalDescription>
       </ModalContent>
       <ModalActions>
-        {/* <Button color="black" onClick={() => setLogOpen(false)}>
-          Nope
-        </Button> */}
         <Button
           content="Confirm"
           labelPosition="right"
