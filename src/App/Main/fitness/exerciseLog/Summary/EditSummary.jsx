@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 
 const defaultValues = {
-  workoutId: null,
   comments: "",
   timeStarted: "",
   timeCompleted: "",

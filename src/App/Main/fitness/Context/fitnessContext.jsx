@@ -35,7 +35,7 @@ export const FitnessProvider = ({ children }) => {
   // edit workout summaries
   function editWorkoutSummary(values) {
     setEditLoading(true);
-    apiCall("post", "/api/fitness/logs/summary", { ...values })
+    apiCall("post", "/api/fitness/logs/summary", values)
       .then(() => {
         setWorkoutLogs(null);
         toast.success("Successfully edited workout log!");
