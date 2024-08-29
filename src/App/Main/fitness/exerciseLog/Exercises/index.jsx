@@ -10,8 +10,11 @@ const Exercises = ({ selectedWorkout }) => {
   const [editOpen, setEditOpen] = useState(false);
   const [activeExercise, setActiveExercise] = useState(null);
 
-  const { editWorkoutExercises, deleteWorkoutExercise } =
-    useContext(FitnessContext);
+  const {
+    editWorkoutExercises,
+    deleteWorkoutExercise,
+    changeExercisePosition,
+  } = useContext(FitnessContext);
 
   function handleEdit(id) {
     setActiveExercise(id);
@@ -29,6 +32,7 @@ const Exercises = ({ selectedWorkout }) => {
         setActiveExercise={setActiveExercise}
         handleSubmit={editWorkoutExercises}
         handleDelete={deleteWorkoutExercise}
+        handleChangePosition={changeExercisePosition}
         parentId={selectedWorkout.id}
       />
       <CopyFromTemplate
@@ -45,14 +49,16 @@ const Exercises = ({ selectedWorkout }) => {
           />
         )}
         <Grid stackable columns={3}>
-          {selectedWorkout?.exercises.map((e, i) => (
-            <ViewExerciseCard
-              exercise={e}
-              index={i}
-              handleEdit={() => handleEdit(e.id)}
-              key={"workout-exercise-view-" + i}
-            />
-          ))}
+          {selectedWorkout?.exercises
+            .sort((a, b) => a.orderId - b.orderId)
+            .map((e, i) => (
+              <ViewExerciseCard
+                exercise={e}
+                index={i}
+                handleEdit={() => handleEdit(e.id)}
+                key={"workout-exercise-view-" + i}
+              />
+            ))}
         </Grid>
         <Button
           icon="plus"

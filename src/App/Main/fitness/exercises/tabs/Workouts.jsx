@@ -19,6 +19,7 @@ const Workouts = () => {
     getExerciseTypes,
     editTemplateExercises,
     deleteTemplateExercise,
+    changeExercisePosition,
   } = useContext(FitnessContext);
 
   useEffect(() => {
@@ -54,18 +55,21 @@ const Workouts = () => {
             setActiveExercise={setActiveExercise}
             handleSubmit={editTemplateExercises}
             handleDelete={deleteTemplateExercise}
+            handleChangePosition={changeExercisePosition}
             parentId={template.id}
           />
           <Header as="h5">{template?.name}</Header>
           <Grid columns={3}>
-            {template?.exercises?.map((e, i) => (
-              <ViewExerciseCard
-                exercise={e}
-                index={i}
-                handleEdit={() => handleOpenModal(e.id)}
-                key={"view-card-workouts-" + i}
-              />
-            ))}
+            {template?.exercises
+              ?.sort((a, b) => a.orderId - b.orderId)
+              .map((e, i) => (
+                <ViewExerciseCard
+                  exercise={e}
+                  index={i}
+                  handleEdit={() => handleOpenModal(e.id)}
+                  key={"view-card-workouts-" + i}
+                />
+              ))}
             <Grid.Column>
               <Button
                 color="green"

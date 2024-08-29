@@ -205,7 +205,6 @@ export const FitnessProvider = ({ children }) => {
   // change position of exercise relative to others
   function changeExercisePosition(direction, exercise) {
     setEditLoading(true);
-    console.log(direction, exercise);
     apiCall("post", "/api/fitness/exercise/order", { direction, exercise })
       .then(() => {
         if (exercise.workoutId) {

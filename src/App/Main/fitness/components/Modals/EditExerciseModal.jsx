@@ -209,12 +209,18 @@ const EditExerciseModal = ({
         <Button
           color="blue"
           icon="arrow up"
-          onClick={() => handleChangePosition("up", exercise)}
+          onClick={() => {
+            handleChangePosition("up", exercise);
+            handleCloseModal();
+          }}
         />
         <Button
           color="blue"
           icon="arrow down"
-          onClick={() => handleChangePosition("down", exercise)}
+          onClick={() => {
+            handleChangePosition("down", exercise);
+            handleCloseModal();
+          }}
         />
         <Button color="red" onClick={handleCloseModal}>
           Cancel
