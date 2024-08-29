@@ -202,6 +202,27 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  // change position of exercise relative to others
+  function changeExercisePosition(direction, exercise) {
+    setEditLoading(true);
+    console.log(direction, exercise);
+    apiCall("post", "/api/fitness/exercise/order", { direction, exercise })
+      .then(() => {
+        if (exercise.workoutId) {
+          setWorkoutLogs(null);
+        }
+        if (exercise.templateId) {
+          setWorkoutTemplates(null);
+        }
+
+        toast.success("Successfully changed order of exercise!");
+      })
+      .catch((err) => {
+        toast.error(`Error changing exercise order: ${err}`);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <FitnessContext.Provider
       value={{
@@ -224,6 +245,7 @@ export const FitnessProvider = ({ children }) => {
         deleteTemplateExercise,
         copyWorkoutFromTemplate,
         deleteWorkoutSummary,
+        changeExercisePosition,
       }}
     >
       {children}
