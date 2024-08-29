@@ -33,6 +33,7 @@ const EditExerciseModal = ({
   setActiveExercise,
   handleSubmit,
   handleDelete,
+  handleChangePosition,
   parentId,
 }) => {
   const [formValues, setFormValues] = useState(defaultValues);
@@ -205,6 +206,16 @@ const EditExerciseModal = ({
         </ModalDescription>
       </ModalContent>
       <ModalActions>
+        <Button
+          color="blue"
+          icon="arrow up"
+          onClick={() => handleChangePosition("up", exercise)}
+        />
+        <Button
+          color="blue"
+          icon="arrow down"
+          onClick={() => handleChangePosition("down", exercise)}
+        />
         <Button color="red" onClick={handleCloseModal}>
           Cancel
         </Button>
