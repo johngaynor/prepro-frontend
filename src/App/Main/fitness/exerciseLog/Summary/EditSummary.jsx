@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Grid, Form, Button, Container } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../../components/FormFields";
 import FitnessContext from "../../context/fitnessContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 
 const defaultValues = {
@@ -22,7 +22,6 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
   }, [selectedWorkout]);
 
   const navigate = useNavigate();
-  const params = useParams();
 
   const { editLoading, editWorkoutSummary, deleteWorkoutSummary } =
     useContext(FitnessContext);
@@ -63,7 +62,7 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
         <InputField
           type="date"
           label="Date"
-          value={params.date || ""}
+          value={date || ""}
           onChange={(e, { value }) => navigate(`/fitness/log/${value}`)}
         />
         <InputField
