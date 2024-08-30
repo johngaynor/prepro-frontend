@@ -1,16 +1,16 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import Homepage from "./Homepage";
+import Homepage from "./homepage";
 import BreadCrumb from "./components/Breadcrumb";
-import { LogProvider } from "./components/Context/logContext";
 import Spinner from "./components/Spinner";
 import { Segment } from "semantic-ui-react";
 // page imports
-import Logs from "./components/DailyLogs/logs";
+// import Logs from "./components/DailyLogs/logs";
+import Logs from "./logs";
 import ExerciseLog from "./fitness/exerciseLog";
-import DailyLogForm from "./components/DailyLogForm/DailyLogForm";
+import DailyLogForm from "./logs/components/DailyLogForm/DailyLogForm";
 import AdminConsole from "./admin";
-import AppContext from "./components/Context/appContext";
+import AppContext from "./context/appContext";
 import ExerciseManager from "./fitness/exercises";
 
 const Main = (props) => {
@@ -40,27 +40,19 @@ const Main = (props) => {
     <div style={{ margin: "1rem" }}>
       {!apps && <Spinner />}
       <BreadCrumb path={location.pathname} />
-      <LogProvider>
-        <Routes>
-          <Route path="/" element={<Homepage startsWith={"/"} />} />
-          <Route path="/admin" element={withAuth(AdminConsole, 1)} />
-          <Route path="/logs" element={withAuth(Logs, 2)} />
-          <Route path="/fitness/log" element={withAuth(ExerciseLog, 3)} />
-          <Route path="/fitness/log/:date" element={withAuth(ExerciseLog, 3)} />
-          <Route
-            path="/logs/new/:logType"
-            element={withAuth(DailyLogForm, 3)}
-          />
-          <Route
-            path="/fitness/exercises"
-            element={withAuth(ExerciseManager, 4)}
-          />
-          <Route
-            path="*"
-            element={<Homepage startsWith={location.pathname} />}
-          />
-        </Routes>
-      </LogProvider>
+      <Routes>
+        <Route path="/" element={<Homepage startsWith={"/"} />} />
+        <Route path="/admin" element={withAuth(AdminConsole, 1)} />
+        <Route path="/logs" element={withAuth(Logs, 2)} />
+        <Route path="/fitness/log" element={withAuth(ExerciseLog, 3)} />
+        <Route path="/fitness/log/:date" element={withAuth(ExerciseLog, 3)} />
+        <Route path="/logs/new/:logType" element={withAuth(DailyLogForm, 3)} />
+        <Route
+          path="/fitness/exercises"
+          element={withAuth(ExerciseManager, 4)}
+        />
+        <Route path="*" element={<Homepage startsWith={location.pathname} />} />
+      </Routes>
     </div>
   );
 };

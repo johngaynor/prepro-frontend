@@ -1,24 +1,22 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { toast } from "react-hot-toast";
-import { apiCall } from "../../../services/api";
-import LogContext from "../Context/logContext";
+import { apiCall } from "../../services/api";
+import LogContext from "./context/logContext";
+import { LogProvider } from "./context/logContext";
 import { Link } from "react-router-dom";
 
 import {
   Header,
   Card,
   Segment,
-  Input,
   Grid,
-  Transition,
   Container,
   Button,
   Radio,
-  Form,
 } from "semantic-ui-react";
 
-const Logs = () => {
+const DailyLogs = () => {
   const {
     logs,
     setLogs,
@@ -29,7 +27,7 @@ const Logs = () => {
     setSelectedLog,
     formData,
     setFormData,
-  } = React.useContext(LogContext);
+  } = useContext(LogContext);
 
   const handleLogClick = (log) => {
     setSelectedLog(log);
@@ -47,7 +45,7 @@ const Logs = () => {
     setLogsLoading(false);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!logs.length && !logsLoading) {
       getLogs();
     }
@@ -281,6 +279,14 @@ const Logs = () => {
         </Grid>
       </Segment>
     </div>
+  );
+};
+
+const Logs = () => {
+  return (
+    <LogProvider>
+      <DailyLogs />
+    </LogProvider>
   );
 };
 

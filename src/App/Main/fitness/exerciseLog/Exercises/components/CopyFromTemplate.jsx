@@ -10,7 +10,7 @@ import {
   Grid,
   Form,
 } from "semantic-ui-react";
-import FitnessContext from "../../../Context/fitnessContext";
+import FitnessContext from "../../../context/fitnessContext";
 import toast from "react-hot-toast";
 
 const CopyFromTemplate = ({ open, setOpen, selectedWorkout }) => {

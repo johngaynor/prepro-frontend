@@ -17,7 +17,7 @@ import {
   Container,
   Header,
 } from "semantic-ui-react";
-import FitnessContext from "../../Context/fitnessContext";
+import FitnessContext from "../../context/fitnessContext";
 
 const defaultValues = {
   exerciseId: "",

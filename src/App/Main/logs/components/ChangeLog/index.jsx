@@ -9,7 +9,7 @@ import {
   Modal,
   Container,
 } from "semantic-ui-react";
-import AppContext from "../Context/appContext";
+import AppContext from "../../../components/Context/appContext";
 
 const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
   const { clearLog } = React.useContext(AppContext);

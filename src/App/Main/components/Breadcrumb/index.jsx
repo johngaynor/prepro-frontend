@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Breadcrumb, Icon } from "semantic-ui-react";
-import AppContext from "../Context/appContext";
+import AppContext from "../../context/appContext";
 
 const BreadCrumb = ({ path }) => {
   const { auth } = React.useContext(AppContext);

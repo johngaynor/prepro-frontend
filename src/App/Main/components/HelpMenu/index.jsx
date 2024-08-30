@@ -11,8 +11,7 @@ import {
 } from "semantic-ui-react";
 import { apiCall } from "../../../services/api";
 import { toast } from "react-hot-toast";
-import AppContext from "../Context/appContext";
-import App from "../../../App";
+import AppContext from "../../context/appContext";
 
 const HelpMenu = ({ isOpen, setOpen }) => {
   const [formValues, setFormValues] = useState({ reason: "", details: "" });

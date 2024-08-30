@@ -1,7 +1,7 @@
 import React from "react";
 import Dashboard from "./dashboard";
 import Spinner from "../components/Spinner";
-import AppContext from "../components/Context/appContext";
+import AppContext from "../context/appContext";
 
 const Homepage = ({ startsWith }) => {
   const { userLoading, auth, appsLoading } = React.useContext(AppContext);

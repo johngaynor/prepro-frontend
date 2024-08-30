@@ -9,7 +9,7 @@ import {
   Transition,
   Container,
 } from "semantic-ui-react";
-import AppContext from "../components/Context/appContext";
+import AppContext from "../context/appContext";
 
 const Dashboard = ({ startsWith }) => {
   const [search, setSearch] = useState("");

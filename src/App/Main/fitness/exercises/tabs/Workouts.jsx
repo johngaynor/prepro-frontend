@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Grid, Header, Tab } from "semantic-ui-react";
-import FitnessContext from "../../Context/fitnessContext";
+import FitnessContext from "../../context/fitnessContext";
 import { DropdownField } from "../../../components/FormFields";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
 import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";

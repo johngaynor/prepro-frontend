@@ -1,15 +1,14 @@
-import React from "react";
-import { LogContext } from "../Context/logContext";
+import React, { useEffect, useContext } from "react";
+import { LogContext, LogProvider } from "../../context/logContext";
 import { Form, Button, Segment, Header } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
-import { Radio } from "semantic-ui-react";
 
-const DailyLogForm = () => {
+const LogForm = () => {
   const navigate = useNavigate();
 
-  const { formData, setFormData, date, setDate } = React.useContext(LogContext);
+  const { formData, setFormData, date, setDate } = useContext(LogContext);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setDate(today);
   }, [setDate]);
@@ -255,5 +254,13 @@ const DailyLogForm = () => {
   );
 };
 // };
+
+const DailyLogForm = () => {
+  return (
+    <LogProvider>
+      <LogForm />
+    </LogProvider>
+  );
+};
 
 export default DailyLogForm;

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Accordion, Icon } from "semantic-ui-react";
 import Summary from "./Summary";
 import Exercises from "./Exercises";
-import FitnessContext, { FitnessProvider } from "../Context/fitnessContext";
+import FitnessContext, { FitnessProvider } from "../context/fitnessContext";
 import Spinner from "../../components/Spinner";
 import { useParams, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";

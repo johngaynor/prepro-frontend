@@ -3,7 +3,7 @@ import { Menu, Button, Icon, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import HelpMenu from "../HelpMenu";
 // import Logo from "../../../images/logo-3.png";
-import AppContext from "../Context/appContext";
+import AppContext from "../../context/appContext";
 // import ChangeLog from "../ChangeLog";
 
 const Navbar = ({}) => {

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Grid, Button } from "semantic-ui-react";
-import FitnessContext from "../../Context/fitnessContext";
+import FitnessContext from "../../context/fitnessContext";
 import CopyFromTemplate from "./components/CopyFromTemplate";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
 import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";

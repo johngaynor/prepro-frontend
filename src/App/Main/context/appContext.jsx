@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { apiCall } from "../../../services/api";
+import { apiCall } from "../../services/api";
 import toast from "react-hot-toast";
 
 export const AppContext = createContext();

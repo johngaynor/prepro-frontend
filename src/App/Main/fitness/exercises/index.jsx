@@ -1,5 +1,5 @@
 import React from "react";
-import { FitnessProvider } from "../Context/fitnessContext";
+import { FitnessProvider } from "../context/fitnessContext";
 import Tab from "../../components/Tab";
 import Exercises from "./tabs/Exercises";
 import Gyms from "./tabs/Gyms";

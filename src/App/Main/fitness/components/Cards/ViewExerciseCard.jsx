@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Grid, Button, Card, Header, Label } from "semantic-ui-react";
 import { ViewInput } from "../../../components/FormFields/view";
-import FitnessContext from "../../Context/fitnessContext";
+import FitnessContext from "../../context/fitnessContext";
 
 // exercise object needs the following params:
 // id: auto incremented identifier for the exercise

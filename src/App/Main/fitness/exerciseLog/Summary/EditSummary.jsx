@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Grid, Form, Button, Container } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../../components/FormFields";
-import FitnessContext from "../../Context/fitnessContext";
+import FitnessContext from "../../context/fitnessContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 

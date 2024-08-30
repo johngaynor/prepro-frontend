@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import FitnessContext from "../../Context/fitnessContext";
+import FitnessContext from "../../context/fitnessContext";
 import { Header, Tab, Grid, Confirm, Button } from "semantic-ui-react";
 import ExerciseCard from "../components/ExerciseCard";
 import Spinner from "../../../components/Spinner";
