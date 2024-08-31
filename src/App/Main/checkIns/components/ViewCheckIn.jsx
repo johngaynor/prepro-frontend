@@ -15,7 +15,17 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
           value={DateTime.fromISO(selectedDay.date).toFormat("yyyy-MM-dd")}
           onChange={(e, { value }) => navigate(`/checkins/${value}`)}
         />
-        <ViewInput value={selectedDay.weight} label="Weight" />
+        {selectedDay.questions
+          .sort((a, b) => a.orderId - b.orderId)
+          .map((q, i) => (
+            <ViewInput
+              value={q.answer}
+              label={q.question}
+              key={"question-" + i}
+              height={q.textArea ? 90 : null}
+              fullRow={q.fullWidth}
+            />
+          ))}
       </Grid>
       <Container
         style={{
