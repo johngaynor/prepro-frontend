@@ -8,7 +8,11 @@ import EditCheckIn from "./components/EditCheckIn";
 
 const CheckInLog = () => {
   const [editMode, setEditMode] = useState(false);
-  const { checkIns } = useContext(CheckInContext);
+  const { checkIns, checkInsLoading, getCheckIns } = useContext(CheckInContext);
+
+  useEffect(() => {
+    if (!checkIns && !checkInsLoading) getCheckIns();
+  }, [checkIns, checkInsLoading]);
 
   const { date } = useParams();
   const navigate = useNavigate();

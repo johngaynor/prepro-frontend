@@ -5,34 +5,29 @@ import toast from "react-hot-toast";
 export const CheckInContext = createContext();
 
 export const CheckInProvider = ({ children }) => {
-  const [checkIns, setCheckIns] = useState([
-    {
-      id: 1,
-      date: "2024-08-30",
-      weight: 100,
-      questions: [],
-    },
-  ]);
+  const [checkIns, setCheckIns] = useState(null);
+  // loading states
+  const [checkInsLoading, setCheckInsLoading] = useState(false);
 
-  // get workout logs
-  //   function getWorkoutLogs() {
-  //     setLogsLoading(true);
-  //     apiCall("get", "/api/fitness/logs")
-  //       .then((res) => {
-  //         if (res.result) {
-  //           setWorkoutLogs(res.result);
-  //         } else {
-  //           throw new Error("No result from API call...");
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         toast.error(`Error getting workout logs: ${err.message}`);
-  //       })
-  //       .finally(() => setLogsLoading(false));
-  //   }
+  // get check ins
+  function getCheckIns() {
+    setCheckInsLoading(true);
+    apiCall("get", "/api/checkins")
+      .then((res) => {
+        if (res.result) {
+          setCheckIns(res.result);
+        } else {
+          throw new Error("No result from API call...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting check ins: ${err.message}`);
+      })
+      .finally(() => setCheckInsLoading(false));
+  }
 
   return (
-    <CheckInContext.Provider value={{ checkIns }}>
+    <CheckInContext.Provider value={{ checkIns, checkInsLoading, getCheckIns }}>
       {children}
     </CheckInContext.Provider>
   );
