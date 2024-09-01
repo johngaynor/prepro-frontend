@@ -10,6 +10,7 @@ export const CheckInProvider = ({ children }) => {
   // loading states
   const [checkInsLoading, setCheckInsLoading] = useState(false);
   const [templatesLoading, setTemplatesLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
 
   // get check ins
   function getCheckIns() {
@@ -26,6 +27,35 @@ export const CheckInProvider = ({ children }) => {
         toast.error(`Error getting check ins: ${err.message}`);
       })
       .finally(() => setCheckInsLoading(false));
+  }
+
+  // update check ins
+  function editCheckIns(values) {
+    setEditLoading(true);
+    apiCall("post", "/api/checkins", values)
+      .then((res) => {
+        setCheckIns(null);
+        toast.success("Successfully edited check in!");
+      })
+      .catch((err) => {
+        toast.error(`Error editing check ins: ${err.message}`);
+        console.log(err);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
+  // delete check ins
+  function deleteCheckIns(id) {
+    setEditLoading(true);
+    apiCall("delete", `/api/checkins/checkin/${id}`)
+      .then(() => {
+        setCheckIns(null);
+        toast.success("Successfully deleted check in!");
+      })
+      .catch((err) => {
+        toast.error(`Error deleting check in: ${err.message}`);
+      })
+      .finally(() => setEditLoading(false));
   }
 
   // get templates
@@ -54,6 +84,9 @@ export const CheckInProvider = ({ children }) => {
         templates,
         templatesLoading,
         getTemplates,
+        editLoading,
+        editCheckIns,
+        deleteCheckIns,
       }}
     >
       {children}

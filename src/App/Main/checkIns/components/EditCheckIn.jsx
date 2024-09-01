@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Button, Container, Form } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../components/FormFields";
+import CheckInContext from "../context/checkInContext";
 
 const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
   const [formValues, setFormValues] = useState(null);
   // const [formErrors, setFormErrors] = useState({});
 
+  const { editCheckIns, deleteCheckIns } = useContext(CheckInContext);
+  const navigate = useNavigate();
   useEffect(() => {
     if (selectedDay) {
-      setFormValues(selectedDay.questions);
+      setFormValues(
+        selectedDay.questions.map((q) => ({
+          ...q, // had to create a shallow copy so original objects aren't mutated
+        }))
+      );
     } else if (template) {
       setFormValues(
         template.questions.map((q) => ({
@@ -20,10 +27,14 @@ const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
     }
   }, [selectedDay, template]);
 
-  const navigate = useNavigate();
+  function handleSubmit() {
+    // handle validation
+    editCheckIns({ ...selectedDay, questions: formValues, date });
+    setEditMode(false);
+  }
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
         <InputField
           type="date"
@@ -79,15 +90,22 @@ const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
               content="Cancel"
               icon="cancel"
               color="red"
-              onClick={() => setEditMode(false)}
+              onClick={() => {
+                setFormValues(
+                  selectedDay.questions.map((q) => ({
+                    ...q, // had to create a shallow copy so original objects aren't mutated
+                  }))
+                );
+                setEditMode(false);
+              }}
             />
             <Button
               type="button"
               icon="trash"
               color="red"
               onClick={() => {
-                // deleteWorkoutSummary(selectedWorkout.id);
-                setFormValues(defaultValues);
+                deleteCheckIns(selectedDay.id);
+                setFormValues(null);
               }}
             />
           </>
