@@ -155,3 +155,41 @@ export const DropdownField = ({
     </Grid.Column>
   );
 };
+
+export const FileField = ({
+  disabled,
+  label,
+  multiple,
+  accept,
+  error,
+  value,
+  onChange,
+}) => {
+  return (
+    <Grid.Column>
+      {label && (
+        <Label
+          horizontal
+          style={{ minWidth: "45%", textAlign: "center" }}
+          color={error ? "red" : null}
+        >
+          {label}:
+        </Label>
+      )}
+      <Input fluid disabled={disabled}>
+        <input
+          onChange={(e) => onChange(e.target.files)}
+          type="file"
+          id="file"
+          accept={accept}
+          multiple={multiple}
+        />
+      </Input>
+      {error && (
+        <div>
+          <div className="ui red pointing label">{error}</div>
+        </div>
+      )}
+    </Grid.Column>
+  );
+};

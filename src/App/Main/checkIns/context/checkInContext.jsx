@@ -75,6 +75,21 @@ export const CheckInProvider = ({ children }) => {
       .finally(() => setTemplatesLoading(false));
   }
 
+  // send attachments
+  function addAttachments(formData) {
+    setEditLoading(true);
+    apiCall("post", "/api/checkins/attachments", formData)
+      .then((res) => {
+        // clear out odl attachments
+        toast.success("Successfully added attachments!");
+      })
+      .catch((err) => {
+        toast.error(`Error adding attachments: ${err.message}`);
+        console.log("Error with sending attachmeht", err);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <CheckInContext.Provider
       value={{
@@ -87,6 +102,7 @@ export const CheckInProvider = ({ children }) => {
         editLoading,
         editCheckIns,
         deleteCheckIns,
+        addAttachments,
       }}
     >
       {children}
