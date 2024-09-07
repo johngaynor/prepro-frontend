@@ -5,7 +5,7 @@ import CopyFromTemplate from "./components/CopyFromTemplate";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
 import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";
 
-const Exercises = ({ selectedWorkout }) => {
+const Exercises = ({ selectedWorkout, lastWorkout }) => {
   const [copyOpen, setCopyOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [activeExercise, setActiveExercise] = useState(null);
@@ -21,6 +21,14 @@ const Exercises = ({ selectedWorkout }) => {
     setEditOpen(true);
   }
 
+  const activeExerciseId = selectedWorkout?.exercises?.find(
+    (e) => e.id === activeExercise
+  )?.exerciseId;
+
+  const prevExercise = lastWorkout?.exercises?.find(
+    (e) => e.exerciseId === activeExerciseId
+  );
+
   return (
     <>
       <EditExerciseModal
@@ -34,6 +42,7 @@ const Exercises = ({ selectedWorkout }) => {
         handleDelete={deleteWorkoutExercise}
         handleChangePosition={changeExercisePosition}
         parentId={selectedWorkout.id}
+        prevExercise={prevExercise}
       />
       <CopyFromTemplate
         open={copyOpen}

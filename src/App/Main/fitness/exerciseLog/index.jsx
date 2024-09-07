@@ -49,6 +49,10 @@ const Log = () => {
   });
 
   const selectedWorkout = workoutLogs?.find((l) => l.date === date);
+  const lastWorkout = workoutLogs
+    ?.filter((l) => l.workoutTemplateId === selectedWorkout?.workoutTemplateId)
+
+    .sort((a, b) => a.date - b.date)[0];
 
   return (
     <React.Fragment>
@@ -87,7 +91,10 @@ const Log = () => {
               Workout Exercises
             </Accordion.Title>
             <Accordion.Content active={activeTab === 2}>
-              <Exercises selectedWorkout={selectedWorkout} />
+              <Exercises
+                selectedWorkout={selectedWorkout}
+                lastWorkout={lastWorkout}
+              />
             </Accordion.Content>
           </>
         )}

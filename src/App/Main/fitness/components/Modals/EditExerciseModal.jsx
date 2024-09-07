@@ -35,6 +35,7 @@ const EditExerciseModal = ({
   handleDelete,
   handleChangePosition,
   parentId,
+  prevExercise,
 }) => {
   const [formValues, setFormValues] = useState(defaultValues);
 
@@ -90,7 +91,7 @@ const EditExerciseModal = ({
                   text: e.name,
                   value: e.id,
                 }))}
-                value={formValues.exerciseId}
+                value={formValues.exerciseId || ""}
                 onChange={(e, { value }) =>
                   setFormValues({ ...formValues, exerciseId: value })
                 }
@@ -155,7 +156,9 @@ const EditExerciseModal = ({
                   </Grid.Column>
                   <Grid.Column width={5}>
                     <InputField
-                      placeholder="Weight"
+                      placeholder={
+                        prevExercise ? prevExercise.sets[i].weight : "Weight"
+                      }
                       type="number"
                       value={s.weight || ""}
                       onChange={(e, { value }) => {
@@ -167,9 +170,11 @@ const EditExerciseModal = ({
                   </Grid.Column>
                   <Grid.Column width={5}>
                     <InputField
-                      placeholder="Reps"
+                      placeholder={
+                        prevExercise ? prevExercise.sets[i].reps : "Reps"
+                      }
                       type="number"
-                      value={s.reps}
+                      value={s.reps || ""}
                       onChange={(e, { value }) => {
                         const newSets = [...formValues.sets];
                         newSets[i].reps = value;
@@ -197,6 +202,7 @@ const EditExerciseModal = ({
                 fullWidth
                 label="comments"
                 value={formValues.comments}
+                placeholder={prevExercise ? prevExercise.comments : "Comments"}
                 onChange={(e, { value }) =>
                   setFormValues({ ...formValues, comments: value })
                 }
