@@ -18,6 +18,7 @@ import {
   Header,
 } from "semantic-ui-react";
 import FitnessContext from "../../context/fitnessContext";
+import { cloneDeep } from "lodash";
 
 const defaultValues = {
   exerciseId: "",
@@ -41,7 +42,7 @@ const EditExerciseModal = ({
 
   useEffect(() => {
     if (exercise) {
-      setFormValues(exercise);
+      setFormValues(cloneDeep(exercise)); // make a deep clone to avoid mutating original object
     }
   }, [exercise]);
 
@@ -65,6 +66,14 @@ const EditExerciseModal = ({
   function handleDeleteModal(id) {
     handleDelete(id);
     handleCloseModal(); // close modal afterwards
+  }
+
+  function copyFromLastWorkout(i, weight, reps) {
+    console.log("hit");
+    const newSets = [...formValues.sets];
+    newSets[i].reps = reps;
+    newSets[i].weight = weight;
+    setFormValues({ ...formValues, sets: newSets });
   }
 
   return (
@@ -146,7 +155,17 @@ const EditExerciseModal = ({
                       }}
                     />
                   </Grid.Column>
-                  <Grid.Column width={4} style={{ marginLeft: "10px" }}>
+                  <Grid.Column
+                    width={4}
+                    style={{ marginLeft: "10px" }}
+                    onClick={() =>
+                      copyFromLastWorkout(
+                        i,
+                        prevExercise?.sets[i]?.weight,
+                        prevExercise?.sets[i]?.reps
+                      )
+                    }
+                  >
                     <InputField
                       placeholder="Set #"
                       value={i + 1}
@@ -157,7 +176,9 @@ const EditExerciseModal = ({
                   <Grid.Column width={5}>
                     <InputField
                       placeholder={
-                        prevExercise ? prevExercise.sets[i].weight : "Weight"
+                        prevExercise
+                          ? prevExercise.sets[i]?.weight || "Weight"
+                          : "Weight"
                       }
                       type="number"
                       value={s.weight || ""}
@@ -171,7 +192,9 @@ const EditExerciseModal = ({
                   <Grid.Column width={5}>
                     <InputField
                       placeholder={
-                        prevExercise ? prevExercise.sets[i].reps : "Reps"
+                        prevExercise
+                          ? prevExercise.sets[i]?.reps || "Reps"
+                          : "Reps"
                       }
                       type="number"
                       value={s.reps || ""}
@@ -202,7 +225,11 @@ const EditExerciseModal = ({
                 fullWidth
                 label="comments"
                 value={formValues.comments}
-                placeholder={prevExercise ? prevExercise.comments : "Comments"}
+                placeholder={
+                  prevExercise
+                    ? prevExercise.comments || "Comments"
+                    : "Comments"
+                }
                 onChange={(e, { value }) =>
                   setFormValues({ ...formValues, comments: value })
                 }

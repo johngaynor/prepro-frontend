@@ -4,6 +4,7 @@ import { Grid, Button, Container, Form } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../components/FormFields";
 import AttachFile from "../../components/AttachFile";
 import CheckInContext from "../context/checkInContext";
+import { cloneDeep } from "lodash";
 
 const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
   const [formValues, setFormValues] = useState(null);
@@ -15,11 +16,7 @@ const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (selectedDay) {
-      setFormValues(
-        selectedDay.questions.map((q) => ({
-          ...q, // had to create a shallow copy so original objects aren't mutated
-        }))
-      );
+      setFormValues(cloneDeep(selectedDay.questions)); // make a deep clone to avoid mutating original object
     } else if (template) {
       setFormValues(
         template.questions.map((q) => ({
