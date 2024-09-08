@@ -36,6 +36,13 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
       >
         <Button
           type="button"
+          content="View Report"
+          icon="eye"
+          color="teal"
+          onClick={() => navigate(`/checkins/${selectedDay.date}?report=true`)}
+        />
+        <Button
+          type="button"
           content="Edit"
           icon="pencil"
           color="orange"
