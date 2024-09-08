@@ -1,13 +1,31 @@
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Button, Container } from "semantic-ui-react";
+import { Grid, Button, Container, Image } from "semantic-ui-react";
 import { InputField } from "../../components/FormFields";
 import { DateTime } from "luxon";
 import { ViewInput } from "../../components/FormFields/view";
+import CheckInContext from "../context/checkInContext";
+import AttachFile from "../../components/AttachFile";
 
 const ViewCheckIn = ({ selectedDay, setEditMode }) => {
+  const [fileOpen, setFileOpen] = useState(false);
+
+  const { addAttachments } = useContext(CheckInContext);
   const navigate = useNavigate();
+
+  function handleSubmitFile(formData) {
+    addAttachments(formData, selectedDay.id);
+  }
+
   return (
     <>
+      {fileOpen && (
+        <AttachFile
+          headerText="Submit Check In Photos"
+          onSubmit={handleSubmitFile}
+          toggleFormOpen={() => setFileOpen(!fileOpen)}
+        />
+      )}
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
         <InputField
           type="date"
@@ -27,6 +45,20 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
             />
           ))}
       </Grid>
+      <Grid columns={5} doubling stackable style={{ marginBottom: 20 }}>
+        {selectedDay.photos?.map((p, i) => {
+          return (
+            <Grid.Column>
+              <Image
+                size="small"
+                src={p.s3Url}
+                key={"checkin-photo-" + i}
+                style={{ height: 200, width: "auto" }}
+              />
+            </Grid.Column>
+          );
+        })}
+      </Grid>
       <Container
         style={{
           width: "100%",
@@ -34,6 +66,13 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
           justifyContent: "flex-end",
         }}
       >
+        <Button
+          onClick={() => setFileOpen(true)}
+          color="purple"
+          type="button"
+          content="Add Photos"
+          icon="file"
+        />
         <Button
           type="button"
           content="View Report"

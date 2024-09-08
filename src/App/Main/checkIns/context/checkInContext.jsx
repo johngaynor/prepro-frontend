@@ -76,16 +76,17 @@ export const CheckInProvider = ({ children }) => {
   }
 
   // send attachments
-  function addAttachments(formData) {
+  function addAttachments(formData, checkInId) {
     setEditLoading(true);
+    formData.append("checkInId", checkInId);
     apiCall("post", "/api/checkins/attachments", formData)
       .then((res) => {
-        // clear out odl attachments
+        // clear out old attachments
         toast.success("Successfully added attachments!");
       })
       .catch((err) => {
         toast.error(`Error adding attachments: ${err.message}`);
-        console.log("Error with sending attachmeht", err);
+        console.log("Error with sending attachment", err);
       })
       .finally(() => setEditLoading(false));
   }

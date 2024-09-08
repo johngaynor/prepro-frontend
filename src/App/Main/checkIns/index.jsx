@@ -29,8 +29,6 @@ const CheckInLog = () => {
   const [searchParams] = useSearchParams();
   const report = searchParams.get("report");
 
-  console.log(report, typeof report);
-
   // set the date in params if there isn't one given or if the date is invalid
   useEffect(() => {
     if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {

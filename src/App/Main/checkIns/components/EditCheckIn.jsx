@@ -2,17 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Button, Container, Form } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../components/FormFields";
-import AttachFile from "../../components/AttachFile";
 import CheckInContext from "../context/checkInContext";
 import { cloneDeep } from "lodash";
 
 const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
   const [formValues, setFormValues] = useState(null);
-  const [fileOpen, setFileOpen] = useState(false);
   // const [formErrors, setFormErrors] = useState({});
 
-  const { editCheckIns, deleteCheckIns, addAttachments } =
-    useContext(CheckInContext);
+  const { editCheckIns, deleteCheckIns } = useContext(CheckInContext);
   const navigate = useNavigate();
   useEffect(() => {
     if (selectedDay) {
@@ -75,13 +72,6 @@ const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
               );
             }
           })}
-        {fileOpen && (
-          <AttachFile
-            headerText="Submit Check In Photos"
-            onSubmit={addAttachments}
-            toggleFormOpen={() => setFileOpen(!fileOpen)}
-          />
-        )}
       </Grid>
       <Container
         style={{
@@ -90,12 +80,6 @@ const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
           justifyContent: "flex-end",
         }}
       >
-        <Button
-          onClick={() => setFileOpen(true)}
-          color="purple"
-          type="button"
-          icon="file"
-        />
         {selectedDay && (
           <>
             <Button

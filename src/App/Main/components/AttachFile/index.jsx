@@ -48,7 +48,7 @@ const AttachFile = ({
     toggleFormOpen();
   };
 
-  console.log(files);
+  // console.log(files);
   return (
     <Modal open={true} onClose={toggleFormOpen} closeIcon>
       <Modal.Header>
