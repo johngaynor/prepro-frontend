@@ -69,7 +69,6 @@ const EditExerciseModal = ({
   }
 
   function copyFromLastWorkout(i, weight, reps) {
-    console.log("hit");
     const newSets = [...formValues.sets];
     newSets[i].reps = reps;
     newSets[i].weight = weight;
