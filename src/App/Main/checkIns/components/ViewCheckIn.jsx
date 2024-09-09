@@ -51,7 +51,7 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
             <Grid.Column key={"checkin-photo-" + i}>
               <Image
                 size="small"
-                src={p.s3Url}
+                src={p.signedUrl}
                 style={{ height: 200, width: "auto" }}
               />
             </Grid.Column>
