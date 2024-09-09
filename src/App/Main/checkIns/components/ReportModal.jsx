@@ -53,7 +53,7 @@ const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
 
         <PDFDownloadLink
           document={<CheckInDoc selectedDay={selectedDay} />}
-          fileName={`${user.name} ${selectedDay.date} Check In`}
+          fileName={`${user.name} ${selectedDay?.date} Check In`}
           className="ui yellow button"
         >
           <i aria-hidden="true" className={"download icon"} />

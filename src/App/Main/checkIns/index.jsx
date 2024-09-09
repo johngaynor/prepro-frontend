@@ -33,11 +33,11 @@ const CheckInLog = () => {
   useEffect(() => {
     if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       const currentDate = DateTime.now().toFormat("yyyy-MM-dd");
-      navigate(`/checkins/${currentDate}?report=true`); // change these back to false
+      navigate(`/checkins/${currentDate}?report=false`); // change these back to false
     }
 
     if (date && report !== "false" && report !== "true") {
-      navigate(`/checkins/${date}?report=true`);
+      navigate(`/checkins/${date}?report=false`);
     }
   });
 
