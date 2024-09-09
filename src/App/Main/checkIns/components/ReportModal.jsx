@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   ModalHeader,
   ModalDescription,
@@ -9,10 +9,19 @@ import {
   Container,
   Header,
 } from "semantic-ui-react";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import ReportPdf, { CheckInDoc } from "./ReportPdf";
+import { PDFDownloadLink, usePDF, PDFViewer } from "@react-pdf/renderer";
+import CheckInDoc from "./ReportPdf";
+import AppContext from "../../context/appContext";
 
 const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
+  const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
+
+  useEffect(() => {
+    if (!pdf.loading) update(CheckInDoc({ selectedDay }));
+  });
+
+  const { user } = useContext(AppContext);
+
   return (
     <Modal
       onClose={handleCloseModal}
@@ -26,7 +35,9 @@ const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
       </ModalHeader>
       <ModalContent>
         <ModalDescription>
-          <ReportPdf selectedDay={selectedDay} />
+          <PDFViewer showToolbar={true} style={{ width: "100%", height: 700 }}>
+            <CheckInDoc selectedDay={selectedDay} />
+          </PDFViewer>
         </ModalDescription>
       </ModalContent>
       <ModalActions>
@@ -42,7 +53,7 @@ const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
 
         <PDFDownloadLink
           document={<CheckInDoc selectedDay={selectedDay} />}
-          fileName={`Summary - `}
+          fileName={`${user.name} ${selectedDay.date} Check In`}
           className="ui yellow button"
         >
           <i aria-hidden="true" className={"download icon"} />

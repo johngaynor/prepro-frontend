@@ -8,6 +8,7 @@ import {
   usePDF,
   Link,
   Font,
+  PDFDownloadLink,
 } from "@react-pdf/renderer";
 import { useEffect } from "react";
 
@@ -18,7 +19,7 @@ const font = {
   boldItalic: "Helvetica-BoldOblique",
 };
 
-function FormQuestionBox(question) {
+const FormQuestionBox = ({ question }) => {
   return (
     <View style={{ margin: "10 0" }}>
       <Text>{question.question}:</Text>
@@ -27,10 +28,9 @@ function FormQuestionBox(question) {
       </Text>
     </View>
   );
-}
+};
 
-export const CheckInDoc = ({ selectedDay }) => {
-  //   console.log("props", props);
+const CheckInDoc = ({ selectedDay }) => {
   return (
     <Document>
       <Page
@@ -56,26 +56,39 @@ export const CheckInDoc = ({ selectedDay }) => {
             necessary
           </Text>
         </View>
-        <View></View>
-        {/* Questions section */}
-        <View>{selectedDay?.questions?.map((q) => FormQuestionBox(q))}</View>
+        {/* Images section */}
+        <View
+          style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}
+        >
+          {selectedDay?.photos?.map((p, i) => (
+            <Image
+              src={{
+                uri: p.s3Url,
+                method: "GET",
+                headers: { "Cache-Control": "no-cache" },
+                body: "",
+              }}
+              key={"checkin-photo-report-" + i}
+              //   style={{ height: 100, width: "auto", aspectRatio: "auto" }}
+              //   style={{ margin: "10", height: 100, width: 100 }}
+              style={{ height: 500 }}
+            />
+          ))}
+        </View>
+      </Page>
+      {/* Questions section */}
+      <Page
+        size="letter"
+        style={{ padding: 100, fontSize: 10, fontFamily: font.normal }}
+      >
+        <View>
+          {selectedDay?.questions?.map((q, i) => (
+            <FormQuestionBox question={q} key={"form-question-" + i} />
+          ))}
+        </View>
       </Page>
     </Document>
   );
 };
 
-const ReportPdf = (props) => {
-  const [pdf, update] = usePDF({ document: CheckInDoc({ ...props }) });
-
-  useEffect(() => {
-    if (!pdf.loading) update(CheckInDoc({ ...props }));
-  });
-
-  return (
-    <PDFViewer showToolbar={true} style={{ width: "100%", height: 700 }}>
-      <CheckInDoc {...props} />
-    </PDFViewer>
-  );
-};
-
-export default ReportPdf;
+export default CheckInDoc;

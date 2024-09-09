@@ -48,11 +48,10 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
       <Grid columns={5} doubling stackable style={{ marginBottom: 20 }}>
         {selectedDay.photos?.map((p, i) => {
           return (
-            <Grid.Column>
+            <Grid.Column key={"checkin-photo-" + i}>
               <Image
                 size="small"
                 src={p.s3Url}
-                key={"checkin-photo-" + i}
                 style={{ height: 200, width: "auto" }}
               />
             </Grid.Column>
