@@ -82,11 +82,25 @@ export const CheckInProvider = ({ children }) => {
     apiCall("post", "/api/checkins/attachments", formData)
       .then((res) => {
         // clear out old attachments
+        setCheckIns(null);
         toast.success("Successfully added attachments!");
       })
       .catch((err) => {
         toast.error(`Error adding attachments: ${err.message}`);
         console.log("Error with sending attachment", err);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
+  function deleteAttachment(id) {
+    setEditLoading(true);
+    apiCall("delete", `/api/checkins/attachment/${id}`)
+      .then(() => {
+        setCheckIns(null);
+        toast.success("Successfully deleted photo!");
+      })
+      .catch((err) => {
+        toast.error(`Error deleting photo: ${err.message}`);
       })
       .finally(() => setEditLoading(false));
   }
@@ -104,6 +118,7 @@ export const CheckInProvider = ({ children }) => {
         editCheckIns,
         deleteCheckIns,
         addAttachments,
+        deleteAttachment,
       }}
     >
       {children}

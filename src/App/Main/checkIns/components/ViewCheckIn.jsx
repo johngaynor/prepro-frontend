@@ -6,15 +6,21 @@ import { DateTime } from "luxon";
 import { ViewInput } from "../../components/FormFields/view";
 import CheckInContext from "../context/checkInContext";
 import AttachFile from "../../components/AttachFile";
+import PhotoModal from "./PhotoModal";
 
 const ViewCheckIn = ({ selectedDay, setEditMode }) => {
   const [fileOpen, setFileOpen] = useState(false);
+  const [activePhoto, setActivePhoto] = useState(false);
 
-  const { addAttachments } = useContext(CheckInContext);
+  const { addAttachments, deleteAttachment } = useContext(CheckInContext);
   const navigate = useNavigate();
 
   function handleSubmitFile(formData) {
     addAttachments(formData, selectedDay.id);
+  }
+
+  function handleClosePhoto() {
+    setActivePhoto(null);
   }
 
   return (
@@ -26,6 +32,12 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
           toggleFormOpen={() => setFileOpen(!fileOpen)}
         />
       )}
+      <PhotoModal
+        modalOpen={!!activePhoto}
+        photo={activePhoto}
+        handleCloseModal={handleClosePhoto}
+        handleDeletePhoto={deleteAttachment}
+      />
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
         <InputField
           type="date"
@@ -48,7 +60,10 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
       <Grid columns={5} doubling stackable style={{ marginBottom: 20 }}>
         {selectedDay.photos?.map((p, i) => {
           return (
-            <Grid.Column key={"checkin-photo-" + i}>
+            <Grid.Column
+              key={"checkin-photo-" + i}
+              onClick={() => setActivePhoto(p)}
+            >
               <Image
                 size="small"
                 src={p.signedUrl}

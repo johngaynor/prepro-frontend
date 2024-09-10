@@ -17,6 +17,7 @@ const CheckInLog = () => {
     templates,
     templatesLoading,
     getTemplates,
+    editLoading,
   } = useContext(CheckInContext);
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const CheckInLog = () => {
 
   return (
     <Segment>
-      {(checkInsLoading || templatesLoading) && <Spinner />}
+      {(checkInsLoading || templatesLoading || editLoading) && <Spinner />}
       <ReportModal
         handleCloseModal={handleCloseReport}
         selectedDay={selectedDay}
