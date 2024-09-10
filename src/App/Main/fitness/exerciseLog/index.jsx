@@ -50,9 +50,16 @@ const Log = () => {
 
   const selectedWorkout = workoutLogs?.find((l) => l.date === date);
   const lastWorkout = workoutLogs
-    ?.filter((l) => l.workoutTemplateId === selectedWorkout?.workoutTemplateId)
-
-    .sort((a, b) => a.date - b.date)[0];
+    ?.filter(
+      (l) =>
+        l.workoutTemplateId === selectedWorkout?.workoutTemplateId &&
+        l.date !== selectedWorkout.date
+    )
+    .sort((a, b) => {
+      const dateA = DateTime.fromISO(a.date);
+      const dateB = DateTime.fromISO(b.date);
+      return dateB - dateA;
+    })[0];
 
   return (
     <React.Fragment>
