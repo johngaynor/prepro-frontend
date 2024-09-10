@@ -10,30 +10,53 @@ import ActivityContext from "../context/activityContext";
 
 const localizer = momentLocalizer(moment);
 
-// const testActivities = [
-//   { start: "2024-09-09", title: "test" },
-//   { start: "2024-09-09", title: "test" },
-// ];
-
 const Calendar = () => {
   const { activities, activitiesLoading, getActivities } =
     useContext(ActivityContext);
 
   useEffect(() => {
     if (!activities && !activitiesLoading) getActivities();
-  });
+  }, [activities, activitiesLoading]);
+
+  // changing colors of calendar items
+  const eventStyleGetter = (event) => {
+    let backgroundColor = "#3174ad"; // default color
+
+    switch (event.type) {
+      case "workout":
+        backgroundColor = "#0E6EB8";
+        break;
+      case "checkin":
+        backgroundColor = "#016936";
+        break;
+      default:
+        backgroundColor = "#909399";
+    }
+
+    return {
+      style: {
+        backgroundColor,
+        borderRadius: "5px",
+        opacity: 0.8,
+        color: "white",
+        border: "0px",
+        display: "block",
+      },
+    };
+  };
 
   return (
     <Segment>
       {activitiesLoading && <Spinner />}
+
       <ReactBigCalendar
         localizer={localizer}
-        // events={testActivities}
-        event={activities}
-        startAccessor="start"
-        endAccessor="start"
+        events={activities || []}
+        startAccessor="date"
+        endAccessor="date"
         titleAccessor="title"
         style={{ height: 500 }}
+        eventPropGetter={eventStyleGetter}
       />
     </Segment>
   );
