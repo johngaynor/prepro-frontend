@@ -63,14 +63,12 @@ const CheckInDoc = ({ selectedDay }) => {
           {selectedDay?.photos?.map((p, i) => (
             <Image
               src={{
-                uri: p.s3Url,
+                uri: p.signedUrl,
                 method: "GET",
                 headers: { "Cache-Control": "no-cache" },
                 body: "",
               }}
               key={"checkin-photo-report-" + i}
-              //   style={{ height: 100, width: "auto", aspectRatio: "auto" }}
-              //   style={{ margin: "10", height: 100, width: 100 }}
               style={{ height: 500 }}
             />
           ))}
