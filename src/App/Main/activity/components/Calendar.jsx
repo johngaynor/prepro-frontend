@@ -7,12 +7,15 @@ import { Segment } from "semantic-ui-react";
 import Spinner from "../../components/Spinner";
 import moment from "moment/moment"; // use luxon for everything else
 import ActivityContext from "../context/activityContext";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const localizer = momentLocalizer(moment);
 
 const Calendar = () => {
   const { activities, activitiesLoading, getActivities } =
     useContext(ActivityContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!activities && !activitiesLoading) getActivities();
@@ -45,6 +48,19 @@ const Calendar = () => {
     };
   };
 
+  function handleClickItem(item) {
+    switch (item.type) {
+      case "checkin":
+        navigate(`/checkins/${item.date}?report=false`);
+        break;
+      case "workout":
+        navigate(`/fitness/log/${item.date}`);
+        break;
+      default:
+        toast.error("Invalid calendar event type");
+    }
+  }
+
   return (
     <Segment>
       {activitiesLoading && <Spinner />}
@@ -57,6 +73,7 @@ const Calendar = () => {
         titleAccessor="title"
         style={{ height: 500 }}
         eventPropGetter={eventStyleGetter}
+        onSelectEvent={(e) => handleClickItem(e)}
       />
     </Segment>
   );
