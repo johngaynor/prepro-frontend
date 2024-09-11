@@ -1,16 +1,4 @@
-import {
-  PDFViewer,
-  Document,
-  View,
-  Text,
-  Page,
-  Image,
-  usePDF,
-  Link,
-  Font,
-  PDFDownloadLink,
-} from "@react-pdf/renderer";
-import { useEffect } from "react";
+import { Document, View, Text, Page, Image } from "@react-pdf/renderer";
 
 const font = {
   normal: "Helvetica",
@@ -22,8 +10,8 @@ const font = {
 const FormQuestionBox = ({ question }) => {
   return (
     <View style={{ margin: "10 0" }}>
-      <Text>{question.question}:</Text>
-      <Text style={{ marginTop: 5, fontStyle: "bold" }}>
+      <Text style={{}}>{question.question}:</Text>
+      <Text style={{ marginTop: 5, fontWeight: "bold" }}>
         {question.answer || "N/a"}
       </Text>
     </View>
@@ -33,10 +21,7 @@ const FormQuestionBox = ({ question }) => {
 const CheckInDoc = ({ selectedDay }) => {
   return (
     <Document>
-      <Page
-        size="letter"
-        style={{ padding: 100, fontSize: 10, fontFamily: font.normal }}
-      >
+      <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         <View
           style={{
             marginTop: -30,
@@ -75,10 +60,7 @@ const CheckInDoc = ({ selectedDay }) => {
         </View>
       </Page>
       {/* Questions section */}
-      <Page
-        size="letter"
-        style={{ padding: 100, fontSize: 10, fontFamily: font.normal }}
-      >
+      <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         <View>
           {selectedDay?.questions?.map((q, i) => (
             <FormQuestionBox question={q} key={"form-question-" + i} />
