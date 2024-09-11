@@ -1,6 +1,7 @@
 import React, { createContext, useState } from "react";
 import { apiCall } from "../../../services/api";
 import toast from "react-hot-toast";
+import { pdf } from "@react-pdf/renderer";
 
 export const CheckInContext = createContext();
 
@@ -105,6 +106,25 @@ export const CheckInProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  // send pdf to coach
+  async function sendPdfToCoach(reportPdf, filename) {
+    setEditLoading(true);
+    const blob = await pdf(reportPdf).toBlob();
+    const formData = new FormData();
+    formData.append("filename", filename);
+    formData.append("file", blob, "test-name-report");
+
+    apiCall("post", "/api/checkins/send", formData)
+      .then((res) => {
+        toast.success("Successfully mailed PDF to coach!");
+      })
+      .catch((err) => {
+        toast.error(`Error mailing pdf: ${err.message}`);
+        console.log(err);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <CheckInContext.Provider
       value={{
@@ -119,6 +139,7 @@ export const CheckInProvider = ({ children }) => {
         deleteCheckIns,
         addAttachments,
         deleteAttachment,
+        sendPdfToCoach,
       }}
     >
       {children}

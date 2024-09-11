@@ -12,6 +12,7 @@ import {
 import { PDFDownloadLink, usePDF, PDFViewer } from "@react-pdf/renderer";
 import CheckInDoc from "./ReportPdf";
 import AppContext from "../../context/appContext";
+import CheckInContext from "../context/checkInContext";
 
 const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
@@ -21,6 +22,9 @@ const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
   });
 
   const { user } = useContext(AppContext);
+  const { sendPdfToCoach } = useContext(CheckInContext);
+
+  const filename = `${user.name} ${selectedDay?.date} Check In`;
 
   return (
     <Modal
@@ -45,15 +49,15 @@ const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
           color="purple"
           icon="send"
           content="Email to Coach"
-          //   onClick={() => {
-          //     handleChangePosition("down", exercise);
-          //     handleCloseModal();
-          //   }}
+          onClick={() => {
+            handleCloseModal();
+            sendPdfToCoach(<CheckInDoc selectedDay={selectedDay} />, filename);
+          }}
         />
 
         <PDFDownloadLink
           document={<CheckInDoc selectedDay={selectedDay} />}
-          fileName={`${user.name} ${selectedDay?.date} Check In`}
+          fileName={filename}
           className="ui yellow button"
         >
           <i aria-hidden="true" className={"download icon"} />
