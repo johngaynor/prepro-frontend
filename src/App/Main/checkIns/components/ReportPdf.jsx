@@ -1,19 +1,10 @@
 import { Document, View, Text, Page, Image } from "@react-pdf/renderer";
 
-const font = {
-  normal: "Helvetica",
-  bold: "Helvetica-Bold",
-  italic: "Helvetica-Oblique",
-  boldItalic: "Helvetica-BoldOblique",
-};
-
 const FormQuestionBox = ({ question }) => {
   return (
     <View style={{ margin: "10 0" }}>
-      <Text style={{}}>{question.question}:</Text>
-      <Text style={{ marginTop: 5, fontWeight: "bold" }}>
-        {question.answer || "N/a"}
-      </Text>
+      <Text style={{ fontStyle: "italic" }}>{question.question}:</Text>
+      <Text style={{ marginTop: 5 }}>{" - " + (question.answer || "N/a")}</Text>
     </View>
   );
 };
