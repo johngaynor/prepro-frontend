@@ -10,7 +10,7 @@ import {
   Header,
 } from "semantic-ui-react";
 import { PDFDownloadLink, usePDF, PDFViewer } from "@react-pdf/renderer";
-import CheckInDoc from "./ReportPdf";
+import CheckInDoc from "./Pdf/ReportPdf";
 import AppContext from "../../context/appContext";
 import CheckInContext from "../context/checkInContext";
 import { DateTime } from "luxon";
@@ -37,7 +37,12 @@ const ReportModal = ({
   const logs = dailyLogs
     ?.filter((l) => {
       const logDate = DateTime.fromISO(l.date).startOf("day");
-      return logDate >= startDate && logDate <= endDate;
+      if (startDate) {
+        return logDate >= startDate && logDate <= endDate;
+      } else {
+        // no previous checkins
+        return logDate <= endDate;
+      }
     })
     .sort((a, b) => {
       const dateA = DateTime.fromISO(a.date);
