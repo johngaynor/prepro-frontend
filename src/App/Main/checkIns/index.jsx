@@ -57,7 +57,7 @@ const CheckInLog = () => {
   const template = templates?.find((t) => t.isDefault);
   const lastCheckIn = checkIns
     ?.filter((c) => {
-      const today = DateTime.fromISO(selectedDay?.date).startOf("day");
+      const today = DateTime.fromISO(date).startOf("day");
       const checkInDate = DateTime.fromISO(c.date).startOf("day");
       return checkInDate < today;
     })
@@ -91,6 +91,7 @@ const CheckInLog = () => {
           template={template}
           setEditMode={setEditMode}
           date={date}
+          lastCheckIn={lastCheckIn}
         />
       )}
     </Segment>

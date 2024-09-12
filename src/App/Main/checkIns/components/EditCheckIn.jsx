@@ -5,7 +5,13 @@ import { InputField, TextAreaField } from "../../components/FormFields";
 import CheckInContext from "../context/checkInContext";
 import { cloneDeep } from "lodash";
 
-const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
+const EditCheckIn = ({
+  selectedDay,
+  template,
+  setEditMode,
+  date,
+  lastCheckIn,
+}) => {
   const [formValues, setFormValues] = useState(null);
   // const [formErrors, setFormErrors] = useState({});
 
@@ -28,6 +34,10 @@ const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
     // handle validation
     editCheckIns({ ...selectedDay, questions: formValues, date });
     setEditMode(false);
+  }
+
+  function handleCopyFromLast() {
+    setFormValues(cloneDeep(lastCheckIn.questions));
   }
 
   return (
@@ -106,6 +116,15 @@ const EditCheckIn = ({ selectedDay, template, setEditMode, date }) => {
               }}
             />
           </>
+        )}
+        {lastCheckIn && !selectedDay && (
+          <Button
+            type="button"
+            icon="upload"
+            color="teal"
+            content="Pull From Last Checkin"
+            onClick={handleCopyFromLast}
+          />
         )}
         <Button type="submit" content="Save" icon="save" color="blue" />
       </Container>
