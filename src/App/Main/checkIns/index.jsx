@@ -18,12 +18,23 @@ const CheckInLog = () => {
     templatesLoading,
     getTemplates,
     editLoading,
+    dailyLogs,
+    logsLoading,
+    getDailyLogs,
   } = useContext(CheckInContext);
 
   useEffect(() => {
     if (!checkIns && !checkInsLoading) getCheckIns();
     if (!templates && !templatesLoading) getTemplates();
-  }, [checkIns, checkInsLoading, templates, templatesLoading]);
+    if (!dailyLogs && !logsLoading) getDailyLogs();
+  }, [
+    checkIns,
+    checkInsLoading,
+    templates,
+    templatesLoading,
+    dailyLogs,
+    logsLoading,
+  ]);
 
   const { date } = useParams();
   const navigate = useNavigate();
@@ -44,6 +55,17 @@ const CheckInLog = () => {
 
   const selectedDay = checkIns?.find((c) => c.date === date);
   const template = templates?.find((t) => t.isDefault);
+  const lastCheckIn = checkIns
+    ?.filter((c) => {
+      const today = DateTime.fromISO(selectedDay?.date).startOf("day");
+      const checkInDate = DateTime.fromISO(c.date).startOf("day");
+      return checkInDate < today;
+    })
+    .sort((a, b) => {
+      const dateA = DateTime.fromISO(a.date);
+      const dateB = DateTime.fromISO(b.date);
+      return dateB - dateA;
+    })[0];
 
   function handleCloseReport() {
     navigate(`/checkins/${date}?report=false`);
@@ -51,11 +73,14 @@ const CheckInLog = () => {
 
   return (
     <Segment>
-      {(checkInsLoading || templatesLoading || editLoading) && <Spinner />}
+      {(checkInsLoading || templatesLoading || logsLoading || editLoading) && (
+        <Spinner />
+      )}
       <ReportModal
         handleCloseModal={handleCloseReport}
         selectedDay={selectedDay}
         modalOpen={report}
+        lastCheckIn={lastCheckIn}
       />
 
       {selectedDay && !editMode ? (

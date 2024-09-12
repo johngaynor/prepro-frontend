@@ -9,7 +9,7 @@ const FormQuestionBox = ({ question }) => {
   );
 };
 
-const CheckInDoc = ({ selectedDay }) => {
+const CheckInDoc = ({ selectedDay, logs }) => {
   return (
     <Document>
       <Page size="letter" style={{ padding: 100, fontSize: 10 }}>

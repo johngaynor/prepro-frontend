@@ -7,10 +7,12 @@ export const CheckInContext = createContext();
 
 export const CheckInProvider = ({ children }) => {
   const [checkIns, setCheckIns] = useState(null);
+  const [dailyLogs, setDailyLogs] = useState(null);
   const [templates, setTemplates] = useState(null);
   // loading states
   const [checkInsLoading, setCheckInsLoading] = useState(false);
   const [templatesLoading, setTemplatesLoading] = useState(false);
+  const [logsLoading, setLogsLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
 
   // get check ins
@@ -28,6 +30,23 @@ export const CheckInProvider = ({ children }) => {
         toast.error(`Error getting check ins: ${err.message}`);
       })
       .finally(() => setCheckInsLoading(false));
+  }
+
+  // get daily logs
+  function getDailyLogs() {
+    setLogsLoading(true);
+    apiCall("get", "/api/checkins/daily")
+      .then((res) => {
+        if (res.result) {
+          setDailyLogs(res.result);
+        } else {
+          throw new Error("No result from API call...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting daily logs: ${err.message}`);
+      })
+      .finally(() => setLogsLoading(false));
   }
 
   // update check ins
@@ -140,6 +159,9 @@ export const CheckInProvider = ({ children }) => {
         addAttachments,
         deleteAttachment,
         sendPdfToCoach,
+        dailyLogs,
+        logsLoading,
+        getDailyLogs,
       }}
     >
       {children}

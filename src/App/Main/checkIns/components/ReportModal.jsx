@@ -13,8 +13,14 @@ import { PDFDownloadLink, usePDF, PDFViewer } from "@react-pdf/renderer";
 import CheckInDoc from "./ReportPdf";
 import AppContext from "../../context/appContext";
 import CheckInContext from "../context/checkInContext";
+import { DateTime } from "luxon";
 
-const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
+const ReportModal = ({
+  handleCloseModal,
+  selectedDay,
+  modalOpen,
+  lastCheckIn,
+}) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
 
   useEffect(() => {
@@ -22,9 +28,29 @@ const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
   });
 
   const { user } = useContext(AppContext);
-  const { sendPdfToCoach } = useContext(CheckInContext);
+  const { sendPdfToCoach, dailyLogs } = useContext(CheckInContext);
+
+  const startDate =
+    lastCheckIn && DateTime.fromISO(lastCheckIn.date).plus({ days: 1 });
+  const endDate = selectedDay && DateTime.fromISO(selectedDay.date);
+
+  const logs = dailyLogs
+    ?.filter((l) => {
+      const logDate = DateTime.fromISO(l.date).startOf("day");
+      return logDate >= startDate && logDate <= endDate;
+    })
+    .sort((a, b) => {
+      const dateA = DateTime.fromISO(a.date);
+      const dateB = DateTime.fromISO(b.date);
+      return dateA - dateB;
+    });
 
   const filename = `${user.name} ${selectedDay?.date} Check In`;
+
+  const reportProps = {
+    selectedDay,
+    logs,
+  };
 
   return (
     <Modal
@@ -40,7 +66,7 @@ const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
       <ModalContent>
         <ModalDescription>
           <PDFViewer showToolbar={true} style={{ width: "100%", height: 700 }}>
-            <CheckInDoc selectedDay={selectedDay} />
+            <CheckInDoc {...reportProps} />
           </PDFViewer>
         </ModalDescription>
       </ModalContent>
@@ -51,12 +77,12 @@ const ReportModal = ({ handleCloseModal, selectedDay, modalOpen }) => {
           content="Email to Coach"
           onClick={() => {
             handleCloseModal();
-            sendPdfToCoach(<CheckInDoc selectedDay={selectedDay} />, filename);
+            sendPdfToCoach(<CheckInDoc {...reportProps} />, filename);
           }}
         />
 
         <PDFDownloadLink
-          document={<CheckInDoc selectedDay={selectedDay} />}
+          document={<CheckInDoc {...reportProps} />}
           fileName={filename}
           className="ui yellow button"
         >
