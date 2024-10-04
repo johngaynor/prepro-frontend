@@ -1,39 +1,85 @@
-import React from "react";
-import { Grid, Header, Tab, Button, Container, Form } from "semantic-ui-react";
+import React, { useContext, useState } from "react";
+import {
+  Tab,
+  Table,
+  TableHeader,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableHeaderCell,
+  Checkbox,
+  Grid,
+} from "semantic-ui-react";
+import SupplementContext from "../../context/supplementContext";
+import { DateTime } from "luxon";
+import { InputField } from "../../../../components/FormFields";
 
 const DailyView = () => {
+  const [selectedDay, setSelectedDay] = useState(
+    DateTime.now().toFormat("yyyy-MM-dd")
+  );
+  const { suppItems, suppLogs, toggleSupplementLog } =
+    useContext(SupplementContext);
+
+  const formattedDate = DateTime.fromISO(selectedDay).toFormat("yyyy-MM-dd");
+
+  const filteredLogs = suppItems?.reduce((acc, val) => {
+    const retArr = [...acc];
+
+    const match = suppLogs?.find(
+      (l) => l.date === formattedDate && l.supplementId === val.id
+    );
+    if (match) {
+      retArr.push({ ...val, completed: true });
+    } else {
+      retArr.push({ ...val });
+    }
+    return retArr;
+  }, []);
+
   return (
     <Tab.Pane>
-      <Container>
-        <Header as="h1">Daily View</Header>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <Form>
-                <Form.Field>
-                  <label>Date</label>
-                  <input type="date" />
-                </Form.Field>
-                <Form.Field>
-                  <label>Supplement</label>
-                  <input type="text" />
-                </Form.Field>
-                <Form.Field>
-                  <label>Amount</label>
-                  <input type="number" />
-                </Form.Field>
-                <Form.Field>
-                  <label>Unit</label>
-                  <input type="text" />
-                </Form.Field>
-                <Button primary type="submit">
-                  Submit
-                </Button>
-              </Form>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+      <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
+        <InputField
+          type="date"
+          label="Date"
+          value={formattedDate}
+          onChange={(e, { value }) => setSelectedDay(value)}
+        />
+      </Grid>
+      <Table striped>
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell>Supplement</TableHeaderCell>
+            <TableHeaderCell>Description</TableHeaderCell>
+            <TableHeaderCell>Dosage</TableHeaderCell>
+            <TableHeaderCell>Completed?</TableHeaderCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filteredLogs?.map((item, i) => {
+            return (
+              <TableRow verticalAlign="top" key={"supp-item-" + i}>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  {item.name}
+                  {/* <br />
+                {item.description} */}
+                </TableCell>
+                <TableCell>{item.description}</TableCell>
+                <TableCell>--</TableCell>
+                <TableCell verticalAlign="top">
+                  <Checkbox
+                    checked={item.completed}
+                    onChange={() => {
+                      toggleSupplementLog(item, formattedDate);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
     </Tab.Pane>
   );
 };

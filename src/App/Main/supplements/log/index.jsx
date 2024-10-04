@@ -8,14 +8,19 @@ import Tab from "../../components/Tab";
 import Spinner from "../../components/Spinner";
 
 const SupplementLog = () => {
-  const { suppItems, suppsLoading, getAllSupplements } =
-    useContext(SupplementContext);
-
-  console.log(suppItems);
+  const {
+    suppItems,
+    suppsLoading,
+    getSupplements,
+    suppLogs,
+    logsLoading,
+    getSupplementLogs,
+  } = useContext(SupplementContext);
 
   useEffect(() => {
-    if (!suppItems.length && !suppsLoading) getAllSupplements();
-  }, [suppItems, suppsLoading]);
+    if (!suppItems && !suppsLoading) getSupplements();
+    if (!suppLogs && !logsLoading) getSupplementLogs();
+  }, [suppItems, suppsLoading, suppLogs, logsLoading]);
 
   const mainPanes = [
     {
@@ -33,7 +38,7 @@ const SupplementLog = () => {
   ];
   return (
     <>
-      {suppsLoading && <Spinner />}
+      {(suppsLoading || logsLoading) && <Spinner />}
       <Tab panes={mainPanes} />
     </>
   );
