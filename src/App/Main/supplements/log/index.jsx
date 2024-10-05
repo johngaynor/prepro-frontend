@@ -15,12 +15,23 @@ const SupplementLog = () => {
     suppLogs,
     logsLoading,
     getSupplementLogs,
+    missedLogs,
+    missedLogsLoading,
+    getMissedSupplements,
   } = useContext(SupplementContext);
 
   useEffect(() => {
     if (!suppItems && !suppsLoading) getSupplements();
     if (!suppLogs && !logsLoading) getSupplementLogs();
-  }, [suppItems, suppsLoading, suppLogs, logsLoading]);
+    if (!missedLogs && !missedLogsLoading) getMissedSupplements();
+  }, [
+    suppItems,
+    suppsLoading,
+    suppLogs,
+    logsLoading,
+    missedLogs,
+    missedLogsLoading,
+  ]);
 
   const mainPanes = [
     {

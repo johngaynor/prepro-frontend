@@ -19,7 +19,7 @@ const DailyView = () => {
   const [selectedDay, setSelectedDay] = useState(
     DateTime.now().toFormat("yyyy-MM-dd")
   );
-  const { suppItems, suppLogs, toggleSupplementLog } =
+  const { suppItems, suppLogs, missedLogs, toggleSupplementLog } =
     useContext(SupplementContext);
 
   const formattedDate = DateTime.fromISO(selectedDay).toFormat("yyyy-MM-dd");
@@ -30,14 +30,23 @@ const DailyView = () => {
     const match = suppLogs?.find(
       (l) => l.date === formattedDate && l.supplementId === val.id
     );
-    if (match) {
-      retArr.push({ ...val, completed: true });
+    const missedMatch = missedLogs?.find(
+      (l) => l.date === formattedDate && l.supplementId === val.id
+    );
+
+    if (match || missedMatch) {
+      retArr.push({
+        ...val,
+        completed: !!match,
+        missed: !!missedMatch,
+      });
     } else {
       retArr.push({ ...val });
     }
     return retArr;
   }, []);
 
+  console.log(filteredLogs);
   return (
     <Tab.Pane>
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
@@ -55,6 +64,7 @@ const DailyView = () => {
             <TableHeaderCell>Description</TableHeaderCell>
             <TableHeaderCell>Dosage</TableHeaderCell>
             <TableHeaderCell>Completed?</TableHeaderCell>
+            <TableHeaderCell>Missed?</TableHeaderCell>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -64,9 +74,18 @@ const DailyView = () => {
                 verticalAlign="top"
                 key={"supp-item-" + i}
                 positive={item.completed}
+                negative={item.missed}
               >
                 <TableCell style={{ fontWeight: "bold" }}>
-                  <Icon name={item.completed ? "checkmark" : "question"} />
+                  <Icon
+                    name={
+                      item.completed
+                        ? "checkmark"
+                        : item.missed
+                        ? "cancel"
+                        : "question"
+                    }
+                  />
                   {item.name}
                   {/* <br />
                 {item.description} */}
@@ -79,7 +98,18 @@ const DailyView = () => {
                     onChange={() => {
                       toggleSupplementLog(item, formattedDate);
                     }}
+                    disabled={item.missed}
                   />
+                </TableCell>
+                <TableCell>
+                  {!item.completed && !item.missed && (
+                    <Icon
+                      name="cancel"
+                      onClick={() => {
+                        console.log("edit item", item);
+                      }}
+                    />
+                  )}
                 </TableCell>
               </TableRow>
             );

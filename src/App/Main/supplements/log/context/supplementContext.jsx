@@ -7,9 +7,11 @@ export const SupplementContext = React.createContext();
 export const SupplementProvider = ({ children }) => {
   const [suppItems, setSuppItems] = React.useState(null);
   const [suppLogs, setSuppLogs] = React.useState(null);
+  const [missedLogs, setMissedLogs] = React.useState(null);
   // loading states
   const [suppsLoading, setSuppsLoading] = React.useState(false);
   const [logsLoading, setLogsLoading] = React.useState(false);
+  const [missedLogsLoading, setMissedLogsLoading] = React.useState(false);
 
   // api calls
   function getSupplements() {
@@ -54,6 +56,18 @@ export const SupplementProvider = ({ children }) => {
       });
   }
 
+  function getMissedSupplements() {
+    setMissedLogsLoading(true);
+    apiCall("get", "/api/supplements/logs/missed", { credentials: "include" })
+      .then((res) => {
+        setMissedLogs(res.result);
+      })
+      .catch((err) => {
+        toast.error(`Error getting missed supplement logs: ${err}`);
+      })
+      .finally(() => setMissedLogsLoading(false));
+  }
+
   return (
     <SupplementContext.Provider
       value={{
@@ -64,6 +78,9 @@ export const SupplementProvider = ({ children }) => {
         logsLoading,
         getSupplementLogs,
         toggleSupplementLog,
+        missedLogs,
+        missedLogsLoading,
+        getMissedSupplements,
       }}
     >
       {children}
