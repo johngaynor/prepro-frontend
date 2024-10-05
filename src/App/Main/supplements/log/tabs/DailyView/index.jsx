@@ -9,6 +9,7 @@ import {
   TableHeaderCell,
   Checkbox,
   Grid,
+  Icon,
 } from "semantic-ui-react";
 import SupplementContext from "../../context/supplementContext";
 import { DateTime } from "luxon";
@@ -59,8 +60,13 @@ const DailyView = () => {
         <TableBody>
           {filteredLogs?.map((item, i) => {
             return (
-              <TableRow verticalAlign="top" key={"supp-item-" + i}>
+              <TableRow
+                verticalAlign="top"
+                key={"supp-item-" + i}
+                positive={item.completed}
+              >
                 <TableCell style={{ fontWeight: "bold" }}>
+                  <Icon name={item.completed ? "checkmark" : "question"} />
                   {item.name}
                   {/* <br />
                 {item.description} */}
