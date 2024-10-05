@@ -7,7 +7,12 @@ import {
 
 const localizer = momentLocalizer(moment);
 
-const MonthlyCalendar = ({ suppItems, suppLogs, setActiveItems }) => {
+const MonthlyCalendar = ({
+  suppItems,
+  suppLogs,
+  setActiveItems,
+  setActiveDay,
+}) => {
   const suppsToDisplay = suppLogs?.map((l) => ({
     ...l,
     title: suppItems?.find((i) => i.id === l.supplementId)?.name,
@@ -21,6 +26,7 @@ const MonthlyCalendar = ({ suppItems, suppLogs, setActiveItems }) => {
       startAccessor="date"
       endAccessor="date"
       titleAccessor="title"
+      onNavigate={(date) => setActiveDay(date)}
       style={{ height: 500 }}
       messages={{
         showMore: (total, hiddenItems, allItems) => (
