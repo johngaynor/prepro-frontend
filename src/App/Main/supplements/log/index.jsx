@@ -49,7 +49,7 @@ const SupplementLog = () => {
   ];
   return (
     <>
-      {(suppsLoading || logsLoading) && <Spinner />}
+      {(suppsLoading || logsLoading || missedLogsLoading) && <Spinner />}
       <Tab panes={mainPanes} />
     </>
   );

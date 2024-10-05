@@ -68,6 +68,21 @@ export const SupplementProvider = ({ children }) => {
       .finally(() => setMissedLogsLoading(false));
   }
 
+  function addMissedSupplement(item, date, reason) {
+    apiCall("post", "/api/supplements/logs/missed", {
+      credentials: "include",
+      item,
+      date,
+      reason,
+    })
+      .then(() => {
+        getMissedSupplements();
+      })
+      .catch((err) => {
+        toast.error(`Error adding missed supplement: ${err}`);
+      });
+  }
+
   return (
     <SupplementContext.Provider
       value={{
@@ -81,6 +96,7 @@ export const SupplementProvider = ({ children }) => {
         missedLogs,
         missedLogsLoading,
         getMissedSupplements,
+        addMissedSupplement,
       }}
     >
       {children}

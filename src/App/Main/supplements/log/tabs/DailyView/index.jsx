@@ -10,17 +10,26 @@ import {
   Checkbox,
   Grid,
   Icon,
+  Popup,
 } from "semantic-ui-react";
 import SupplementContext from "../../context/supplementContext";
 import { DateTime } from "luxon";
 import { InputField } from "../../../../components/FormFields";
+import MissedModal from "./components/MissedModal";
 
 const DailyView = () => {
   const [selectedDay, setSelectedDay] = useState(
     DateTime.now().toFormat("yyyy-MM-dd")
   );
-  const { suppItems, suppLogs, missedLogs, toggleSupplementLog } =
-    useContext(SupplementContext);
+  const [missedItem, setMissedItem] = useState(null);
+
+  const {
+    suppItems,
+    suppLogs,
+    missedLogs,
+    toggleSupplementLog,
+    addMissedSupplement,
+  } = useContext(SupplementContext);
 
   const formattedDate = DateTime.fromISO(selectedDay).toFormat("yyyy-MM-dd");
 
@@ -39,6 +48,7 @@ const DailyView = () => {
         ...val,
         completed: !!match,
         missed: !!missedMatch,
+        reason: missedMatch?.reason,
       });
     } else {
       retArr.push({ ...val });
@@ -46,9 +56,14 @@ const DailyView = () => {
     return retArr;
   }, []);
 
-  console.log(filteredLogs);
   return (
     <Tab.Pane>
+      <MissedModal
+        handleClose={() => setMissedItem(null)}
+        missedItem={missedItem}
+        selectedDay={selectedDay}
+        addMissedSupplement={addMissedSupplement}
+      />
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
         <InputField
           type="date"
@@ -105,9 +120,20 @@ const DailyView = () => {
                   {!item.completed && !item.missed && (
                     <Icon
                       name="cancel"
-                      onClick={() => {
-                        console.log("edit item", item);
-                      }}
+                      onClick={() => setMissedItem(item)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  )}
+                  {item.reason && (
+                    <Popup
+                      content={item.reason} // The content you want to display in the tooltip
+                      trigger={
+                        <Icon
+                          name="info circle"
+                          style={{ cursor: "pointer" }}
+                        />
+                      }
+                      position="top center"
                     />
                   )}
                 </TableCell>
