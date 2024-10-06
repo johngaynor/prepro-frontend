@@ -30,25 +30,13 @@ const ReportModal = ({
   const { user } = useContext(AppContext);
   const { sendPdfToCoach, dailyLogs } = useContext(CheckInContext);
 
-  const startDate =
-    lastCheckIn && DateTime.fromISO(lastCheckIn.date).plus({ days: 1 });
-  const endDate = selectedDay && DateTime.fromISO(selectedDay.date);
-
   const logs = dailyLogs
-    ?.filter((l) => {
-      const logDate = DateTime.fromISO(l.date).startOf("day");
-      if (startDate) {
-        return logDate >= startDate && logDate <= endDate;
-      } else {
-        // no previous checkins
-        return logDate <= endDate;
-      }
-    })
-    .sort((a, b) => {
+    ?.sort((a, b) => {
       const dateA = DateTime.fromISO(a.date);
       const dateB = DateTime.fromISO(b.date);
       return dateA - dateB;
-    });
+    })
+    .map((l) => ({ date: l.date, weight: parseFloat(l.amWeight) }));
 
   const filename = `${user.name} ${selectedDay?.date} Check In`;
 
