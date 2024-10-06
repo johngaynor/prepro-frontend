@@ -43,6 +43,7 @@ const ReportModal = ({
   const reportProps = {
     selectedDay,
     logs,
+    lastCheckIn,
   };
 
   return (
