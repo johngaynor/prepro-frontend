@@ -72,7 +72,7 @@ const CheckInLog = () => {
   }
 
   return (
-    <Segment>
+    <>
       {(checkInsLoading || templatesLoading || logsLoading || editLoading) && (
         <Spinner />
       )}
@@ -94,7 +94,7 @@ const CheckInLog = () => {
           lastCheckIn={lastCheckIn}
         />
       )}
-    </Segment>
+    </>
   );
 };
 
