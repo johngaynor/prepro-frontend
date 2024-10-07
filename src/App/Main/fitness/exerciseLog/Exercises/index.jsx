@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid, Button, Segment } from "semantic-ui-react";
 import FitnessContext from "../../context/fitnessContext";
 import CopyFromTemplate from "./components/CopyFromTemplate";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
@@ -30,7 +30,7 @@ const Exercises = ({ selectedWorkout, lastWorkout }) => {
   );
 
   return (
-    <>
+    <Segment>
       <EditExerciseModal
         modalOpen={editOpen}
         setModalOpen={setEditOpen}
@@ -49,35 +49,41 @@ const Exercises = ({ selectedWorkout, lastWorkout }) => {
         setOpen={setCopyOpen}
         selectedWorkout={selectedWorkout}
       />
-      <>
-        {!selectedWorkout.exercises.length && (
-          <Button
-            color="blue"
-            content="Copy from Template"
-            onClick={() => setCopyOpen(true)}
-          />
-        )}
-        <Grid stackable columns={3}>
-          {selectedWorkout?.exercises
-            .sort((a, b) => a.orderId - b.orderId)
-            .map((e, i) => (
-              <ViewExerciseCard
-                exercise={e}
-                index={i}
-                handleEdit={() => handleEdit(e.id)}
-                key={"workout-exercise-view-" + i}
-              />
-            ))}
-        </Grid>
+
+      {!selectedWorkout.exercises.length && (
         <Button
-          icon="plus"
-          type="button"
-          onClick={() => setEditOpen(true)}
-          color="green"
-          style={{ marginTop: selectedWorkout.exercises.length ? 20 : 40 }}
+          color="blue"
+          content="Copy from Template"
+          onClick={() => setCopyOpen(true)}
         />
-      </>
-    </>
+      )}
+      <Grid
+        stackable
+        columns={3}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {selectedWorkout?.exercises
+          .sort((a, b) => a.orderId - b.orderId)
+          .map((e, i) => (
+            <ViewExerciseCard
+              exercise={e}
+              index={i}
+              handleEdit={() => handleEdit(e.id)}
+              key={"workout-exercise-view-" + i}
+            />
+          ))}
+      </Grid>
+      <Button
+        icon="plus"
+        type="button"
+        onClick={() => setEditOpen(true)}
+        color="green"
+        style={{ marginTop: selectedWorkout.exercises.length ? 20 : 40 }}
+      />
+    </Segment>
   );
 };
 

@@ -8,7 +8,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 
 const Log = () => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const [editMode, setEditMode] = useState(false);
 
   const {
@@ -66,7 +66,7 @@ const Log = () => {
       <Accordion fluid styled>
         {(logsLoading || editLoading) && <Spinner />}
         <Accordion.Title
-          active={activeTab === 1}
+          active={activeTab === 1 || !selectedWorkout}
           onClick={() => {
             if (activeTab !== 1) {
               setActiveTab(1);
@@ -76,7 +76,7 @@ const Log = () => {
           <Icon name="dropdown" />
           Workout Information
         </Accordion.Title>
-        <Accordion.Content active={activeTab === 1}>
+        <Accordion.Content active={activeTab === 1 || !selectedWorkout}>
           <Summary
             selectedWorkout={selectedWorkout}
             setActiveTab={setActiveTab}
@@ -84,28 +84,13 @@ const Log = () => {
             setEditMode={setEditMode}
           />
         </Accordion.Content>
-        {!editMode && selectedWorkout && (
-          <>
-            <Accordion.Title
-              active={activeTab === 2}
-              onClick={() => {
-                if (activeTab !== 2) {
-                  setActiveTab(2);
-                } else setActiveTab(null);
-              }}
-            >
-              <Icon name="dropdown" />
-              Workout Exercises
-            </Accordion.Title>
-            <Accordion.Content active={activeTab === 2}>
-              <Exercises
-                selectedWorkout={selectedWorkout}
-                lastWorkout={lastWorkout}
-              />
-            </Accordion.Content>
-          </>
-        )}
       </Accordion>
+      {!editMode && selectedWorkout && (
+        <Exercises
+          selectedWorkout={selectedWorkout}
+          lastWorkout={lastWorkout}
+        />
+      )}
     </React.Fragment>
   );
 };
