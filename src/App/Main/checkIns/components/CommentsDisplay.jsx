@@ -38,9 +38,10 @@ const CommentsDisplay = ({ checkInId }) => {
                 {(commentaryLoading || usersLoading) && <Spinner />}
                 {commentary?.map(({ id, comment, date, userId }, i) => {
                   const username = apiUsers.find((u) => u.id === userId)?.name;
-                  const formattedDate = DateTime.fromISO(date, { zone: "utc" })
-                    .toLocal()
-                    .minus({ hours: 4 }); // this is really annoying
+                  const formattedDate = DateTime.fromISO(date, {
+                    zone: "utc",
+                  }).toLocal();
+
                   return (
                     id && (
                       <Feed.Event key={i}>
