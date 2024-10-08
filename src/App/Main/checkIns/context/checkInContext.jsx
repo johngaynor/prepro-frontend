@@ -165,6 +165,21 @@ export const CheckInProvider = ({ children }) => {
       .finally(() => setCommentaryLoading(false));
   }
 
+  // add comment
+  function addComment(values) {
+    setEditLoading(true);
+    apiCall("post", "/api/checkins/commentary", values)
+      .then((res) => {
+        setCommentaryId(null);
+        toast.success("Successfully added comment!");
+      })
+      .catch((err) => {
+        toast.error(`Error adding comment: ${err.message}`);
+        console.log(err);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <CheckInContext.Provider
       value={{
@@ -187,6 +202,7 @@ export const CheckInProvider = ({ children }) => {
         commentaryLoading,
         commentaryId,
         getCommentary,
+        addComment,
       }}
     >
       {children}

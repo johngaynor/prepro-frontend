@@ -8,8 +8,13 @@ import { DateTime } from "luxon";
 const CommentsDisplay = ({ checkInId }) => {
   const [comment, setComment] = useState("");
 
-  const { commentary, commentaryLoading, getCommentary, commentaryId } =
-    useContext(CheckInContext);
+  const {
+    commentary,
+    commentaryLoading,
+    getCommentary,
+    commentaryId,
+    addComment,
+  } = useContext(CheckInContext);
   const { apiUsers, usersLoading, getAllUsers } = useContext(AppContext);
 
   useEffect(() => {
@@ -56,12 +61,16 @@ const CommentsDisplay = ({ checkInId }) => {
               <Input
                 placeholder="Add a Comment"
                 fluid
+                value={comment}
                 action={
                   <Button
                     color="green"
                     content="Submit"
                     icon="send"
-                    // onClick={() => addComment(complaintId, comment)}
+                    onClick={() => {
+                      addComment({ checkInId, comment });
+                      setComment("");
+                    }}
                   />
                 }
                 onChange={(e, { value }) => setComment(value)}
