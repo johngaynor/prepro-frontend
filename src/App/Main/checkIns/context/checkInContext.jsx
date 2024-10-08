@@ -129,16 +129,18 @@ export const CheckInProvider = ({ children }) => {
   }
 
   // send pdf to coach
-  async function sendPdfToCoach(reportPdf, filename) {
+  async function sendPdfToCoach(reportPdf, filename, checkInId) {
     setEditLoading(true);
     const blob = await pdf(reportPdf).toBlob();
     const formData = new FormData();
     formData.append("filename", filename);
+    formData.append("checkInId", checkInId);
     formData.append("file", blob, "test-name-report");
 
     apiCall("post", "/api/checkins/send", formData)
       .then((res) => {
         toast.success("Successfully mailed PDF to coach!");
+        setCommentaryId(null); // clear comments to bring in new one
       })
       .catch((err) => {
         toast.error(`Error mailing pdf: ${err.message}`);

@@ -37,7 +37,10 @@ const CommentsDisplay = ({ checkInId }) => {
               <Feed>
                 {(commentaryLoading || usersLoading) && <Spinner />}
                 {commentary?.map(({ id, comment, date, userId }, i) => {
-                  userId = apiUsers.find((u) => u.id === userId)?.name;
+                  const username = apiUsers.find((u) => u.id === userId)?.name;
+                  const formattedDate = DateTime.fromISO(date, { zone: "utc" })
+                    .toLocal()
+                    .minus({ hours: 4 }); // this is really annoying
                   return (
                     id && (
                       <Feed.Event key={i}>
@@ -45,11 +48,9 @@ const CommentsDisplay = ({ checkInId }) => {
                           <Feed.Summary>{comment}</Feed.Summary>
                           <Feed.Summary>
                             <Feed.Date>
-                              {`${userId} - ${DateTime.fromISO(
-                                date
-                              ).toRelative()} (${DateTime.fromISO(
-                                date
-                              ).toFormat("M/d/yy h:mm a")})`}
+                              {`${username} - ${formattedDate.toRelative()} (${formattedDate.toFormat(
+                                "M/d/yy h:mm a"
+                              )})`}
                             </Feed.Date>
                           </Feed.Summary>
                         </Feed.Content>

@@ -71,7 +71,11 @@ const ReportModal = ({
           content="Email to Coach"
           onClick={() => {
             handleCloseModal();
-            sendPdfToCoach(<CheckInDoc {...reportProps} />, filename);
+            sendPdfToCoach(
+              <CheckInDoc {...reportProps} />,
+              filename,
+              selectedDay?.id
+            );
           }}
         />
 
