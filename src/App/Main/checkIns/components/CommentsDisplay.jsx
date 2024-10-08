@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Input, Button, Feed, Accordion } from "semantic-ui-react";
-import moment from "moment";
 import CheckInContext from "../context/checkInContext";
 import AppContext from "../../context/appContext";
 import Spinner from "../../components/Spinner";
+import { DateTime } from "luxon";
 
 const CommentsDisplay = ({ checkInId }) => {
   const [comment, setComment] = useState("");
@@ -40,9 +40,11 @@ const CommentsDisplay = ({ checkInId }) => {
                           <Feed.Summary>{comment}</Feed.Summary>
                           <Feed.Summary>
                             <Feed.Date>
-                              {`${userId} - ${moment(date).fromNow()} (${moment(
+                              {`${userId} - ${DateTime.fromISO(
                                 date
-                              ).format("M/D/YY LT")})`}
+                              ).toRelative()} (${DateTime.fromISO(
+                                date
+                              ).toFormat("M/d/yy h:mm a")})`}
                             </Feed.Date>
                           </Feed.Summary>
                         </Feed.Content>
