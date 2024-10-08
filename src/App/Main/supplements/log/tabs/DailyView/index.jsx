@@ -11,6 +11,7 @@ import {
   Grid,
   Icon,
   Popup,
+  Button,
 } from "semantic-ui-react";
 import SupplementContext from "../../context/supplementContext";
 import { DateTime } from "luxon";
@@ -65,12 +66,37 @@ const DailyView = () => {
         addMissedSupplement={addMissedSupplement}
       />
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
-        <InputField
-          type="date"
-          label="Date"
-          value={formattedDate}
-          onChange={(e, { value }) => setSelectedDay(value)}
-        />
+        <Grid.Column>
+          <InputField
+            type="date"
+            label="Date"
+            value={formattedDate}
+            onChange={(e, { value }) => setSelectedDay(value)}
+          />
+        </Grid.Column>
+        <Grid.Column verticalAlign="bottom">
+          <Button
+            icon="arrow left"
+            color="blue"
+            onClick={() => {
+              const yesterday = DateTime.fromISO(selectedDay)
+                .minus({ days: 1 })
+                .toFormat("yyyy-MM-dd");
+              setSelectedDay(yesterday);
+            }}
+            style={{ marginLeft: -20 }}
+          />
+          <Button
+            icon="arrow right"
+            color="blue"
+            onClick={() => {
+              const tomorrow = DateTime.fromISO(selectedDay)
+                .plus({ days: 1 })
+                .toFormat("yyyy-MM-dd");
+              setSelectedDay(tomorrow);
+            }}
+          />
+        </Grid.Column>
       </Grid>
       <Table striped>
         <TableHeader>
