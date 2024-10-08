@@ -6,12 +6,15 @@ export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  const [userLoading, setUserLoading] = useState(true);
   const [auth, setAuth] = useState(false);
   const [apps, setApps] = useState([]);
+  const [apiUsers, setApiUsers] = useState(null);
+  // loading states
+  const [userLoading, setUserLoading] = useState(true);
   const [appsLoading, setAppsLoading] = useState(false);
   const [changeLog, setChangeLog] = useState(null);
   const [logLoading, setLogLoading] = useState(false);
+  const [usersLoading, setUsersLoading] = useState(false);
 
   function authUser() {
     apiCall("get", "/api/auth/user", { credentials: "include" })
@@ -71,6 +74,22 @@ export const AppProvider = ({ children }) => {
       });
   }
 
+  function getAllUsers() {
+    setUsersLoading(true);
+    apiCall("get", "/api/users", { credentials: "include" })
+      .then((res) => {
+        if (res.result.length) {
+          setApiUsers(res.result);
+        } else {
+          toast.error("No apps returned...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting all user access: ${err}`);
+      })
+      .finally(() => setUsersLoading(false));
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -86,6 +105,9 @@ export const AppProvider = ({ children }) => {
         authUser,
         getApps,
         clearApps,
+        getAllUsers,
+        apiUsers,
+        usersLoading,
       }}
     >
       {children}

@@ -1,34 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Input, Button, Feed, Accordion } from "semantic-ui-react";
 import moment from "moment";
+import CheckInContext from "../context/checkInContext";
+import AppContext from "../../context/appContext";
+import Spinner from "../../components/Spinner";
 
-// still needs functionality
-const CommentsDisplay = ({ complaintId, addComment }) => {
+const CommentsDisplay = ({ checkInId }) => {
   const [comment, setComment] = useState("");
-  //   useEffect(() => {
-  //     if (!issueComments.length && !issueCommentsLoading) getIssueComments(complaintId);
-  //   });
 
-  const testComments = [
-    {
-      id: 1,
-      userName: "John Doe",
-      commentDate: "2021-08-01T12:00:00",
-      noteText: "This is a test comment",
-    },
-    {
-      id: 2,
-      userName: "John Doe",
-      commentDate: "2021-08-01T12:00:00",
-      noteText: "This is a test comment",
-    },
-    {
-      id: 3,
-      userName: "John Doe",
-      commentDate: "2021-08-01T12:00:00",
-      noteText: "This is a test comment",
-    },
-  ];
+  const { commentary, commentaryLoading, getCommentary, commentaryId } =
+    useContext(CheckInContext);
+  const { apiUsers, usersLoading, getAllUsers } = useContext(AppContext);
+
+  useEffect(() => {
+    if ((!commentary || commentaryId !== checkInId) && !commentaryLoading)
+      getCommentary(checkInId);
+    if (!apiUsers && !usersLoading) getAllUsers();
+  }, [commentary, commentaryId, commentaryLoading, apiUsers, usersLoading]);
 
   return (
     <Accordion
@@ -42,25 +30,26 @@ const CommentsDisplay = ({ complaintId, addComment }) => {
           content: (
             <Accordion.Content>
               <Feed>
-                {testComments.map(
-                  ({ id, noteText, userName, commentDate }, i) =>
+                {(commentaryLoading || usersLoading) && <Spinner />}
+                {commentary?.map(({ id, comment, date, userId }, i) => {
+                  userId = apiUsers.find((u) => u.id === userId)?.name;
+                  return (
                     id && (
                       <Feed.Event key={i}>
                         <Feed.Content style={{ padding: 0, paddingLeft: 10 }}>
-                          <Feed.Summary>{noteText}</Feed.Summary>
+                          <Feed.Summary>{comment}</Feed.Summary>
                           <Feed.Summary>
                             <Feed.Date>
-                              {`${userName} - ${moment(
-                                commentDate
-                              ).fromNow()} (${moment(commentDate).format(
-                                "M/D/YY LT"
-                              )})`}
+                              {`${userId} - ${moment(date).fromNow()} (${moment(
+                                date
+                              ).format("M/D/YY LT")})`}
                             </Feed.Date>
                           </Feed.Summary>
                         </Feed.Content>
                       </Feed.Event>
                     )
-                )}
+                  );
+                })}
               </Feed>
               <Input
                 placeholder="Add a Comment"
@@ -70,7 +59,7 @@ const CommentsDisplay = ({ complaintId, addComment }) => {
                     color="green"
                     content="Submit"
                     icon="send"
-                    onClick={() => addComment(complaintId, comment)}
+                    // onClick={() => addComment(complaintId, comment)}
                   />
                 }
                 onChange={(e, { value }) => setComment(value)}

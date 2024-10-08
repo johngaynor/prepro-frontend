@@ -9,11 +9,14 @@ export const CheckInProvider = ({ children }) => {
   const [checkIns, setCheckIns] = useState(null);
   const [dailyLogs, setDailyLogs] = useState(null);
   const [templates, setTemplates] = useState(null);
+  const [commentary, setCommentary] = useState(null);
+  const [commentaryId, setCommentaryId] = useState(null);
   // loading states
   const [checkInsLoading, setCheckInsLoading] = useState(false);
   const [templatesLoading, setTemplatesLoading] = useState(false);
   const [logsLoading, setLogsLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
+  const [commentaryLoading, setCommentaryLoading] = useState(false);
 
   // get check ins
   function getCheckIns() {
@@ -144,6 +147,24 @@ export const CheckInProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  // get commentary
+  function getCommentary(id) {
+    setCommentaryLoading(true);
+    setCommentaryId(id);
+    apiCall("get", `/api/checkins/commentary/${id}`)
+      .then((res) => {
+        if (res.result) {
+          setCommentary(res.result);
+        } else {
+          throw new Error("No result from API call...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting check in commentary: ${err.message}`);
+      })
+      .finally(() => setCommentaryLoading(false));
+  }
+
   return (
     <CheckInContext.Provider
       value={{
@@ -162,6 +183,10 @@ export const CheckInProvider = ({ children }) => {
         dailyLogs,
         logsLoading,
         getDailyLogs,
+        commentary,
+        commentaryLoading,
+        commentaryId,
+        getCommentary,
       }}
     >
       {children}

@@ -89,12 +89,15 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
               />
             ))}
         </Grid>
-        <Grid columns={2} stackable>
-          <Grid.Column>
-            <CommentsDisplay />
-          </Grid.Column>
-          <Grid.Column></Grid.Column>
-        </Grid>
+        {selectedDay && (
+          <Grid columns={2} stackable>
+            <Grid.Column>
+              <CommentsDisplay checkInId={selectedDay.id} />
+            </Grid.Column>
+            <Grid.Column></Grid.Column>
+          </Grid>
+        )}
+
         {/* <Grid columns={5} doubling stackable style={{ marginBottom: 20 }}>
         {selectedDay.photos?.map((p, i) => {
           return (

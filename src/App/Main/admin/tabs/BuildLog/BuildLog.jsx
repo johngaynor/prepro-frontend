@@ -2,6 +2,7 @@ import React from "react";
 import { Grid, Header, Tab, Button, Container, Form } from "semantic-ui-react";
 import { DropdownField } from "../../../components/FormFields";
 import AdminContext from "../../Context/adminContext";
+import AppContext from "../../../context/appContext";
 import AppCard from "./AppCard";
 import Spinner from "../../../components/Spinner";
 import toast from "react-hot-toast";
@@ -20,10 +21,8 @@ const BuildLog = () => {
     appAccess,
     accessLoading,
     getAllAccess,
-    apiUsers,
-    usersLoading,
-    getAllUsers,
   } = React.useContext(AdminContext);
+  const { apiUsers, usersLoading, getAllUsers } = React.useContext(AppContext);
 
   React.useEffect(() => {
     if (!allApps && !appsLoading) getAllApps();
