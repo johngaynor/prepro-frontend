@@ -11,12 +11,14 @@ export const CheckInProvider = ({ children }) => {
   const [templates, setTemplates] = useState(null);
   const [commentary, setCommentary] = useState(null);
   const [commentaryId, setCommentaryId] = useState(null);
+  const [poses, setPoses] = useState(null);
   // loading states
   const [checkInsLoading, setCheckInsLoading] = useState(false);
   const [templatesLoading, setTemplatesLoading] = useState(false);
   const [logsLoading, setLogsLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
   const [commentaryLoading, setCommentaryLoading] = useState(false);
+  const [posesLoading, setPosesLoading] = useState(false);
 
   // get check ins
   function getCheckIns() {
@@ -182,6 +184,49 @@ export const CheckInProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
+  // get poses
+  function getPoses() {
+    setPosesLoading(true);
+    apiCall("get", `/api/checkins/poses`)
+      .then((res) => {
+        if (res.result) {
+          setPoses(res.result);
+        } else {
+          throw new Error("No result from API call...");
+        }
+      })
+      .catch((err) => {
+        toast.error(`Error getting poses: ${err.message}`);
+      })
+      .finally(() => setPosesLoading(false));
+  }
+
+  function assignPose(checkInId, photoId, poseId) {
+    setEditLoading(true);
+    // update locally
+    const checkIn = checkIns.find((c) => c.id === checkInId);
+    const photo = checkIn.photos.find((p) => p.id === photoId);
+
+    const newPhoto = { ...photo, poseId };
+    const newPhotos = checkIn.photos.map((p) =>
+      p.id === photoId ? newPhoto : p
+    );
+
+    const newCheckIn = { ...checkIn, photos: newPhotos };
+    const newCheckIns = checkIns.map((c) =>
+      c.id === checkInId ? newCheckIn : c
+    );
+    setCheckIns(newCheckIns);
+
+    apiCall("post", "/api/checkins/pose", { photoId, poseId })
+      .then(() => {})
+      .catch((err) => {
+        toast.error(`Error changing pose: ${err.message}`);
+        console.log(err);
+      })
+      .finally(() => setEditLoading(false));
+  }
+
   return (
     <CheckInContext.Provider
       value={{
@@ -205,6 +250,10 @@ export const CheckInProvider = ({ children }) => {
         commentaryId,
         getCommentary,
         addComment,
+        getPoses,
+        poses,
+        posesLoading,
+        assignPose,
       }}
     >
       {children}

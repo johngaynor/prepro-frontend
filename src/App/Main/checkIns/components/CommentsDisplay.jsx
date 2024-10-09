@@ -5,7 +5,7 @@ import AppContext from "../../context/appContext";
 import Spinner from "../../components/Spinner";
 import { DateTime } from "luxon";
 
-const CommentsDisplay = ({ checkInId }) => {
+const PhotosDisplay = ({ checkInId }) => {
   const [comment, setComment] = useState("");
 
   const {
@@ -37,7 +37,7 @@ const CommentsDisplay = ({ checkInId }) => {
               <Feed>
                 {(commentaryLoading || usersLoading) && <Spinner />}
                 {commentary?.map(({ id, comment, date, userId }, i) => {
-                  const username = apiUsers.find((u) => u.id === userId)?.name;
+                  const username = apiUsers?.find((u) => u.id === userId)?.name;
                   const formattedDate = DateTime.fromISO(date, {
                     zone: "utc",
                   }).toLocal();
@@ -86,4 +86,4 @@ const CommentsDisplay = ({ checkInId }) => {
   );
 };
 
-export default CommentsDisplay;
+export default PhotosDisplay;

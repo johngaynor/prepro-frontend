@@ -21,12 +21,16 @@ const CheckInLog = () => {
     dailyLogs,
     logsLoading,
     getDailyLogs,
+    getPoses,
+    poses,
+    posesLoading,
   } = useContext(CheckInContext);
 
   useEffect(() => {
     if (!checkIns && !checkInsLoading) getCheckIns();
     if (!templates && !templatesLoading) getTemplates();
     if (!dailyLogs && !logsLoading) getDailyLogs();
+    if (!poses && !posesLoading) getPoses();
   }, [
     checkIns,
     checkInsLoading,
@@ -34,6 +38,8 @@ const CheckInLog = () => {
     templatesLoading,
     dailyLogs,
     logsLoading,
+    poses,
+    posesLoading,
   ]);
 
   const { date } = useParams();
@@ -73,9 +79,11 @@ const CheckInLog = () => {
 
   return (
     <>
-      {(checkInsLoading || templatesLoading || logsLoading || editLoading) && (
-        <Spinner />
-      )}
+      {(checkInsLoading ||
+        templatesLoading ||
+        logsLoading ||
+        editLoading ||
+        posesLoading) && <Spinner />}
       <ReportModal
         handleCloseModal={handleCloseReport}
         selectedDay={selectedDay}

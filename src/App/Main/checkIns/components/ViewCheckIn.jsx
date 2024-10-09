@@ -1,27 +1,23 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Button, Container, Image, Segment } from "semantic-ui-react";
+import { Grid, Button, Container, Segment } from "semantic-ui-react";
 import { InputField } from "../../components/FormFields";
 import { DateTime } from "luxon";
 import { ViewInput } from "../../components/FormFields/view";
 import CheckInContext from "../context/checkInContext";
 import AttachFile from "../../components/AttachFile";
-import PhotoModal from "./PhotoModal";
 import CommentsDisplay from "./CommentsDisplay";
+import PhotosDisplay from "./PhotosDisplay";
 
 const ViewCheckIn = ({ selectedDay, setEditMode }) => {
   const [fileOpen, setFileOpen] = useState(false);
-  const [activePhoto, setActivePhoto] = useState(false);
 
-  const { addAttachments, deleteAttachment } = useContext(CheckInContext);
+  const { addAttachments, deleteAttachment, poses, assignPose } =
+    useContext(CheckInContext);
   const navigate = useNavigate();
 
   function handleSubmitFile(formData) {
     addAttachments(formData, selectedDay.id);
-  }
-
-  function handleClosePhoto() {
-    setActivePhoto(null);
   }
 
   return (
@@ -64,12 +60,6 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
             toggleFormOpen={() => setFileOpen(!fileOpen)}
           />
         )}
-        <PhotoModal
-          modalOpen={!!activePhoto}
-          photo={activePhoto}
-          handleCloseModal={handleClosePhoto}
-          handleDeletePhoto={deleteAttachment}
-        />
         <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
           <InputField
             type="date"
@@ -94,26 +84,17 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
             <Grid.Column>
               <CommentsDisplay checkInId={selectedDay.id} />
             </Grid.Column>
-            <Grid.Column></Grid.Column>
-          </Grid>
-        )}
-
-        {/* <Grid columns={5} doubling stackable style={{ marginBottom: 20 }}>
-        {selectedDay.photos?.map((p, i) => {
-          return (
-            <Grid.Column
-              key={"checkin-photo-" + i}
-              onClick={() => setActivePhoto(p)}
-            >
-              <Image
-                size="small"
-                src={p.signedUrl}
-                style={{ height: 200, width: "auto" }}
+            <Grid.Column>
+              <PhotosDisplay
+                photos={selectedDay.photos}
+                poses={poses}
+                deleteAttachment={deleteAttachment}
+                checkInId={selectedDay.id}
+                assignPose={assignPose}
               />
             </Grid.Column>
-          );
-        })}
-      </Grid> */}
+          </Grid>
+        )}
       </Segment>
     </>
   );
