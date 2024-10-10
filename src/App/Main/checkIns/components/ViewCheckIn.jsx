@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Button, Container, Segment } from "semantic-ui-react";
+import { Grid, Button, Container, Segment, Label } from "semantic-ui-react";
 import { InputField } from "../../components/FormFields";
 import { DateTime } from "luxon";
 import { ViewInput } from "../../components/FormFields/view";
@@ -19,6 +19,12 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
   function handleSubmitFile(formData) {
     addAttachments(formData, selectedDay.id);
   }
+
+  const labels = {
+    incomplete: false,
+    noPhotos: selectedDay.photos.length <= 0,
+    missingPoses: !!selectedDay.photos.find((p) => !p.poseId),
+  };
 
   return (
     <>
@@ -53,6 +59,26 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
         />
       </Container>
       <Segment>
+        <Label
+          ribbon
+          color={
+            labels.incomplete
+              ? "red"
+              : labels.noPhotos
+              ? "orange"
+              : labels.missingPoses
+              ? "teal"
+              : "green"
+          }
+        >
+          {labels.incomplete
+            ? "red"
+            : labels.noPhotos
+            ? "Missing Photos"
+            : labels.missingPoses
+            ? "Missing Pose Assignments"
+            : "Complete"}
+        </Label>
         {fileOpen && (
           <AttachFile
             headerText="Submit Check In Photos"
@@ -60,7 +86,7 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
             toggleFormOpen={() => setFileOpen(!fileOpen)}
           />
         )}
-        <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
+        <Grid stackable columns={3} style={{ marginBottom: 10, marginTop: 0 }}>
           <InputField
             type="date"
             label="Date"
