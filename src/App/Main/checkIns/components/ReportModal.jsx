@@ -13,7 +13,9 @@ import { PDFDownloadLink, usePDF, PDFViewer } from "@react-pdf/renderer";
 import CheckInDoc from "./Pdf/ReportPdf";
 import AppContext from "../../context/appContext";
 import CheckInContext from "../context/checkInContext";
+import SupplementContext from "../../supplements/log/context/supplementContext";
 import { DateTime } from "luxon";
+import Spinner from "../../components/Spinner";
 
 const ReportModal = ({
   handleCloseModal,
@@ -22,6 +24,31 @@ const ReportModal = ({
   lastCheckIn,
 }) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
+
+  const {
+    getSupplements,
+    suppsLoading,
+    suppItems,
+    getSupplementLogs,
+    logsLoading,
+    suppLogs,
+    missedLogs,
+    missedLogsLoading,
+    getMissedSupplements,
+  } = useContext(SupplementContext);
+
+  useEffect(() => {
+    if (!suppItems && !suppsLoading) getSupplements();
+    if (!suppLogs && !logsLoading) getSupplementLogs();
+    if (!missedLogs && !missedLogsLoading) getMissedSupplements();
+  }, [
+    suppItems,
+    suppsLoading,
+    suppLogs,
+    logsLoading,
+    missedLogs,
+    missedLogsLoading,
+  ]);
 
   useEffect(() => {
     if (!pdf.loading) update(CheckInDoc({ selectedDay }));
@@ -44,6 +71,9 @@ const ReportModal = ({
     selectedDay,
     logs,
     lastCheckIn,
+    suppItems,
+    suppLogs,
+    missedLogs,
   };
 
   return (
@@ -51,6 +81,7 @@ const ReportModal = ({
       onClose={handleCloseModal}
       open={modalOpen === "true" ? true : false}
     >
+      {(suppsLoading || missedLogsLoading || logsLoading) && <Spinner />}
       <ModalHeader>
         <Container style={{ display: "flex", justifyContent: "space-between" }}>
           <Header>Check In Report</Header>

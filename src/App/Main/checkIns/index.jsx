@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner";
 import ViewCheckIn from "./components/ViewCheckIn";
 import EditCheckIn from "./components/EditCheckIn";
 import ReportModal from "./components/ReportModal";
+import { SupplementProvider } from "../supplements/log/context/supplementContext";
 
 const CheckInLog = () => {
   const [editMode, setEditMode] = useState(false);
@@ -84,13 +85,14 @@ const CheckInLog = () => {
         logsLoading ||
         editLoading ||
         posesLoading) && <Spinner />}
-      <ReportModal
-        handleCloseModal={handleCloseReport}
-        selectedDay={selectedDay}
-        modalOpen={report}
-        lastCheckIn={lastCheckIn}
-      />
-
+      <SupplementProvider>
+        <ReportModal
+          handleCloseModal={handleCloseReport}
+          selectedDay={selectedDay}
+          modalOpen={report}
+          lastCheckIn={lastCheckIn}
+        />
+      </SupplementProvider>
       {selectedDay && !editMode ? (
         <ViewCheckIn selectedDay={selectedDay} setEditMode={setEditMode} />
       ) : (

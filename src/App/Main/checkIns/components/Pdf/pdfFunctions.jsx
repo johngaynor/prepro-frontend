@@ -8,6 +8,7 @@ import {
   Line,
   Svg,
 } from "@react-pdf/renderer";
+import { DateTime } from "luxon";
 
 const font = {
   regular: "Times-Roman",
@@ -366,6 +367,139 @@ export function DrawLineGraph({
           </Text>
         ) : null}
       </Svg>
+    </View>
+  );
+}
+
+export function SupplementHeatmap({ last7Logs, suppItems }) {
+  return (
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* date headers */}
+      <View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
+        <View style={{ width: 100, marginRight: 20 }} />
+        {last7Logs?.map((log, index) => (
+          <View
+            key={"supp-day-header-" + index}
+            style={{
+              width: 25,
+              height: 25,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text>{DateTime.fromISO(log.date).toFormat("M/d")}</Text>
+          </View>
+        ))}
+      </View>
+      {/* heatmap */}
+      {suppItems?.map((item, i) => {
+        return (
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 4,
+              marginTop: 4,
+            }}
+            key={"supp-item-row-" + i}
+          >
+            <View
+              style={{
+                width: 100,
+                display: "flex",
+                justifyContent: "center",
+                marginRight: 20,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "right",
+                  width: "100%",
+                }}
+              >
+                {item.name}
+              </Text>
+            </View>
+
+            {last7Logs?.map((log, index) => {
+              const isSuccess = log.success?.find(
+                (l) => l.supplementId === item.id
+              );
+              const isMissed = log.missed?.find(
+                (l) => l.supplementId === item.id
+              );
+
+              return (
+                <View
+                  key={"supp-item-day-" + index}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    borderRadius: 4,
+                    backgroundColor: isSuccess
+                      ? "#7bc96f"
+                      : isMissed
+                      ? "#ff6347"
+                      : "#ebedf0",
+                    border: "2px solid grey",
+                  }}
+                />
+              );
+            })}
+          </View>
+        );
+      })}
+      {/* Legend */}
+      <View
+        style={{ display: "flex", flexDirection: "row", gap: 4, marginTop: 10 }}
+      >
+        <View style={{ width: 100, marginRight: 20 }} />
+        {/* Success */}
+        <View
+          style={{
+            width: 15,
+            height: 15,
+            borderRadius: 4,
+            backgroundColor: "#7bc96f",
+            border: "2px solid grey",
+          }}
+        />
+        <View style={{ display: "flex", justifyContent: "center" }}>
+          <Text>= Success </Text>
+        </View>
+        {/* Miss */}
+        <View
+          style={{
+            width: 15,
+            height: 15,
+            borderRadius: 4,
+            backgroundColor: "#ff6347",
+            border: "2px solid grey",
+          }}
+        />
+        <View style={{ display: "flex", justifyContent: "center" }}>
+          <Text>= Missed </Text>
+        </View>
+        {/* N/a */}
+        <View
+          style={{
+            width: 15,
+            height: 15,
+            borderRadius: 4,
+            backgroundColor: "#ebedf0",
+            border: "2px solid grey",
+          }}
+        />
+        <View style={{ display: "flex", justifyContent: "center" }}>
+          <Text>= N/a</Text>
+        </View>
+      </View>
     </View>
   );
 }
