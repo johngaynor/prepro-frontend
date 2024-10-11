@@ -1,66 +1,55 @@
 import React, { useContext, useEffect } from "react";
 import DailyView from "./tabs/DailyView";
 import MonthlyView from "./tabs/MonthlyView";
-import SupplementContext, {
-  SupplementProvider,
-} from "./context/supplementContext";
 import Tab from "../../components/Tab";
 import Spinner from "../../components/Spinner";
+import { getSupplements, getSupplementLogs } from "../actions";
+import { connect } from "react-redux";
 
-const SupplementLog = () => {
-  const {
-    suppItems,
-    suppsLoading,
-    getSupplements,
-    suppLogs,
-    logsLoading,
-    getSupplementLogs,
-    missedLogs,
-    missedLogsLoading,
-    getMissedSupplements,
-  } = useContext(SupplementContext);
-
+const SupplementLog = ({
+  supplements,
+  supplementsLoading,
+  getSupplements,
+  logs,
+  logsLoading,
+  getSupplementLogs,
+}) => {
   useEffect(() => {
-    if (!suppItems && !suppsLoading) getSupplements();
-    if (!suppLogs && !logsLoading) getSupplementLogs();
-    if (!missedLogs && !missedLogsLoading) getMissedSupplements();
-  }, [
-    suppItems,
-    suppsLoading,
-    suppLogs,
-    logsLoading,
-    missedLogs,
-    missedLogsLoading,
-  ]);
+    if (!supplements && !supplementsLoading) getSupplements();
+    // if (!logs && !logsLoading) getSupplementLogs();
+  }, [supplements, supplementsLoading, logs, logsLoading]);
 
   const mainPanes = [
     {
       menuItem: "Daily View",
       render: () => {
-        return <DailyView />;
+        // return <DailyView />;
       },
     },
     {
       menuItem: "Monthly View",
       render: () => {
-        return <MonthlyView />;
+        // return <MonthlyView />;
       },
     },
   ];
   return (
     <>
-      {(suppsLoading || logsLoading || missedLogsLoading) && <Spinner />}
+      {(supplementsLoading || logsLoading) && <Spinner />}
       <Tab panes={mainPanes} />
     </>
   );
 };
 
-const SupplementLogPage = () => {
-  return (
-    <SupplementProvider>
-      <SupplementLog />
-    </SupplementProvider>
-  );
-};
+function mapStateToProps(state) {
+  return {
+    supplements: state.supplements.supplements,
+    supplementsLoading: state.supplements.supplementsLoading,
+    logs: state.supplements.logs,
+    logsLoading: state.supplements.logsLoading,
+  };
+}
 
-export default SupplementLogPage;
+export default connect(mapStateToProps, { getSupplements, getSupplementLogs })(
+  SupplementLog
+);
