@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import DailyView from "./tabs/DailyView";
 import MonthlyView from "./tabs/MonthlyView";
 import Tab from "../../components/Tab";
@@ -16,14 +16,14 @@ const SupplementLog = ({
 }) => {
   useEffect(() => {
     if (!supplements && !supplementsLoading) getSupplements();
-    // if (!logs && !logsLoading) getSupplementLogs();
+    if (!logs && !logsLoading) getSupplementLogs();
   }, [supplements, supplementsLoading, logs, logsLoading]);
 
   const mainPanes = [
     {
       menuItem: "Daily View",
       render: () => {
-        // return <DailyView />;
+        return <DailyView />;
       },
     },
     {

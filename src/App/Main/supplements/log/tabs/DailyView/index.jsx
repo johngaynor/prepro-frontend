@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Tab,
   Table,
@@ -13,58 +13,41 @@ import {
   Popup,
   Button,
 } from "semantic-ui-react";
-import SupplementContext from "../../context/supplementContext";
 import { DateTime } from "luxon";
 import { InputField } from "../../../../components/FormFields";
 import MissedModal from "./components/MissedModal";
+import { connect } from "react-redux";
+import { toggleSupplementLog } from "../../../actions";
 
-const DailyView = () => {
+const DailyView = ({ supplements, logs, toggleSupplementLog }) => {
   const [selectedDay, setSelectedDay] = useState(
     DateTime.now().toFormat("yyyy-MM-dd")
   );
   const [missedItem, setMissedItem] = useState(null);
 
-  const {
-    suppItems,
-    suppLogs,
-    missedLogs,
-    toggleSupplementLog,
-    addMissedSupplement,
-  } = useContext(SupplementContext);
-
   const formattedDate = DateTime.fromISO(selectedDay).toFormat("yyyy-MM-dd");
 
-  const filteredLogs = suppItems?.reduce((acc, val) => {
+  const filteredLogs = supplements?.reduce((acc, val) => {
     const retArr = [...acc];
 
-    const match = suppLogs?.find(
-      (l) => l.date === formattedDate && l.supplementId === val.id
-    );
-    const missedMatch = missedLogs?.find(
+    const match = logs?.find(
       (l) => l.date === formattedDate && l.supplementId === val.id
     );
 
-    if (match || missedMatch) {
-      retArr.push({
-        ...val,
-        completed: !!match,
-        missed: !!missedMatch,
-        reason: missedMatch?.reason,
-      });
-    } else {
-      retArr.push({ ...val });
-    }
+    retArr.push({ ...val, reason: match?.reason, completed: match?.completed });
     return retArr;
   }, []);
 
+  // console.log(logs, filteredLogs);
+
   return (
     <Tab.Pane>
-      <MissedModal
+      {/* <MissedModal
         handleClose={() => setMissedItem(null)}
         missedItem={missedItem}
         selectedDay={selectedDay}
         addMissedSupplement={addMissedSupplement}
-      />
+      /> */}
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
         <Grid.Column>
           <InputField
@@ -114,36 +97,34 @@ const DailyView = () => {
               <TableRow
                 verticalAlign="top"
                 key={"supp-item-" + i}
-                positive={item.completed}
-                negative={item.missed}
+                positive={!!item.completed}
+                negative={item.completed === 0}
               >
                 <TableCell style={{ fontWeight: "bold" }}>
                   <Icon
                     name={
                       item.completed
                         ? "checkmark"
-                        : item.missed
+                        : item.completed === 0
                         ? "cancel"
                         : "question"
                     }
                   />
                   {item.name}
-                  {/* <br />
-                {item.description} */}
                 </TableCell>
                 <TableCell>{item.description}</TableCell>
                 <TableCell>--</TableCell>
                 <TableCell verticalAlign="top">
                   <Checkbox
-                    checked={item.completed}
+                    checked={!!item.completed}
                     onChange={() => {
                       toggleSupplementLog(item, formattedDate);
                     }}
-                    disabled={item.missed}
+                    disabled={item.completed === 0}
                   />
                 </TableCell>
                 <TableCell>
-                  {!item.completed && !item.missed && (
+                  {(!item.completed || item.completed !== 0) && (
                     <Icon
                       name="cancel"
                       onClick={() => setMissedItem(item)}
@@ -152,7 +133,7 @@ const DailyView = () => {
                   )}
                   {item.reason && (
                     <Popup
-                      content={item.reason} // The content you want to display in the tooltip
+                      content={item.reason}
                       trigger={
                         <Icon
                           name="info circle"
@@ -172,4 +153,11 @@ const DailyView = () => {
   );
 };
 
-export default DailyView;
+function mapStateToProps(state) {
+  return {
+    supplements: state.supplements.supplements,
+    logs: state.supplements.logs,
+  };
+}
+
+export default connect(mapStateToProps, { toggleSupplementLog })(DailyView);
