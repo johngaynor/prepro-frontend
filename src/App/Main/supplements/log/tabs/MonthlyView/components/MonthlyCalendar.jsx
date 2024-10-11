@@ -8,15 +8,15 @@ import {
 const localizer = momentLocalizer(moment);
 
 const MonthlyCalendar = ({
-  suppItems,
-  suppLogs,
+  supplements,
+  logs,
   setActiveItems,
   setActiveDay,
 }) => {
-  const suppsToDisplay = suppLogs?.map((l) => ({
+  const suppsToDisplay = logs?.map((l) => ({
     ...l,
-    title: suppItems?.find((i) => i.id === l.supplementId)?.name,
-    description: suppItems?.find((i) => i.id === l.supplementId)?.description,
+    title: supplements?.find((i) => i.id === l.supplementId)?.name,
+    description: supplements?.find((i) => i.id === l.supplementId)?.description,
   }));
 
   return (

@@ -21,15 +21,15 @@ const SupplementLog = ({
 
   const mainPanes = [
     {
-      menuItem: "Daily View",
+      menuItem: "Monthly View",
       render: () => {
-        return <DailyView />;
+        return <MonthlyView />;
       },
     },
     {
-      menuItem: "Monthly View",
+      menuItem: "Daily View",
       render: () => {
-        // return <MonthlyView />;
+        return <DailyView />;
       },
     },
   ];

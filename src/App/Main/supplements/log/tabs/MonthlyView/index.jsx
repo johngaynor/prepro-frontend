@@ -1,15 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Segment } from "semantic-ui-react";
-import SupplementContext from "../../context/supplementContext";
 import { DateTime } from "luxon";
 import ItemsModal from "./components/ItemsModal";
 import MonthlyCalendar from "./components/MonthlyCalendar";
 import HeatMap from "./components/HeatMap";
+import { connect } from "react-redux";
 
-const MonthlyView = () => {
+const MonthlyView = ({ supplements, logs }) => {
   const [activeItems, setActiveItems] = useState(null);
   const [activeDay, setActiveDay] = useState(DateTime.now().toJSDate());
-  const { suppItems, suppLogs } = useContext(SupplementContext);
 
   const activeMonth = DateTime.fromJSDate(activeDay).month;
   const activeYear = DateTime.fromJSDate(activeDay).year;
@@ -21,14 +20,14 @@ const MonthlyView = () => {
         handleClose={() => setActiveItems(null)}
       />
       <MonthlyCalendar
-        suppItems={suppItems}
-        suppLogs={suppLogs}
+        supplements={supplements}
+        logs={logs}
         setActiveItems={setActiveItems}
         setActiveDay={setActiveDay}
       />
       <HeatMap
-        suppItems={suppItems}
-        suppLogs={suppLogs}
+        supplements={supplements}
+        logs={logs}
         activeMonth={activeMonth}
         activeYear={activeYear}
       />
@@ -36,4 +35,11 @@ const MonthlyView = () => {
   );
 };
 
-export default MonthlyView;
+function mapStateToProps(state) {
+  return {
+    supplements: state.supplements.supplements,
+    logs: state.supplements.logs,
+  };
+}
+
+export default connect(mapStateToProps)(MonthlyView);
