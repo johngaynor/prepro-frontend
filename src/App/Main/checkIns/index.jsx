@@ -8,6 +8,7 @@ import ViewCheckIn from "./components/ViewCheckIn";
 import EditCheckIn from "./components/EditCheckIn";
 import ReportModal from "./components/ReportModal";
 import { SupplementProvider } from "../supplements/log/context/supplementContext";
+import { connect } from "react-redux";
 
 const CheckInLog = () => {
   const [editMode, setEditMode] = useState(false);
@@ -117,3 +118,19 @@ const CheckInLogs = () => {
 };
 
 export default CheckInLogs;
+
+// function mapStateToProps(state) {
+//   return {
+//     checkIns: state.checkIns.checkIns,
+//     checkInsLoading: state.checkIns.checkInsLoading,
+//     templates: state.checkIns.templates,
+//     templatesLoading: state.checkIns.templatesLoading,
+//     dailyLogs: state.checkIns.dailyLogs,
+//     logsLoading: state.checkIns.logsLoading,
+//     commentary: state.checkIns.commentary,
+//     commentaryLoading: state.checkIns.commentaryLoading,
+//     commentaryId: state.checkIns.commentaryId,
+//   };
+// }
+
+// export default connect(mapStateToProps)(CheckInLogs);
