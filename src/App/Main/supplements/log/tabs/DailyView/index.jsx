@@ -17,16 +17,20 @@ import { DateTime } from "luxon";
 import { InputField } from "../../../../components/FormFields";
 import MissedModal from "./components/MissedModal";
 import { connect } from "react-redux";
-import { toggleSupplementLog } from "../../../actions";
+import { toggleSupplementLog, addMissedSupplement } from "../../../actions";
 
-const DailyView = ({ supplements, logs, toggleSupplementLog }) => {
+const DailyView = ({
+  supplements,
+  logs,
+  toggleSupplementLog,
+  addMissedSupplement,
+}) => {
   const [selectedDay, setSelectedDay] = useState(
     DateTime.now().toFormat("yyyy-MM-dd")
   );
   const [missedItem, setMissedItem] = useState(null);
 
   const formattedDate = DateTime.fromISO(selectedDay).toFormat("yyyy-MM-dd");
-
   const filteredLogs = supplements?.reduce((acc, val) => {
     const retArr = [...acc];
 
@@ -38,16 +42,14 @@ const DailyView = ({ supplements, logs, toggleSupplementLog }) => {
     return retArr;
   }, []);
 
-  // console.log(logs, filteredLogs);
-
   return (
     <Tab.Pane>
-      {/* <MissedModal
+      <MissedModal
         handleClose={() => setMissedItem(null)}
         missedItem={missedItem}
         selectedDay={selectedDay}
         addMissedSupplement={addMissedSupplement}
-      /> */}
+      />
       <Grid stackable columns={3} style={{ marginBottom: "10px" }}>
         <Grid.Column>
           <InputField
@@ -124,7 +126,7 @@ const DailyView = ({ supplements, logs, toggleSupplementLog }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  {(!item.completed || item.completed !== 0) && (
+                  {!item.completed && item.completed !== 0 && (
                     <Icon
                       name="cancel"
                       onClick={() => setMissedItem(item)}
@@ -160,4 +162,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { toggleSupplementLog })(DailyView);
+export default connect(mapStateToProps, {
+  toggleSupplementLog,
+  addMissedSupplement,
+})(DailyView);

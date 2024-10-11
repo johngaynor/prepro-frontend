@@ -5,6 +5,8 @@ import {
   LOAD_SUPPLEMENT_LOGS,
   LOAD_EDIT_SUPPLEMENT_LOGS,
   FETCH_EDIT_SUPPLEMENT_LOGS,
+  LOAD_ADD_MISSED_SUPPLEMENT_LOGS,
+  FETCH_ADD_MISSED_SUPPLEMENT_LOGS,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -36,6 +38,16 @@ export function toggleSupplementLog(item, date) {
     { item, date },
     (failed) => ({ type: LOAD_EDIT_SUPPLEMENT_LOGS, failed }),
     () => ({ type: FETCH_EDIT_SUPPLEMENT_LOGS, item, date })
+  );
+}
+
+export function addMissedSupplement(item, date, reason) {
+  return API.post(
+    "/api/supplements/logs/missed",
+    "Error adding missed supplement",
+    { item, date, reason },
+    (failed) => ({ type: LOAD_ADD_MISSED_SUPPLEMENT_LOGS, failed }),
+    () => ({ type: FETCH_ADD_MISSED_SUPPLEMENT_LOGS, item, date, reason })
   );
 }
 

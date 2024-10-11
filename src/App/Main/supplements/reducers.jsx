@@ -5,6 +5,8 @@ import {
   LOAD_SUPPLEMENT_LOGS,
   FETCH_EDIT_SUPPLEMENT_LOGS,
   LOAD_EDIT_SUPPLEMENT_LOGS,
+  FETCH_ADD_MISSED_SUPPLEMENT_LOGS,
+  LOAD_ADD_MISSED_SUPPLEMENT_LOGS,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -57,6 +59,28 @@ export default (state = DEFAULT_STATE, action) => {
         logs: action.failed ? null : state.logs,
         editLoading: false,
       };
+    case FETCH_ADD_MISSED_SUPPLEMENT_LOGS:
+      // adding locally
+      return {
+        ...state,
+        editLoading: true,
+        logs: [
+          ...state.logs,
+          {
+            supplementId: action.item.id,
+            date: action.date,
+            completed: 0,
+            reason: action.reason,
+          },
+        ],
+      };
+    case LOAD_ADD_MISSED_SUPPLEMENT_LOGS:
+      return {
+        ...state,
+        logs: action.failed ? null : state.logs,
+        editLoading: false,
+      };
+
     default:
       return state;
   }
