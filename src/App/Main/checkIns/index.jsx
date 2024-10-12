@@ -7,7 +7,6 @@ import Spinner from "../components/Spinner";
 import ViewCheckIn from "./components/ViewCheckIn";
 import EditCheckIn from "./components/EditCheckIn";
 import ReportModal from "./components/ReportModal";
-import { SupplementProvider } from "../supplements/log/context/supplementContext";
 import { connect } from "react-redux";
 
 const CheckInLog = () => {
