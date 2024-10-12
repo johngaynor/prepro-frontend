@@ -5,13 +5,7 @@ import { InputField, TextAreaField } from "../../components/FormFields";
 import CheckInContext from "../context/checkInContext";
 import { cloneDeep } from "lodash";
 
-const EditCheckIn = ({
-  selectedDay,
-  template,
-  setEditMode,
-  date,
-  lastCheckIn,
-}) => {
+const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
   const [formValues, setFormValues] = useState(null);
   // const [formErrors, setFormErrors] = useState({});
 
@@ -19,16 +13,9 @@ const EditCheckIn = ({
   const navigate = useNavigate();
   useEffect(() => {
     if (selectedDay) {
-      setFormValues(cloneDeep(selectedDay.questions)); // make a deep clone to avoid mutating original object
-    } else if (template) {
-      setFormValues(
-        template.questions.map((q) => ({
-          ...q,
-          answer: "",
-        }))
-      );
+      setFormValues(cloneDeep(selectedDay)); // make a deep clone to avoid mutating original object
     }
-  }, [selectedDay, template]);
+  }, [selectedDay]);
 
   function handleSubmit() {
     // handle validation
@@ -50,7 +37,7 @@ const EditCheckIn = ({
             value={date || ""}
             onChange={(e, { value }) => navigate(`/checkins/${value}`)}
           />
-          {formValues
+          {/* {formValues
             ?.sort((a, b) => a.orderId - b.orderId)
             .map((v, i) => {
               function handleChange(val) {
@@ -82,7 +69,7 @@ const EditCheckIn = ({
                   />
                 );
               }
-            })}
+            })} */}
         </Grid>
         <Container
           style={{

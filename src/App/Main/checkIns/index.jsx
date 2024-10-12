@@ -61,7 +61,6 @@ const CheckInLog = () => {
   });
 
   const selectedDay = checkIns?.find((c) => c.date === date);
-  const template = templates?.find((t) => t.isDefault);
   const lastCheckIn = checkIns
     ?.filter((c) => {
       const today = DateTime.fromISO(date).startOf("day");
@@ -85,25 +84,23 @@ const CheckInLog = () => {
         logsLoading ||
         editLoading ||
         posesLoading) && <Spinner />}
-      <SupplementProvider>
-        <ReportModal
-          handleCloseModal={handleCloseReport}
-          selectedDay={selectedDay}
-          modalOpen={report}
-          lastCheckIn={lastCheckIn}
-        />
-      </SupplementProvider>
-      {selectedDay && !editMode ? (
-        <ViewCheckIn selectedDay={selectedDay} setEditMode={setEditMode} />
-      ) : (
-        <EditCheckIn
-          selectedDay={selectedDay}
-          template={template}
-          setEditMode={setEditMode}
-          date={date}
-          lastCheckIn={lastCheckIn}
-        />
-      )}
+      {/* <ReportModal
+        handleCloseModal={handleCloseReport}
+        selectedDay={selectedDay}
+        modalOpen={report}
+        lastCheckIn={lastCheckIn}
+      /> */}
+      {
+        selectedDay && !editMode ? (
+          <ViewCheckIn selectedDay={selectedDay} setEditMode={setEditMode} />
+        ) : null
+        // <EditCheckIn
+        //   selectedDay={selectedDay}
+        //   setEditMode={setEditMode}
+        //   date={date}
+        //   lastCheckIn={lastCheckIn}
+        // />
+      }
     </>
   );
 };

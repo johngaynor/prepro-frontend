@@ -26,6 +26,8 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
     missingPoses: !!selectedDay.photos.find((p) => !p.poseId),
   };
 
+  console.log(selectedDay);
+
   return (
     <>
       <Container
@@ -93,19 +95,38 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
             value={DateTime.fromISO(selectedDay.date).toFormat("yyyy-MM-dd")}
             onChange={(e, { value }) => navigate(`/checkins/${value}`)}
           />
-          {selectedDay.questions
-            .sort((a, b) => a.orderId - b.orderId)
-            .map((q, i) => (
-              <ViewInput
-                value={q.answer}
-                label={q.question}
-                key={"question-" + i}
-                height={q.textArea ? 90 : null}
-                fullRow={q.fullWidth}
-              />
-            ))}
+          <ViewInput
+            value={selectedDay?.timeline}
+            label="Timeline (how many weeks into diet)"
+          />
+          <ViewInput
+            value={selectedDay?.phase}
+            label="Current diet phase (bulk, cut, etc.)"
+          />
+          <ViewInput
+            value={selectedDay?.hormones}
+            label="Hormone altering or fat loss supplements used"
+          />
+          <ViewInput
+            value={selectedDay?.cardio}
+            label="Cardio (style, duration, number of times per week)"
+          />
+          <ViewInput
+            value={selectedDay?.training}
+            label="Training (style and days per week)"
+          />
+          <ViewInput
+            value={selectedDay?.cheats}
+            label="Cheat/missed meals (PLEASE BE HONEST, this is necessary for making accurate changes)"
+            fullRow
+          />
+          <ViewInput
+            value={selectedDay?.comments}
+            label="Overall comments/thoughts from the week (training, mood, sleep, energy, etc.)"
+            fullRow
+          />
         </Grid>
-        {selectedDay && (
+        {/* {selectedDay && (
           <Grid columns={2} stackable>
             <Grid.Column>
               <CommentsDisplay checkInId={selectedDay.id} />
@@ -120,7 +141,7 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
               />
             </Grid.Column>
           </Grid>
-        )}
+        )} */}
       </Segment>
     </>
   );
