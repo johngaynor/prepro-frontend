@@ -1,6 +1,5 @@
 import Tab from "../components/Tab";
 import Calendar from "./components/Calendar";
-import { ActivityProvider } from "./context/activityContext";
 
 const ActivityLogs = () => {
   const mainPanes = [
@@ -11,11 +10,7 @@ const ActivityLogs = () => {
       },
     },
   ];
-  return (
-    <ActivityProvider>
-      <Tab panes={mainPanes} />
-    </ActivityProvider>
-  );
+  return <Tab panes={mainPanes} />;
 };
 
 export default ActivityLogs;

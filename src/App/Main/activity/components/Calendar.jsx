@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import {
   Calendar as ReactBigCalendar,
   momentLocalizer,
@@ -6,15 +6,14 @@ import {
 import { Segment } from "semantic-ui-react";
 import Spinner from "../../components/Spinner";
 import moment from "moment/moment"; // use luxon for everything else
-import ActivityContext from "../context/activityContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { connect } from "react-redux";
+import { getActivities } from "../actions";
 
 const localizer = momentLocalizer(moment);
 
-const Calendar = () => {
-  const { activities, activitiesLoading, getActivities } =
-    useContext(ActivityContext);
+const Calendar = ({ activities, activitiesLoading, getActivities }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -79,4 +78,11 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+const mapStateToProps = (state) => {
+  return {
+    activities: state.activities.activities,
+    activitiesLoading: state.activities.activitiesLoading,
+  };
+};
+
+export default connect(mapStateToProps, { getActivities })(Calendar);
