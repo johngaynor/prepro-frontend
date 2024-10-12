@@ -79,11 +79,10 @@ function getMin(values) {
 
 const CheckInDoc = ({
   selectedDay,
-  logs = [],
+  weightLogs = [],
   lastCheckIn,
-  suppLogs,
-  suppItems,
-  missedLogs,
+  supplementLogs,
+  supplements,
 }) => {
   const last7Days = selectedDay
     ? Array.from({ length: 7 })
@@ -93,7 +92,7 @@ const CheckInDoc = ({
             .minus({ days: index })
             .startOf("day")
             .toISODate();
-          const log = logs.find((l) => l.date === day);
+          const log = weightLogs.find((l) => l.date === day);
           return { date: day, value: log?.weight || null };
         })
         .reverse()
@@ -110,7 +109,7 @@ const CheckInDoc = ({
             .minus({ days: index })
             .startOf("day")
             .toISODate();
-          const log = logs.find((l) => l.date === day);
+          const log = weightLogs.find((l) => l.date === day);
           return { date: day, value: log?.weight || null };
         })
         .reverse()
@@ -119,15 +118,14 @@ const CheckInDoc = ({
   const max30 = getMax(last30Days);
   const min30 = getMin(last30Days);
 
-  const lastWeight = logs.length
-    ? logs.find((l) => l.date === lastCheckIn?.date)?.weight
+  const lastWeight = weightLogs.length
+    ? weightLogs.find((l) => l.date === lastCheckIn?.date)?.weight
     : null;
   const todayWeight = [...last7Days].reverse()[0]?.value;
 
-  const last7Logs =
-    suppLogs &&
-    missedLogs &&
-    suppItems &&
+  const last7SupplementLogs =
+    supplementLogs &&
+    supplements &&
     Array.from({ length: 7 })
       .map((_, index) => {
         const currentDay = DateTime.fromISO(selectedDay?.date);
@@ -135,10 +133,10 @@ const CheckInDoc = ({
           .minus({ days: index + 1 })
           .startOf("day")
           .toISODate();
-        const success = suppLogs.filter((l) => l.date === day);
-        const missed = missedLogs.filter((l) => l.date === day);
+        const matches = supplementLogs.filter((l) => l.date === day);
 
-        return { date: day, success, missed };
+        // return { date: day, success, missed };
+        return { date: day, logs: matches };
       })
       .reverse();
 
@@ -320,7 +318,10 @@ const CheckInDoc = ({
         >
           Supplement Log - Last 7 Days
         </Text>
-        <SupplementHeatmap last7Logs={last7Logs} suppItems={suppItems} />
+        <SupplementHeatmap
+          last7SupplementLogs={last7SupplementLogs}
+          supplements={supplements}
+        />
         <Text
           style={{
             textDecoration: "underline",
@@ -330,21 +331,27 @@ const CheckInDoc = ({
         >
           Missed Supplements
         </Text>
-        {suppItems?.map((item, index) => {
-          const missed = missedLogs?.filter(
+        {supplements?.map((item, index) => {
+          const missed = supplementLogs?.filter(
             (l) =>
               l.supplementId === item.id &&
-              last7Logs?.find((log) => log.date === l.date)
+              last7SupplementLogs?.find((log) => log.date === l.date) &&
+              last7SupplementLogs
+                ?.find((log) => log.date === l.date)
+                .logs.find((log) => log.completed === 0)
           );
-          if (missed?.length)
+          if (missed?.length && missed.find((m) => m.completed === 0))
             return (
               <View key={"missed-supps-" + index} style={{ marginBottom: 5 }}>
                 <Text>{item.name}</Text>
-                {missed.map((m, i) => (
-                  <Text key={"missed-supp-" + i}>
-                    - {DateTime.fromISO(m.date).toFormat("M/d")}, {m.reason}
-                  </Text>
-                ))}
+                {missed.map(
+                  (m, i) =>
+                    m.reason && (
+                      <Text key={"missed-supp-" + i}>
+                        - {DateTime.fromISO(m.date).toFormat("M/d")}, {m.reason}
+                      </Text>
+                    )
+                )}
               </View>
             );
 

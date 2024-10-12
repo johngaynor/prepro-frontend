@@ -13,42 +13,30 @@ import { PDFDownloadLink, usePDF, PDFViewer } from "@react-pdf/renderer";
 import CheckInDoc from "./Pdf/ReportPdf";
 import AppContext from "../../context/appContext";
 import CheckInContext from "../context/checkInContext";
-import SupplementContext from "../../supplements/log/context/supplementContext";
 import { DateTime } from "luxon";
 import Spinner from "../../components/Spinner";
+import { getSupplementLogs, getSupplements } from "../../supplements/actions";
+import { connect } from "react-redux";
 
 const ReportModal = ({
   handleCloseModal,
   selectedDay,
   modalOpen,
   lastCheckIn,
+  // from redux
+  supplements,
+  supplementsLoading,
+  getSupplements,
+  supplementLogs,
+  supplementLogsLoading,
+  getSupplementLogs,
 }) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
 
-  const {
-    getSupplements,
-    suppsLoading,
-    suppItems,
-    getSupplementLogs,
-    logsLoading,
-    suppLogs,
-    missedLogs,
-    missedLogsLoading,
-    getMissedSupplements,
-  } = useContext(SupplementContext);
-
   useEffect(() => {
-    if (!suppItems && !suppsLoading) getSupplements();
-    if (!suppLogs && !logsLoading) getSupplementLogs();
-    if (!missedLogs && !missedLogsLoading) getMissedSupplements();
-  }, [
-    suppItems,
-    suppsLoading,
-    suppLogs,
-    logsLoading,
-    missedLogs,
-    missedLogsLoading,
-  ]);
+    if (!supplements && !supplementsLoading) getSupplements();
+    if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
+  }, [supplements, supplementsLoading, supplementLogs, supplementLogsLoading]);
 
   useEffect(() => {
     if (!pdf.loading) update(CheckInDoc({ selectedDay }));
@@ -57,7 +45,7 @@ const ReportModal = ({
   const { user } = useContext(AppContext);
   const { sendPdfToCoach, dailyLogs } = useContext(CheckInContext);
 
-  const logs = dailyLogs
+  const weightLogs = dailyLogs
     ?.sort((a, b) => {
       const dateA = DateTime.fromISO(a.date);
       const dateB = DateTime.fromISO(b.date);
@@ -69,11 +57,10 @@ const ReportModal = ({
 
   const reportProps = {
     selectedDay,
-    logs,
+    weightLogs,
     lastCheckIn,
-    suppItems,
-    suppLogs,
-    missedLogs,
+    supplements,
+    supplementLogs,
   };
 
   return (
@@ -81,7 +68,7 @@ const ReportModal = ({
       onClose={handleCloseModal}
       open={modalOpen === "true" ? true : false}
     >
-      {(suppsLoading || missedLogsLoading || logsLoading) && <Spinner />}
+      {(supplementsLoading || supplementLogsLoading) && <Spinner />}
       <ModalHeader>
         <Container style={{ display: "flex", justifyContent: "space-between" }}>
           <Header>Check In Report</Header>
@@ -123,4 +110,15 @@ const ReportModal = ({
   );
 };
 
-export default ReportModal;
+function mapStateToProps(state) {
+  return {
+    supplements: state.supplements.supplements,
+    supplementsLoading: state.supplements.supplementsLoading,
+    supplementLogs: state.supplements.logs,
+    supplementLogsLoading: state.supplements.logsLoading,
+  };
+}
+
+export default connect(mapStateToProps, { getSupplements, getSupplementLogs })(
+  ReportModal
+);

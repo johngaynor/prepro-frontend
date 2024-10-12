@@ -371,7 +371,7 @@ export function DrawLineGraph({
   );
 }
 
-export function SupplementHeatmap({ last7Logs, suppItems }) {
+export function SupplementHeatmap({ last7SupplementLogs, supplements }) {
   return (
     <View
       style={{
@@ -382,7 +382,7 @@ export function SupplementHeatmap({ last7Logs, suppItems }) {
       {/* date headers */}
       <View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
         <View style={{ width: 100, marginRight: 20 }} />
-        {last7Logs?.map((log, index) => (
+        {last7SupplementLogs?.map((log, index) => (
           <View
             key={"supp-day-header-" + index}
             style={{
@@ -398,7 +398,7 @@ export function SupplementHeatmap({ last7Logs, suppItems }) {
         ))}
       </View>
       {/* heatmap */}
-      {suppItems?.map((item, i) => {
+      {supplements?.map((item, i) => {
         return (
           <View
             style={{
@@ -427,13 +427,8 @@ export function SupplementHeatmap({ last7Logs, suppItems }) {
               </Text>
             </View>
 
-            {last7Logs?.map((log, index) => {
-              const isSuccess = log.success?.find(
-                (l) => l.supplementId === item.id
-              );
-              const isMissed = log.missed?.find(
-                (l) => l.supplementId === item.id
-              );
+            {last7SupplementLogs?.map((log, index) => {
+              const match = log.logs?.find((l) => l.supplementId === item.id);
 
               return (
                 <View
@@ -442,11 +437,12 @@ export function SupplementHeatmap({ last7Logs, suppItems }) {
                     width: 25,
                     height: 25,
                     borderRadius: 4,
-                    backgroundColor: isSuccess
-                      ? "#7bc96f"
-                      : isMissed
-                      ? "#ff6347"
-                      : "#ebedf0",
+                    backgroundColor:
+                      match && match.completed
+                        ? "#7bc96f"
+                        : match && match.completed === 0
+                        ? "#ff6347"
+                        : "#ebedf0",
                     border: "2px solid grey",
                   }}
                 />
