@@ -1,15 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Button, Container, Segment, Label } from "semantic-ui-react";
 import { InputField } from "../../components/FormFields";
 import { DateTime } from "luxon";
 import { ViewInput } from "../../components/FormFields/view";
-import CheckInContext from "../context/checkInContext";
 import AttachFile from "../../components/AttachFile";
 import CommentsDisplay from "./CommentsDisplay";
 import PhotosDisplay from "./PhotosDisplay";
 import { connect } from "react-redux";
-import { addPhoto, deletePhoto } from "../../physique/actions";
+import { addPhoto, deletePhoto, assignPose } from "../../physique/actions";
 
 const ViewCheckIn = ({
   selectedDay,
@@ -18,10 +17,9 @@ const ViewCheckIn = ({
   photos,
   addPhoto,
   deletePhoto,
+  assignPose,
 }) => {
   const [fileOpen, setFileOpen] = useState(false);
-
-  const { assignPose } = useContext(CheckInContext);
   const navigate = useNavigate();
 
   function handleSubmitFile(formData) {
@@ -144,7 +142,6 @@ const ViewCheckIn = ({
                 photos={activePhotos}
                 poses={poses}
                 deletePhoto={deletePhoto}
-                checkInId={selectedDay.id}
                 assignPose={assignPose}
               />
             </Grid.Column>
@@ -162,4 +159,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { addPhoto, deletePhoto })(ViewCheckIn);
+export default connect(mapStateToProps, { addPhoto, deletePhoto, assignPose })(
+  ViewCheckIn
+);

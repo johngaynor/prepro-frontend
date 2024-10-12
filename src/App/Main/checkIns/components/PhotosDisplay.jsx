@@ -3,13 +3,7 @@ import { Accordion, Button, Icon, List } from "semantic-ui-react";
 import PhotoModal from "./PhotoModal";
 import AssignPoseModal from "./AssignPoseModal";
 
-const PhotosDisplay = ({
-  photos,
-  poses,
-  deletePhoto,
-  checkInId,
-  assignPose,
-}) => {
+const PhotosDisplay = ({ photos, poses, deletePhoto, assignPose }) => {
   const [activePhoto, setActivePhoto] = useState(false);
   const [assignOpen, setAssignOpen] = useState(false);
 
@@ -29,7 +23,6 @@ const PhotosDisplay = ({
         photos={photos}
         poses={poses}
         assignPose={assignPose}
-        checkInId={checkInId}
       />
       <Accordion
         fluid
@@ -53,7 +46,10 @@ const PhotosDisplay = ({
                             }}
                             onClick={() => setActivePhoto(p)}
                           >
-                            {p.s3Filename}
+                            {p.poseId
+                              ? poses?.find((pose) => pose.id === p.poseId)
+                                  ?.name
+                              : p.s3Filename}
                             {!p.poseId && (
                               <Icon
                                 name="exclamation triangle"

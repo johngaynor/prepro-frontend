@@ -17,7 +17,6 @@ import {
 import { DropdownField } from "../../components/FormFields";
 
 const AssignPoseModal = ({
-  checkInId,
   photos,
   poses,
   modalOpen,
@@ -63,9 +62,7 @@ const AssignPoseModal = ({
                               }))
                             : []
                         }
-                        onChange={(e, { value }) =>
-                          assignPose(checkInId, p.id, value)
-                        }
+                        onChange={(e, { value }) => assignPose(p.id, value)}
                       />
                     </Grid.Column>
                   </Grid>
