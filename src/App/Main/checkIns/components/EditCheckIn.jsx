@@ -5,17 +5,6 @@ import CheckInContext from "../context/checkInContext";
 import { cloneDeep } from "lodash";
 import { useNavigate } from "react-router-dom";
 
-const defaultValues = {
-  date: "",
-  hormones: "",
-  phase: "",
-  timeline: "",
-  cheats: "",
-  comments: "",
-  training: "",
-  cardio: "",
-};
-
 const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
   const [formValues, setFormValues] = useState({
     date,
@@ -27,6 +16,17 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
     training: "",
     cardio: "",
   });
+
+  const defaultValues = {
+    date,
+    hormones: "",
+    phase: "",
+    timeline: "",
+    cheats: "",
+    comments: "",
+    training: "",
+    cardio: "",
+  };
 
   const navigate = useNavigate();
 

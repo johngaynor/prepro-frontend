@@ -124,7 +124,7 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
             fullRow
           />
         </Grid>
-        {/* {selectedDay && (
+        {selectedDay && (
           <Grid columns={2} stackable>
             <Grid.Column>
               <CommentsDisplay checkInId={selectedDay.id} />
@@ -139,7 +139,7 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
               />
             </Grid.Column>
           </Grid>
-        )} */}
+        )}
       </Segment>
     </>
   );
