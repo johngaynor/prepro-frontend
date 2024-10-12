@@ -8,13 +8,11 @@ export const CheckInContext = createContext();
 export const CheckInProvider = ({ children }) => {
   const [checkIns, setCheckIns] = useState(null);
   const [dailyLogs, setDailyLogs] = useState(null);
-  const [templates, setTemplates] = useState(null);
   const [commentary, setCommentary] = useState(null);
   const [commentaryId, setCommentaryId] = useState(null);
   const [poses, setPoses] = useState(null);
   // loading states
   const [checkInsLoading, setCheckInsLoading] = useState(false);
-  const [templatesLoading, setTemplatesLoading] = useState(false);
   const [logsLoading, setLogsLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
   const [commentaryLoading, setCommentaryLoading] = useState(false);
@@ -81,23 +79,6 @@ export const CheckInProvider = ({ children }) => {
         toast.error(`Error deleting check in: ${err.message}`);
       })
       .finally(() => setEditLoading(false));
-  }
-
-  // get templates
-  function getTemplates() {
-    setTemplatesLoading(true);
-    apiCall("get", "/api/checkins/templates")
-      .then((res) => {
-        if (res.result) {
-          setTemplates(res.result);
-        } else {
-          throw new Error("No result from API call...");
-        }
-      })
-      .catch((err) => {
-        toast.error(`Error getting check in templates: ${err.message}`);
-      })
-      .finally(() => setTemplatesLoading(false));
   }
 
   // send attachments
@@ -233,9 +214,6 @@ export const CheckInProvider = ({ children }) => {
         checkIns,
         checkInsLoading,
         getCheckIns,
-        templates,
-        templatesLoading,
-        getTemplates,
         editLoading,
         editCheckIns,
         deleteCheckIns,

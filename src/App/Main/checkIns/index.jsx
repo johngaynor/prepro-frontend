@@ -15,9 +15,6 @@ const CheckInLog = () => {
     checkIns,
     checkInsLoading,
     getCheckIns,
-    templates,
-    templatesLoading,
-    getTemplates,
     editLoading,
     dailyLogs,
     logsLoading,
@@ -29,19 +26,9 @@ const CheckInLog = () => {
 
   useEffect(() => {
     if (!checkIns && !checkInsLoading) getCheckIns();
-    if (!templates && !templatesLoading) getTemplates();
     if (!dailyLogs && !logsLoading) getDailyLogs();
     if (!poses && !posesLoading) getPoses();
-  }, [
-    checkIns,
-    checkInsLoading,
-    templates,
-    templatesLoading,
-    dailyLogs,
-    logsLoading,
-    poses,
-    posesLoading,
-  ]);
+  }, [checkIns, checkInsLoading, dailyLogs, logsLoading, poses, posesLoading]);
 
   const { date } = useParams();
   const navigate = useNavigate();
@@ -79,11 +66,9 @@ const CheckInLog = () => {
 
   return (
     <>
-      {(checkInsLoading ||
-        templatesLoading ||
-        logsLoading ||
-        editLoading ||
-        posesLoading) && <Spinner />}
+      {(checkInsLoading || logsLoading || editLoading || posesLoading) && (
+        <Spinner />
+      )}
       {/* <ReportModal
         handleCloseModal={handleCloseReport}
         selectedDay={selectedDay}
@@ -118,8 +103,6 @@ export default CheckInLogs;
 //   return {
 //     checkIns: state.checkIns.checkIns,
 //     checkInsLoading: state.checkIns.checkInsLoading,
-//     templates: state.checkIns.templates,
-//     templatesLoading: state.checkIns.templatesLoading,
 //     dailyLogs: state.checkIns.dailyLogs,
 //     logsLoading: state.checkIns.logsLoading,
 //     commentary: state.checkIns.commentary,
