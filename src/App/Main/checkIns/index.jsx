@@ -69,12 +69,12 @@ const CheckInLog = () => {
       {(checkInsLoading || logsLoading || editLoading || posesLoading) && (
         <Spinner />
       )}
-      {/* <ReportModal
+      <ReportModal
         handleCloseModal={handleCloseReport}
         selectedDay={selectedDay}
         modalOpen={report}
         lastCheckIn={lastCheckIn}
-      /> */}
+      />
       {selectedDay && !editMode ? (
         <ViewCheckIn selectedDay={selectedDay} setEditMode={setEditMode} />
       ) : (

@@ -2,11 +2,11 @@ import { Document, View, Text, Page, Image, Svg } from "@react-pdf/renderer";
 import { DrawLineGraph, SupplementHeatmap } from "./pdfFunctions";
 import { DateTime } from "luxon";
 
-const FormQuestionBox = ({ question }) => {
+const FormQuestionBox = ({ question, answer }) => {
   return (
     <View style={{ margin: "10 0" }}>
-      <Text style={{ fontStyle: "italic" }}>{question.question}:</Text>
-      <Text style={{ marginTop: 5 }}>{" - " + (question.answer || "N/a")}</Text>
+      <Text style={{ fontStyle: "italic" }}>{question}:</Text>
+      <Text style={{ marginTop: 5 }}>{" - " + (answer || "N/a")}</Text>
     </View>
   );
 };
@@ -195,7 +195,7 @@ const CheckInDoc = ({
         <LogTable
           lastWeight={lastWeight}
           todayWeight={todayWeight}
-          phase={selectedDay?.questions.find((q) => q.questionId === 4)?.answer}
+          phase={selectedDay?.phase}
         />
         {/* Last 7 days */}
         <View>
@@ -362,9 +362,37 @@ const CheckInDoc = ({
       <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         {/* Questions */}
         <View>
-          {selectedDay?.questions?.map((q, i) => (
+          {/* {selectedDay?.questions?.map((q, i) => (
             <FormQuestionBox question={q} key={"form-question-" + i} />
-          ))}
+          ))} */}
+          <FormQuestionBox
+            question="Hormone altering or fat loss supplements used"
+            answer={selectedDay?.hormones}
+          />
+          <FormQuestionBox
+            question="Current diet phase (bulk, cut, etc.)"
+            answer={selectedDay?.phase}
+          />
+          <FormQuestionBox
+            question="Timeline (how many weeks into diet)"
+            answer={selectedDay?.timeline}
+          />
+          <FormQuestionBox
+            question="Cardio (style, duration, number of times per week)"
+            answer={selectedDay?.cardio}
+          />
+          <FormQuestionBox
+            question="Training (style and days per week)"
+            answer={selectedDay?.training}
+          />
+          <FormQuestionBox
+            question="Cheat/missed meals (PLEASE BE HONEST, this is necessary for making accurate changes)"
+            answer={selectedDay?.cheats}
+          />
+          <FormQuestionBox
+            question="Overall comments/thoughts from the week (training, mood, sleep, energy, etc.)"
+            answer={selectedDay?.comments}
+          />
         </View>
       </Page>
     </Document>
