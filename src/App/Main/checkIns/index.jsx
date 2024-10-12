@@ -90,17 +90,16 @@ const CheckInLog = () => {
         modalOpen={report}
         lastCheckIn={lastCheckIn}
       /> */}
-      {
-        selectedDay && !editMode ? (
-          <ViewCheckIn selectedDay={selectedDay} setEditMode={setEditMode} />
-        ) : null
-        // <EditCheckIn
-        //   selectedDay={selectedDay}
-        //   setEditMode={setEditMode}
-        //   date={date}
-        //   lastCheckIn={lastCheckIn}
-        // />
-      }
+      {selectedDay && !editMode ? (
+        <ViewCheckIn selectedDay={selectedDay} setEditMode={setEditMode} />
+      ) : (
+        <EditCheckIn
+          selectedDay={selectedDay}
+          setEditMode={setEditMode}
+          date={date}
+          lastCheckIn={lastCheckIn}
+        />
+      )}
     </>
   );
 };

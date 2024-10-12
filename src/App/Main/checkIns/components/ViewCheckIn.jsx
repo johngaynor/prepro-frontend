@@ -26,8 +26,6 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
     missingPoses: !!selectedDay.photos.find((p) => !p.poseId),
   };
 
-  console.log(selectedDay);
-
   return (
     <>
       <Container

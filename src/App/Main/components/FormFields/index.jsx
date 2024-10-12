@@ -41,7 +41,7 @@ export const InputField = ({
         type={type}
         fluid
         value={value}
-        onChange={onChange}
+        onChange={(e, { name, value }) => onChange(e, { name, value })}
         disabled={disabled}
         loading={loading}
         error={error ? true : false}
@@ -80,6 +80,7 @@ export const TextAreaField = ({
   fullWidth,
   resizable = "none",
   disabled = false,
+  name,
 }) => {
   return (
     <Grid.Column width={fullWidth ? 16 : width}>
@@ -91,7 +92,8 @@ export const TextAreaField = ({
         rows={rows}
         style={{ display: "inline-block", resize: resizable }}
         value={value}
-        onChange={onChange}
+        name={name}
+        onChange={(e, { name, value }) => onChange(e, { name, value })}
         disabled={disabled}
       />
     </Grid.Column>

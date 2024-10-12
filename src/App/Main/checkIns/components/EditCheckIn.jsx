@@ -1,16 +1,36 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { Grid, Button, Container, Form, Segment } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../components/FormFields";
 import CheckInContext from "../context/checkInContext";
 import { cloneDeep } from "lodash";
+import { useNavigate } from "react-router-dom";
+
+const defaultValues = {
+  date: "",
+  hormones: "",
+  phase: "",
+  timeline: "",
+  cheats: "",
+  comments: "",
+  training: "",
+  cardio: "",
+};
 
 const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
-  const [formValues, setFormValues] = useState(null);
-  // const [formErrors, setFormErrors] = useState({});
+  const [formValues, setFormValues] = useState({
+    date,
+    hormones: "",
+    phase: "",
+    timeline: "",
+    cheats: "",
+    comments: "",
+    training: "",
+    cardio: "",
+  });
+
+  const navigate = useNavigate();
 
   const { editCheckIns, deleteCheckIns } = useContext(CheckInContext);
-  const navigate = useNavigate();
   useEffect(() => {
     if (selectedDay) {
       setFormValues(cloneDeep(selectedDay)); // make a deep clone to avoid mutating original object
@@ -19,12 +39,17 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
 
   function handleSubmit() {
     // handle validation
-    editCheckIns({ ...selectedDay, questions: formValues, date });
+    editCheckIns({ ...selectedDay, ...formValues });
     setEditMode(false);
   }
 
+  function handleChange(e, { name, value }) {
+    setFormValues({ ...formValues, [name]: value });
+  }
+
   function handleCopyFromLast() {
-    setFormValues(cloneDeep(lastCheckIn.questions));
+    const newVals = cloneDeep(lastCheckIn);
+    setFormValues({ ...newVals, date, id: null });
   }
 
   return (
@@ -34,49 +59,57 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
           <InputField
             type="date"
             label="Date"
-            value={date || ""}
+            name="date"
+            value={formValues.date}
             onChange={(e, { value }) => navigate(`/checkins/${value}`)}
           />
-          {/* {formValues
-            ?.sort((a, b) => a.orderId - b.orderId)
-            .map((v, i) => {
-              function handleChange(val) {
-                const questions = [...formValues];
-                const question = questions.splice(i, 1)[0];
-                question.answer = val;
-                questions.push(question);
-                setFormValues(questions);
-              }
-
-              if (v.textArea) {
-                return (
-                  <TextAreaField
-                    label={v.question}
-                    value={v.answer}
-                    onChange={(e, { value }) => handleChange(value)}
-                    key={"question-input-" + i}
-                    fullWidth={v.fullWidth}
-                  />
-                );
-              } else {
-                return (
-                  <InputField
-                    label={v.question}
-                    value={v.answer}
-                    onChange={(e, { value }) => handleChange(value)}
-                    key={"question-input-" + i}
-                    type={v.type}
-                  />
-                );
-              }
-            })} */}
+          <InputField
+            label="Timeline (how many weeks into diet)"
+            name="timeline"
+            value={formValues.timeline || ""}
+            onChange={handleChange}
+          />
+          <InputField
+            label="Current diet phase (bulk, cut, etc.)"
+            name="phase"
+            value={formValues.phase || ""}
+            onChange={handleChange}
+          />
+          <InputField
+            label="Hormone altering or fat loss supplements used"
+            name="hormones"
+            value={formValues.hormones || ""}
+            onChange={handleChange}
+          />
+          <InputField
+            label="Cardio (style, duration, number of times per week)"
+            name="cardio"
+            value={formValues.cardio || ""}
+            onChange={handleChange}
+          />
+          <InputField
+            label="Training (style and days per week)"
+            name="training"
+            value={formValues.training || ""}
+            onChange={handleChange}
+          />
+          <TextAreaField
+            label="Cheat/missed meals"
+            name="cheats"
+            value={formValues.cheats || ""}
+            onChange={handleChange}
+            fullWidth
+          />
+          <TextAreaField
+            label="Overall comments/thoughts from the week"
+            name="comments"
+            value={formValues.comments || ""}
+            onChange={handleChange}
+            fullWidth
+          />
         </Grid>
         <Container
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
+          style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
         >
           {selectedDay && (
             <>
@@ -86,11 +119,7 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
                 icon="cancel"
                 color="red"
                 onClick={() => {
-                  setFormValues(
-                    selectedDay.questions.map((q) => ({
-                      ...q, // had to create a shallow copy so original objects aren't mutated
-                    }))
-                  );
+                  setFormValues(cloneDeep(selectedDay)); // restore original values
                   setEditMode(false);
                 }}
               />
@@ -100,7 +129,7 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
                 color="red"
                 onClick={() => {
                   deleteCheckIns(selectedDay.id);
-                  setFormValues(null);
+                  setFormValues(defaultValues);
                 }}
               />
             </>
@@ -114,6 +143,7 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
               onClick={handleCopyFromLast}
             />
           )}
+
           <Button type="submit" content="Save" icon="save" color="blue" />
         </Container>
       </Form>
