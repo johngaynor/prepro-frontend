@@ -35,7 +35,7 @@ const AssignPoseModal = ({
       <ModalContent>
         <ModalDescription>
           <List divided link relaxed>
-            {photos.map((p, i) => {
+            {photos?.map((p, i) => {
               return (
                 <List.Item key={"assign-photo-" + i}>
                   <Grid columns={2} stackable>

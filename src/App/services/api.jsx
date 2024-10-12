@@ -39,6 +39,7 @@ const API = {
             resolve(res);
           })
           .catch((err) => {
+            console.log(err);
             toast.error(`${errorMessage}: ${err}`);
             if (loadAction) dispatch(loadAction()); // Should always work fine for each instance
             reject();
@@ -84,10 +85,7 @@ const API = {
     return (dispatch) => {
       if (fetchAction) dispatch(fetchAction());
       return new Promise((resolve, reject) => {
-        return apiCall("post", path, {
-          credentials: "include",
-          ...(Array.isArray(data) ? { data } : data),
-        })
+        return apiCall("post", path, data)
           .then((res) => {
             if (loadAction) dispatch(loadAction(res.result));
             if (successMessage) toast.success(successMessage);
@@ -123,7 +121,7 @@ const API = {
           })
           .catch((err) => {
             toast.error(`${errorMessage}: ${err}`);
-            if (loadAction) dispatch(loadAction([{}]));
+            if (loadAction) dispatch(loadAction({ failed: true }));
             reject(err);
           });
       });
@@ -137,27 +135,28 @@ const API = {
    * @param {function} fetchAction action to dispatch before api call is made
    * @returns {void} dispatch function
    */
-  // addPhoto: (path, errorMessage, data, loadAction, fetchAction) => {
-  //   return (dispatch) => {
-  //     if (fetchAction) dispatch(fetchAction());
-  //     return new Promise((resolve, reject) => {
-  //       return apiAddPhoto(
-  //         path,
-  //         { credentials: "include", ...data },
-  //         data.attachment
-  //       )
-  //         .then((res) => {
-  //           if (loadAction) dispatch(loadAction(res));
-  //           dispatch(addFlashMessage(`Document Saved Successfully`, "green"));
-  //           resolve();
-  //         })
-  //         .catch((err) => {
-  //           dispatch(addFlashMessage(`${errorMessage}: ${err}`, "red"));
-  //           reject();
-  //         });
-  //     });
-  //   };
-  // },
+  addPhoto: (path, errorMessage, data, loadAction, fetchAction) => {
+    return (dispatch) => {
+      if (fetchAction) dispatch(fetchAction());
+      return new Promise((resolve, reject) => {
+        return apiAddPhoto(
+          path,
+          { credentials: "include", ...data },
+          data.attachment
+        )
+          .then((res) => {
+            if (loadAction) dispatch(loadAction(res));
+            toast.success("Photo Added Successfully");
+            resolve();
+          })
+          .catch((err) => {
+            toast.error(`${errorMessage}: ${err}`);
+            if (loadAction) dispatch(loadAction({ failed: true }));
+            reject();
+          });
+      });
+    };
+  },
   /**
    * @param {String} path api route to call
    * @param {String} errorMessage error message you want to display on api err
@@ -172,12 +171,12 @@ const API = {
         return apiCall("delete", path, { credentials: "include" })
           .then((res) => {
             if (loadAction) dispatch(loadAction(res));
-            // dispatch(addFlashMessage(`Document Saved Successfully`, "green"));
             resolve(res);
           })
           .catch((err) => {
+            console.log(err);
             toast.error(`${errorMessage}: ${err}`);
-            if (loadAction) dispatch(loadAction([{}]));
+            if (loadAction) dispatch(loadAction({ failed: true }));
             reject(err);
           });
       });

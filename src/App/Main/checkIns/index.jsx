@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Segment } from "semantic-ui-react";
 import CheckInContext, { CheckInProvider } from "./context/checkInContext";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { DateTime } from "luxon";
@@ -8,8 +7,16 @@ import ViewCheckIn from "./components/ViewCheckIn";
 import EditCheckIn from "./components/EditCheckIn";
 import ReportModal from "./components/ReportModal";
 import { connect } from "react-redux";
+import { getPoses, getPhotos } from "../physique/actions";
 
-const CheckInLog = () => {
+const CheckInLog = ({
+  poses,
+  posesLoading,
+  getPoses,
+  photos,
+  photosLoading,
+  getPhotos,
+}) => {
   const [editMode, setEditMode] = useState(false);
   const {
     checkIns,
@@ -19,16 +26,23 @@ const CheckInLog = () => {
     dailyLogs,
     logsLoading,
     getDailyLogs,
-    getPoses,
-    poses,
-    posesLoading,
   } = useContext(CheckInContext);
 
   useEffect(() => {
     if (!checkIns && !checkInsLoading) getCheckIns();
     if (!dailyLogs && !logsLoading) getDailyLogs();
     if (!poses && !posesLoading) getPoses();
-  }, [checkIns, checkInsLoading, dailyLogs, logsLoading, poses, posesLoading]);
+    if (!photos && !photosLoading) getPhotos();
+  }, [
+    checkIns,
+    checkInsLoading,
+    dailyLogs,
+    logsLoading,
+    poses,
+    posesLoading,
+    photos,
+    photosLoading,
+  ]);
 
   const { date } = useParams();
   const navigate = useNavigate();
@@ -89,26 +103,21 @@ const CheckInLog = () => {
   );
 };
 
-const CheckInLogs = () => {
+const CheckInLogs = (props) => {
   return (
     <CheckInProvider>
-      <CheckInLog />
+      <CheckInLog {...props} />
     </CheckInProvider>
   );
 };
 
-export default CheckInLogs;
+function mapStateToProps(state) {
+  return {
+    poses: state.physique.poses,
+    posesLoading: state.physique.posesLoading,
+    photos: state.physique.photos,
+    photosLoading: state.physique.photosLoading,
+  };
+}
 
-// function mapStateToProps(state) {
-//   return {
-//     checkIns: state.checkIns.checkIns,
-//     checkInsLoading: state.checkIns.checkInsLoading,
-//     dailyLogs: state.checkIns.dailyLogs,
-//     logsLoading: state.checkIns.logsLoading,
-//     commentary: state.checkIns.commentary,
-//     commentaryLoading: state.checkIns.commentaryLoading,
-//     commentaryId: state.checkIns.commentaryId,
-//   };
-// }
-
-// export default connect(mapStateToProps)(CheckInLogs);
+export default connect(mapStateToProps, { getPoses, getPhotos })(CheckInLogs);

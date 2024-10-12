@@ -3,17 +3,17 @@ import { Accordion, Button, Icon, List } from "semantic-ui-react";
 import PhotoModal from "./PhotoModal";
 import AssignPoseModal from "./AssignPoseModal";
 
-const AttachmentsDisplay = ({
+const PhotosDisplay = ({
   photos,
   poses,
-  deleteAttachment,
+  deletePhoto,
   checkInId,
   assignPose,
 }) => {
   const [activePhoto, setActivePhoto] = useState(false);
   const [assignOpen, setAssignOpen] = useState(false);
 
-  const missingPoses = photos.filter((p) => !p.poseId).length;
+  const missingPoses = photos?.filter((p) => !p.poseId).length;
 
   return (
     <>
@@ -21,7 +21,7 @@ const AttachmentsDisplay = ({
         modalOpen={!!activePhoto}
         photo={activePhoto}
         handleCloseModal={() => setActivePhoto(false)}
-        handleDeletePhoto={deleteAttachment}
+        handleDeletePhoto={deletePhoto}
       />
       <AssignPoseModal
         modalOpen={assignOpen}
@@ -83,4 +83,4 @@ const AttachmentsDisplay = ({
   );
 };
 
-export default AttachmentsDisplay;
+export default PhotosDisplay;

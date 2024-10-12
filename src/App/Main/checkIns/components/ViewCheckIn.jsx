@@ -8,22 +8,32 @@ import CheckInContext from "../context/checkInContext";
 import AttachFile from "../../components/AttachFile";
 import CommentsDisplay from "./CommentsDisplay";
 import PhotosDisplay from "./PhotosDisplay";
+import { connect } from "react-redux";
+import { addPhoto, deletePhoto } from "../../physique/actions";
 
-const ViewCheckIn = ({ selectedDay, setEditMode }) => {
+const ViewCheckIn = ({
+  selectedDay,
+  setEditMode,
+  poses,
+  photos,
+  addPhoto,
+  deletePhoto,
+}) => {
   const [fileOpen, setFileOpen] = useState(false);
 
-  const { addAttachments, deleteAttachment, poses, assignPose } =
-    useContext(CheckInContext);
+  const { assignPose } = useContext(CheckInContext);
   const navigate = useNavigate();
 
   function handleSubmitFile(formData) {
-    addAttachments(formData, selectedDay.id);
+    addPhoto(formData, selectedDay.id);
   }
+
+  const activePhotos = photos?.filter((p) => p.checkInId === selectedDay.id);
 
   const labels = {
     incomplete: false,
     noPhotos: selectedDay.photos.length <= 0,
-    missingPoses: !!selectedDay.photos.find((p) => !p.poseId),
+    missingPoses: !!activePhotos?.find((p) => !p.poseId),
   };
 
   return (
@@ -131,9 +141,9 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
             </Grid.Column>
             <Grid.Column>
               <PhotosDisplay
-                photos={selectedDay.photos}
+                photos={activePhotos}
                 poses={poses}
-                deleteAttachment={deleteAttachment}
+                deletePhoto={deletePhoto}
                 checkInId={selectedDay.id}
                 assignPose={assignPose}
               />
@@ -145,4 +155,11 @@ const ViewCheckIn = ({ selectedDay, setEditMode }) => {
   );
 };
 
-export default ViewCheckIn;
+const mapStateToProps = (state) => {
+  return {
+    poses: state.physique.poses,
+    photos: state.physique.photos,
+  };
+};
+
+export default connect(mapStateToProps, { addPhoto, deletePhoto })(ViewCheckIn);
