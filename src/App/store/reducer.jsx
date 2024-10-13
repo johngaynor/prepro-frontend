@@ -3,7 +3,13 @@ import { combineReducers } from "redux";
 import supplements from "../Main/supplements/reducers";
 import activities from "../Main/activity/reducers";
 import physique from "../Main/physique/reducers";
+import nutrition from "../Main/nutrition/reducers";
 
-const rootReducer = combineReducers({ supplements, activities, physique });
+const rootReducer = combineReducers({
+  supplements,
+  activities,
+  physique,
+  nutrition,
+});
 
 export default rootReducer;

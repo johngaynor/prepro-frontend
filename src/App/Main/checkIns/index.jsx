@@ -8,6 +8,7 @@ import EditCheckIn from "./components/EditCheckIn";
 import ReportModal from "./components/ReportModal";
 import { connect } from "react-redux";
 import { getPoses, getPhotos } from "../physique/actions";
+import { getWeightLogs } from "../nutrition/actions";
 
 const CheckInLog = ({
   poses,
@@ -16,27 +17,23 @@ const CheckInLog = ({
   photos,
   photosLoading,
   getPhotos,
+  weightLogs,
+  logsLoading,
+  getWeightLogs,
 }) => {
   const [editMode, setEditMode] = useState(false);
-  const {
-    checkIns,
-    checkInsLoading,
-    getCheckIns,
-    editLoading,
-    dailyLogs,
-    logsLoading,
-    getDailyLogs,
-  } = useContext(CheckInContext);
+  const { checkIns, checkInsLoading, getCheckIns, editLoading } =
+    useContext(CheckInContext);
 
   useEffect(() => {
     if (!checkIns && !checkInsLoading) getCheckIns();
-    if (!dailyLogs && !logsLoading) getDailyLogs();
+    if (!weightLogs && !logsLoading) getWeightLogs();
     if (!poses && !posesLoading) getPoses();
     if (!photos && !photosLoading) getPhotos();
   }, [
     checkIns,
     checkInsLoading,
-    dailyLogs,
+    weightLogs,
     logsLoading,
     poses,
     posesLoading,
@@ -117,7 +114,11 @@ function mapStateToProps(state) {
     posesLoading: state.physique.posesLoading,
     photos: state.physique.photos,
     photosLoading: state.physique.photosLoading,
+    weightLogs: state.nutrition.weightLogs,
+    logsLoading: state.nutrition.logsLoading,
   };
 }
 
-export default connect(mapStateToProps, { getPoses, getPhotos })(CheckInLogs);
+export default connect(mapStateToProps, { getPoses, getPhotos, getWeightLogs })(
+  CheckInLogs
+);
