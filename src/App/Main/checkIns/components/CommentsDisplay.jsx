@@ -1,21 +1,25 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Button, Feed, Accordion } from "semantic-ui-react";
-import AppContext from "../../context/appContext";
 import Spinner from "../../components/Spinner";
 import { DateTime } from "luxon";
 import { connect } from "react-redux";
 import { getCommentary, addCommentary } from "../actions";
+import { getAllUsers } from "../../actions";
 
 const PhotosDisplay = ({
   checkInId,
+  // from redux
   commentary,
   commentaryLoading,
   commentaryId,
   getCommentary,
   addCommentary,
+  apiUsers,
+  usersLoading,
+  getAllUsers,
+  user,
 }) => {
   const [comment, setComment] = useState("");
-  const { apiUsers, usersLoading, getAllUsers, user } = useContext(AppContext);
 
   useEffect(() => {
     if ((!commentary || commentaryId !== checkInId) && !commentaryLoading)
@@ -94,9 +98,14 @@ function mapStateToProps(state) {
     commentary: state.checkIns.commentary,
     commentaryLoading: state.checkIns.commentaryLoading,
     commentaryId: state.checkIns.commentaryId,
+    apiUsers: state.app.apiUsers,
+    usersLoading: state.app.usersLoading,
+    user: state.app.user,
   };
 }
 
-export default connect(mapStateToProps, { getCommentary, addCommentary })(
-  PhotosDisplay
-);
+export default connect(mapStateToProps, {
+  getCommentary,
+  addCommentary,
+  getAllUsers,
+})(PhotosDisplay);

@@ -4,8 +4,10 @@ import supplements from "../Main/supplements/reducers";
 import activities from "../Main/activity/reducers";
 import physique from "../Main/physique/reducers";
 import nutrition from "../Main/nutrition/reducers";
+import app from "../Main/reducers";
 
 const rootReducer = combineReducers({
+  app,
   supplements,
   activities,
   physique,

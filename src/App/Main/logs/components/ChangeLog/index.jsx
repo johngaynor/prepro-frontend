@@ -9,10 +9,8 @@ import {
   Modal,
   Container,
 } from "semantic-ui-react";
-import AppContext from "../../../components/Context/appContext";
 
 const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
-  const { clearLog } = React.useContext(AppContext);
   const logObj = changeLog.reduce((acc, val) => {
     const retObj = { ...acc };
 
@@ -27,7 +25,7 @@ const ChangeLog = ({ logOpen, setLogOpen, changeLog }) => {
   const handleConfirmLog = () => {
     const versions = Object.keys(logObj);
     const versionIds = versions.map((v) => logObj[v].versionId);
-    clearLog(versionIds);
+    // clearLog(versionIds);
     setLogOpen(false);
   };
 

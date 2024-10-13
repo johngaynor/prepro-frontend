@@ -4,18 +4,22 @@ import { DropdownField } from "../../../components/FormFields";
 import AppSelector from "./AppSelector";
 import AdminContext from "../../Context/adminContext";
 import Spinner from "../../../components/Spinner";
+import { connect } from "react-redux";
+import { getAllUsers } from "../../../actions";
 
-const ManageUsers = () => {
+const ManageUsers = ({
+  // from redux
+  apiUsers,
+  usersLoading,
+  getAllUsers,
+}) => {
   const [activeUser, setActiveUser] = React.useState(null);
 
   const {
-    apiUsers,
     allApps,
     appAccess,
     getAllApps,
     getAllAccess,
-    getAllUsers,
-    usersLoading,
     appsLoading,
     accessLoading,
   } = React.useContext(AdminContext);
@@ -24,7 +28,7 @@ const ManageUsers = () => {
     if (!apiUsers && !usersLoading) getAllUsers();
     if (!allApps && !appsLoading) getAllApps();
     if (!appAccess && !accessLoading) getAllAccess();
-  }, [apiUsers, allApps, appAccess]);
+  }, [apiUsers, usersLoading, allApps, appAccess]);
 
   const activeUserApps = allApps?.map((app) => {
     const match = appAccess?.find(
@@ -87,4 +91,11 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+function mapStateToProps(state) {
+  return {
+    apiUsers: state.app.apiUsers,
+    usersLoading: state.app.usersLoading,
+  };
+}
+
+export default connect(mapStateToProps, { getAllUsers })(ManageUsers);

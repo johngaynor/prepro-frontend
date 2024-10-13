@@ -9,12 +9,11 @@ import {
   Transition,
   Container,
 } from "semantic-ui-react";
-import AppContext from "../context/appContext";
+import { connect } from "react-redux";
 
-const Dashboard = ({ startsWith }) => {
+const Dashboard = ({ startsWith, user, apps }) => {
   const [search, setSearch] = useState("");
 
-  const { user, apps } = React.useContext(AppContext);
   const cardGroup = apps
     .filter(
       (app) =>
@@ -27,12 +26,6 @@ const Dashboard = ({ startsWith }) => {
           to={app.link}
           key={app.id}
           style={{ margin: 0, padding: 0 }}
-          // onClick={() => {
-          //   window.dataLayer.push({
-          //     appId: app.id,
-          //     userId: currentUser.user.id,
-          //   });
-          // }}
           className="appTile"
         >
           <Card>
@@ -105,4 +98,11 @@ const Dashboard = ({ startsWith }) => {
   );
 };
 
-export default Dashboard;
+function mapStateToProps(state) {
+  return {
+    user: state.app.user,
+    apps: state.app.apps,
+  };
+}
+
+export default connect(mapStateToProps)(Dashboard);

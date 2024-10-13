@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Breadcrumb, Icon } from "semantic-ui-react";
-import AppContext from "../../context/appContext";
+import { connect } from "react-redux";
 
-const BreadCrumb = ({ path }) => {
-  const { auth } = React.useContext(AppContext);
+const BreadCrumb = ({ path, auth }) => {
   const routeParts = path.split("/");
   let crumbPath = "/";
   const filteredParts = routeParts.filter((part) => part !== "");
@@ -37,4 +36,10 @@ const BreadCrumb = ({ path }) => {
   }
 };
 
-export default BreadCrumb;
+function mapStateToProps(state) {
+  return {
+    auth: state.app.auth,
+  };
+}
+
+export default connect(mapStateToProps)(BreadCrumb);

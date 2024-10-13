@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   ModalHeader,
   ModalDescription,
@@ -16,7 +16,6 @@ import {
   pdf as reactPDF,
 } from "@react-pdf/renderer";
 import CheckInDoc from "./Pdf/ReportPdf";
-import AppContext from "../../context/appContext";
 import { DateTime } from "luxon";
 import Spinner from "../../components/Spinner";
 import { getSupplementLogs, getSupplements } from "../../supplements/actions";
@@ -40,6 +39,7 @@ const ReportModal = ({
   weightLogsLoading,
   getWeightLogs,
   sendPdfToCoach,
+  user,
 }) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
 
@@ -52,8 +52,6 @@ const ReportModal = ({
   useEffect(() => {
     if (!pdf.loading) update(CheckInDoc({ selectedDay }));
   });
-
-  const { user } = useContext(AppContext);
 
   const dailyLogs = weightLogs
     ?.sort((a, b) => {
@@ -138,6 +136,7 @@ function mapStateToProps(state) {
     supplementLogsLoading: state.supplements.logsLoading,
     weightLogs: state.nutrition.weightLogs,
     weightLogsLoading: state.nutrition.logsLoading,
+    user: state.app.user,
   };
 }
 

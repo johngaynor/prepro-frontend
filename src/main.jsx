@@ -5,12 +5,8 @@ import "./index.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
-import { AppProvider } from "./App/Main/context/appContext.jsx";
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <App />
   </React.StrictMode>
 );

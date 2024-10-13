@@ -3,37 +3,23 @@ import { Menu, Button, Icon, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import HelpMenu from "../HelpMenu";
 // import Logo from "../../../images/logo-3.png";
-import AppContext from "../../context/appContext";
 // import ChangeLog from "../ChangeLog";
+import { connect } from "react-redux";
+import { authUser, getApps } from "../../actions";
 
-const Navbar = ({}) => {
+const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
   const [helpMenuOpen, setHelpMenuOpen] = React.useState(false);
   // const [logOpen, setLogOpen] = React.useState(true);
   const isMobile = false; // this wil get modified later to adjust for window dimensions
 
-  const {
-    auth,
-    apps,
-    appsLoading,
-    changeLog,
-    logLoading,
-    getChangeLog,
-    authUser,
-    getApps,
-    clearApps,
-  } = React.useContext(AppContext);
-
   React.useEffect(() => {
     if (!auth) {
-      if (apps.length) {
-        clearApps();
-      }
       authUser();
     } else {
       if (!apps.length && !appsLoading) getApps();
-      if (!changeLog && !logLoading) getChangeLog();
+      // if (!changeLog && !logLoading) getChangeLog();
     }
-  }, [auth, apps, changeLog]);
+  }, [auth, apps, appsLoading]);
 
   return (
     <Menu fixed="top" inverted color="blue" size="tiny">
@@ -85,4 +71,12 @@ const Navbar = ({}) => {
   );
 };
 
-export default Navbar;
+function mapStateToProps(state) {
+  return {
+    auth: state.app.auth,
+    apps: state.app.apps,
+    appsLoading: state.app.appsLoading,
+  };
+}
+
+export default connect(mapStateToProps, { authUser, getApps })(Navbar);

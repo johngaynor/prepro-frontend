@@ -2,13 +2,14 @@ import React from "react";
 import { Grid, Header, Tab, Button, Container, Form } from "semantic-ui-react";
 import { DropdownField } from "../../../components/FormFields";
 import AdminContext from "../../Context/adminContext";
-import AppContext from "../../../context/appContext";
 import AppCard from "./AppCard";
 import Spinner from "../../../components/Spinner";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { getAllUsers } from "../../../actions";
 
-const BuildLog = () => {
+const BuildLog = ({ apiUsers, usersLoading, getAllUsers }) => {
   const [selectedApps, setSelectedApps] = React.useState({});
   const [version, setVersion] = React.useState("patch");
 
@@ -22,7 +23,6 @@ const BuildLog = () => {
     accessLoading,
     getAllAccess,
   } = React.useContext(AdminContext);
-  const { apiUsers, usersLoading, getAllUsers } = React.useContext(AppContext);
 
   React.useEffect(() => {
     if (!allApps && !appsLoading) getAllApps();
@@ -166,4 +166,11 @@ const BuildLog = () => {
   );
 };
 
-export default BuildLog;
+function mapStateToProps(state) {
+  return {
+    apiUsers: state.app.apiUsers,
+    usersLoading: state.app.usersLoading,
+  };
+}
+
+export default connect(mapStateToProps, { getAllUsers })(BuildLog);

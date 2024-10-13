@@ -11,12 +11,10 @@ import {
 } from "semantic-ui-react";
 import { apiCall } from "../../../services/api";
 import { toast } from "react-hot-toast";
-import AppContext from "../../context/appContext";
+import { connect } from "react-redux";
 
-const HelpMenu = ({ isOpen, setOpen }) => {
+const HelpMenu = ({ isOpen, setOpen, user }) => {
   const [formValues, setFormValues] = useState({ reason: "", details: "" });
-
-  const { user } = React.useContext(AppContext);
 
   function submitSupportTicket(user, type, message) {
     apiCall("post", "/api/support/submit", { user, type, message })
@@ -159,7 +157,13 @@ function validate(values) {
   return errors;
 }
 
-export default HelpMenu;
+function mapStateToProps(state) {
+  return {
+    user: state.app.user,
+  };
+}
+
+export default connect(mapStateToProps)(HelpMenu);
 
 // function submitForm(values) {
 //   setIsLoading(true);

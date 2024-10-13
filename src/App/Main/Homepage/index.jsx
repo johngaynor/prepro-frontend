@@ -1,11 +1,9 @@
 import React from "react";
 import Dashboard from "./dashboard";
 import Spinner from "../components/Spinner";
-import AppContext from "../context/appContext";
+import { connect } from "react-redux";
 
-const Homepage = ({ startsWith }) => {
-  const { userLoading, auth, appsLoading } = React.useContext(AppContext);
-
+const Homepage = ({ startsWith, userLoading, auth, appsLoading }) => {
   if (userLoading || appsLoading) {
     return <Spinner />;
   }
@@ -42,4 +40,12 @@ const Homepage = ({ startsWith }) => {
   }
 };
 
-export default Homepage;
+function mapStateToProps(state) {
+  return {
+    userLoading: state.app.userLoading,
+    auth: state.app.auth,
+    appsLoading: state.app.appsLoading,
+  };
+}
+
+export default connect(mapStateToProps)(Homepage);

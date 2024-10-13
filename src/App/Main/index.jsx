@@ -4,20 +4,19 @@ import Homepage from "./homepage";
 import BreadCrumb from "./components/Breadcrumb";
 import Spinner from "./components/Spinner";
 import { Segment } from "semantic-ui-react";
+import { connect } from "react-redux";
 // page imports
 import Logs from "./logs";
 import ExerciseLog from "./fitness/exerciseLog";
 import DailyLogForm from "./logs/components/DailyLogForm/DailyLogForm";
 import AdminConsole from "./admin";
-import AppContext from "./context/appContext";
 import ExerciseManager from "./fitness/exercises";
 import CheckInLogs from "./checkIns";
 import ActivityLogs from "./activity";
 import SupplementLogPage from "./supplements/log";
 
-const Main = (props) => {
+const Main = ({ user, apps, ...props }) => {
   const location = useLocation();
-  const { apps, user } = React.useContext(AppContext);
 
   const withAuth = (Component, appId) => {
     const match = apps.find((a) => a.id === appId);
@@ -40,7 +39,7 @@ const Main = (props) => {
 
   return (
     <div style={{ margin: "1rem" }}>
-      {!apps && <Spinner />}
+      {/* {!apps && <Spinner />} */}
       <BreadCrumb path={location.pathname} />
       <Routes>
         <Route path="/" element={<Homepage startsWith={"/"} />} />
@@ -64,4 +63,11 @@ const Main = (props) => {
   );
 };
 
-export default Main;
+function mapStateToProps(state) {
+  return {
+    user: state.app.user,
+    apps: state.app.apps,
+  };
+}
+
+export default connect(mapStateToProps, {})(Main);
