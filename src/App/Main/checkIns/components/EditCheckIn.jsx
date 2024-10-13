@@ -1,11 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Button, Container, Form, Segment } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../components/FormFields";
-import CheckInContext from "../context/checkInContext";
 import { cloneDeep } from "lodash";
 import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { editCheckIn, deleteCheckIn } from "../actions";
 
-const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
+const EditCheckIn = ({
+  selectedDay,
+  setEditMode,
+  date,
+  lastCheckIn,
+  editCheckIn,
+  deleteCheckIn,
+}) => {
   const [formValues, setFormValues] = useState({
     date,
     hormones: "",
@@ -29,8 +37,6 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
   };
 
   const navigate = useNavigate();
-
-  const { editCheckIns, deleteCheckIns } = useContext(CheckInContext);
   useEffect(() => {
     if (selectedDay) {
       setFormValues(cloneDeep(selectedDay)); // make a deep clone to avoid mutating original object
@@ -39,7 +45,7 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
 
   function handleSubmit() {
     // handle validation
-    editCheckIns({ ...selectedDay, ...formValues });
+    editCheckIn({ ...selectedDay, ...formValues });
     setEditMode(false);
   }
 
@@ -128,7 +134,7 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
                 icon="trash"
                 color="red"
                 onClick={() => {
-                  deleteCheckIns(selectedDay.id);
+                  deleteCheckIn(selectedDay.id);
                   setFormValues(defaultValues);
                 }}
               />
@@ -151,4 +157,10 @@ const EditCheckIn = ({ selectedDay, setEditMode, date, lastCheckIn }) => {
   );
 };
 
-export default EditCheckIn;
+function mapStateToProps(state) {
+  return {};
+}
+
+export default connect(mapStateToProps, { editCheckIn, deleteCheckIn })(
+  EditCheckIn
+);

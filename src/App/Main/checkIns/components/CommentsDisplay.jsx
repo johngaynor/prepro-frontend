@@ -1,21 +1,21 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Input, Button, Feed, Accordion } from "semantic-ui-react";
-import CheckInContext from "../context/checkInContext";
 import AppContext from "../../context/appContext";
 import Spinner from "../../components/Spinner";
 import { DateTime } from "luxon";
+import { connect } from "react-redux";
+import { getCommentary, addCommentary } from "../actions";
 
-const PhotosDisplay = ({ checkInId }) => {
+const PhotosDisplay = ({
+  checkInId,
+  commentary,
+  commentaryLoading,
+  commentaryId,
+  getCommentary,
+  addCommentary,
+}) => {
   const [comment, setComment] = useState("");
-
-  const {
-    commentary,
-    commentaryLoading,
-    getCommentary,
-    commentaryId,
-    addComment,
-  } = useContext(CheckInContext);
-  const { apiUsers, usersLoading, getAllUsers } = useContext(AppContext);
+  const { apiUsers, usersLoading, getAllUsers, user } = useContext(AppContext);
 
   useEffect(() => {
     if ((!commentary || commentaryId !== checkInId) && !commentaryLoading)
@@ -36,27 +36,25 @@ const PhotosDisplay = ({ checkInId }) => {
             <Accordion.Content>
               <Feed>
                 {(commentaryLoading || usersLoading) && <Spinner />}
-                {commentary?.map(({ id, comment, date, userId }, i) => {
+                {commentary?.map(({ comment, date, userId }, i) => {
                   const username = apiUsers?.find((u) => u.id === userId)?.name;
                   const formattedDate = DateTime.fromISO(date, {
                     zone: "utc",
                   }).toLocal();
 
                   return (
-                    id && (
-                      <Feed.Event key={i}>
-                        <Feed.Content style={{ padding: 0, paddingLeft: 10 }}>
-                          <Feed.Summary>{comment}</Feed.Summary>
-                          <Feed.Summary>
-                            <Feed.Date>
-                              {`${username} - ${formattedDate.toRelative()} (${formattedDate.toFormat(
-                                "M/d/yy h:mm a"
-                              )})`}
-                            </Feed.Date>
-                          </Feed.Summary>
-                        </Feed.Content>
-                      </Feed.Event>
-                    )
+                    <Feed.Event key={i}>
+                      <Feed.Content style={{ padding: 0, paddingLeft: 10 }}>
+                        <Feed.Summary>{comment}</Feed.Summary>
+                        <Feed.Summary>
+                          <Feed.Date>
+                            {`${username} - ${formattedDate.toRelative()} (${formattedDate.toFormat(
+                              "M/d/yy h:mm a"
+                            )})`}
+                          </Feed.Date>
+                        </Feed.Summary>
+                      </Feed.Content>
+                    </Feed.Event>
                   );
                 })}
               </Feed>
@@ -70,7 +68,12 @@ const PhotosDisplay = ({ checkInId }) => {
                     content="Submit"
                     icon="send"
                     onClick={() => {
-                      addComment({ checkInId, comment });
+                      addCommentary({
+                        checkInId,
+                        comment,
+                        date: DateTime.utc().toISO(),
+                        userId: user.id,
+                      });
                       setComment("");
                     }}
                   />
@@ -86,4 +89,14 @@ const PhotosDisplay = ({ checkInId }) => {
   );
 };
 
-export default PhotosDisplay;
+function mapStateToProps(state) {
+  return {
+    commentary: state.checkIns.commentary,
+    commentaryLoading: state.checkIns.commentaryLoading,
+    commentaryId: state.checkIns.commentaryId,
+  };
+}
+
+export default connect(mapStateToProps, { getCommentary, addCommentary })(
+  PhotosDisplay
+);

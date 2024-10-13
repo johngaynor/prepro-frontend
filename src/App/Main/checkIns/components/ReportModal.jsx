@@ -9,13 +9,19 @@ import {
   Container,
   Header,
 } from "semantic-ui-react";
-import { PDFDownloadLink, usePDF, PDFViewer } from "@react-pdf/renderer";
+import {
+  PDFDownloadLink,
+  usePDF,
+  PDFViewer,
+  pdf as reactPDF,
+} from "@react-pdf/renderer";
 import CheckInDoc from "./Pdf/ReportPdf";
 import AppContext from "../../context/appContext";
-import CheckInContext from "../context/checkInContext";
 import { DateTime } from "luxon";
 import Spinner from "../../components/Spinner";
 import { getSupplementLogs, getSupplements } from "../../supplements/actions";
+import { getWeightLogs } from "../../nutrition/actions";
+import { sendPdfToCoach } from "../actions";
 import { connect } from "react-redux";
 
 const ReportModal = ({
@@ -30,12 +36,17 @@ const ReportModal = ({
   supplementLogs,
   supplementLogsLoading,
   getSupplementLogs,
+  weightLogs,
+  weightLogsLoading,
+  getWeightLogs,
+  sendPdfToCoach,
 }) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
 
   useEffect(() => {
     if (!supplements && !supplementsLoading) getSupplements();
     if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
+    if (!weightLogs && !weightLogsLoading) getWeightLogs();
   }, [supplements, supplementsLoading, supplementLogs, supplementLogsLoading]);
 
   useEffect(() => {
@@ -43,9 +54,8 @@ const ReportModal = ({
   });
 
   const { user } = useContext(AppContext);
-  const { sendPdfToCoach, dailyLogs } = useContext(CheckInContext);
 
-  const weightLogs = dailyLogs
+  const dailyLogs = weightLogs
     ?.sort((a, b) => {
       const dateA = DateTime.fromISO(a.date);
       const dateB = DateTime.fromISO(b.date);
@@ -57,11 +67,21 @@ const ReportModal = ({
 
   const reportProps = {
     selectedDay,
-    weightLogs,
+    dailyLogs,
     lastCheckIn,
     supplements,
     supplementLogs,
   };
+
+  async function handleSendPdf(reportPdf, filename, checkInId) {
+    const blob = await reactPDF(reportPdf).toBlob();
+    const formData = new FormData();
+    formData.append("filename", filename);
+    formData.append("checkInId", checkInId);
+    formData.append("file", blob, "test-name-report");
+    // send pdf
+    sendPdfToCoach(formData);
+  }
 
   return (
     <Modal
@@ -89,7 +109,7 @@ const ReportModal = ({
           content="Email to Coach"
           onClick={() => {
             handleCloseModal();
-            sendPdfToCoach(
+            handleSendPdf(
               <CheckInDoc {...reportProps} />,
               filename,
               selectedDay?.id
@@ -116,9 +136,14 @@ function mapStateToProps(state) {
     supplementsLoading: state.supplements.supplementsLoading,
     supplementLogs: state.supplements.logs,
     supplementLogsLoading: state.supplements.logsLoading,
+    weightLogs: state.nutrition.weightLogs,
+    weightLogsLoading: state.nutrition.logsLoading,
   };
 }
 
-export default connect(mapStateToProps, { getSupplements, getSupplementLogs })(
-  ReportModal
-);
+export default connect(mapStateToProps, {
+  getSupplements,
+  getSupplementLogs,
+  getWeightLogs,
+  sendPdfToCoach,
+})(ReportModal);

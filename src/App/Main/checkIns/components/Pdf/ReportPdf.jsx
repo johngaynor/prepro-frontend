@@ -79,7 +79,7 @@ function getMin(values) {
 
 const CheckInDoc = ({
   selectedDay,
-  weightLogs = [],
+  dailyLogs = [],
   lastCheckIn,
   supplementLogs,
   supplements,
@@ -92,7 +92,7 @@ const CheckInDoc = ({
             .minus({ days: index })
             .startOf("day")
             .toISODate();
-          const log = weightLogs.find((l) => l.date === day);
+          const log = dailyLogs.find((l) => l.date === day);
           return { date: day, value: log?.weight || null };
         })
         .reverse()
@@ -109,7 +109,7 @@ const CheckInDoc = ({
             .minus({ days: index })
             .startOf("day")
             .toISODate();
-          const log = weightLogs.find((l) => l.date === day);
+          const log = dailyLogs.find((l) => l.date === day);
           return { date: day, value: log?.weight || null };
         })
         .reverse()
@@ -118,8 +118,8 @@ const CheckInDoc = ({
   const max30 = getMax(last30Days);
   const min30 = getMin(last30Days);
 
-  const lastWeight = weightLogs.length
-    ? weightLogs.find((l) => l.date === lastCheckIn?.date)?.weight
+  const lastWeight = dailyLogs.length
+    ? dailyLogs.find((l) => l.date === lastCheckIn?.date)?.weight
     : null;
   const todayWeight = [...last7Days].reverse()[0]?.value;
 

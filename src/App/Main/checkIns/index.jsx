@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import CheckInContext, { CheckInProvider } from "./context/checkInContext";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { DateTime } from "luxon";
 import Spinner from "../components/Spinner";
@@ -7,8 +6,8 @@ import ViewCheckIn from "./components/ViewCheckIn";
 import EditCheckIn from "./components/EditCheckIn";
 import ReportModal from "./components/ReportModal";
 import { connect } from "react-redux";
+import { getCheckIns } from "./actions";
 import { getPoses, getPhotos } from "../physique/actions";
-import { getWeightLogs } from "../nutrition/actions";
 
 const CheckInLog = ({
   poses,
@@ -17,29 +16,18 @@ const CheckInLog = ({
   photos,
   photosLoading,
   getPhotos,
-  weightLogs,
-  logsLoading,
-  getWeightLogs,
+  checkIns,
+  checkInsLoading,
+  getCheckIns,
+  pdfLoading,
 }) => {
   const [editMode, setEditMode] = useState(false);
-  const { checkIns, checkInsLoading, getCheckIns, editLoading } =
-    useContext(CheckInContext);
 
   useEffect(() => {
     if (!checkIns && !checkInsLoading) getCheckIns();
-    if (!weightLogs && !logsLoading) getWeightLogs();
     if (!poses && !posesLoading) getPoses();
     if (!photos && !photosLoading) getPhotos();
-  }, [
-    checkIns,
-    checkInsLoading,
-    weightLogs,
-    logsLoading,
-    poses,
-    posesLoading,
-    photos,
-    photosLoading,
-  ]);
+  }, [checkIns, checkInsLoading, poses, posesLoading, photos, photosLoading]);
 
   const { date } = useParams();
   const navigate = useNavigate();
@@ -77,7 +65,7 @@ const CheckInLog = ({
 
   return (
     <>
-      {(checkInsLoading || logsLoading || editLoading || posesLoading) && (
+      {(checkInsLoading || posesLoading || photosLoading || pdfLoading) && (
         <Spinner />
       )}
       <ReportModal
@@ -100,25 +88,20 @@ const CheckInLog = ({
   );
 };
 
-const CheckInLogs = (props) => {
-  return (
-    <CheckInProvider>
-      <CheckInLog {...props} />
-    </CheckInProvider>
-  );
-};
-
 function mapStateToProps(state) {
   return {
     poses: state.physique.poses,
     posesLoading: state.physique.posesLoading,
     photos: state.physique.photos,
     photosLoading: state.physique.photosLoading,
-    weightLogs: state.nutrition.weightLogs,
-    logsLoading: state.nutrition.logsLoading,
+    checkIns: state.checkIns.checkIns,
+    checkInsLoading: state.checkIns.checkInsLoading,
+    pdfLoading: state.checkIns.pdfLoading,
   };
 }
 
-export default connect(mapStateToProps, { getPoses, getPhotos, getWeightLogs })(
-  CheckInLogs
-);
+export default connect(mapStateToProps, {
+  getPoses,
+  getPhotos,
+  getCheckIns,
+})(CheckInLog);
