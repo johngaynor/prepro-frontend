@@ -50,7 +50,7 @@ export const AdminProvider = ({ children }) => {
 
   function getAllUsers() {
     setUsersLoading(true);
-    apiCall("get", "/api/admin/users", { credentials: "include" })
+    apiCall("get", "/api/users", { credentials: "include" })
       .then((res) => {
         if (res.result.length) {
           setApiUsers(res.result);
