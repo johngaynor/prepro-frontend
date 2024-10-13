@@ -1,12 +1,7 @@
 import { List, Checkbox, Card, Segment } from "semantic-ui-react";
-import Spinner from "../../../components/Spinner";
 import React from "react";
-import AdminContext from "../../Context/adminContext";
 
-const AppSelector = ({ activeUser, activeUserApps }) => {
-  const { toggleUserAppAccess, accessChanging } =
-    React.useContext(AdminContext);
-
+const AppSelector = ({ activeUser, activeUserApps, handleToggleAccess }) => {
   const categories = new Set(
     activeUserApps
       .map((app) => app.link.toUpperCase().split("/", 2).join(""))
@@ -29,7 +24,7 @@ const AppSelector = ({ activeUser, activeUserApps }) => {
           <Checkbox
             toggle
             checked={!!app.access || !!app.allUsers}
-            onChange={(e) => toggleUserAppAccess(activeUser, app)}
+            onChange={(e) => handleToggleAccess(activeUser, app)}
             disabled={!!app.restricted || !!app.allUsers}
           />
         </List.Content>
@@ -52,7 +47,6 @@ const AppSelector = ({ activeUser, activeUserApps }) => {
   categories.forEach((cat) => categoryList.push(cat));
   return (
     <Segment basic>
-      {accessChanging && <Spinner />}
       <Card.Group itemsPerRow={3} doubling stackable centered>
         {categoryList.map((cat, i) => (
           <Card key={i}>

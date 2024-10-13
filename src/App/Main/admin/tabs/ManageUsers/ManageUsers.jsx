@@ -2,33 +2,37 @@ import React from "react";
 import { Tab, Header } from "semantic-ui-react";
 import { DropdownField } from "../../../components/FormFields";
 import AppSelector from "./AppSelector";
-import AdminContext from "../../Context/adminContext";
 import Spinner from "../../../components/Spinner";
 import { connect } from "react-redux";
 import { getAllUsers } from "../../../actions";
+import {
+  getAllAccess,
+  getAllApps,
+  addAppAccess,
+  removeAppAccess,
+} from "../../actions";
 
 const ManageUsers = ({
   // from redux
   apiUsers,
   usersLoading,
   getAllUsers,
+  allApps,
+  appAccess,
+  getAllApps,
+  getAllAccess,
+  appsLoading,
+  accessLoading,
+  addAppAccess,
+  removeAppAccess,
 }) => {
   const [activeUser, setActiveUser] = React.useState(null);
-
-  const {
-    allApps,
-    appAccess,
-    getAllApps,
-    getAllAccess,
-    appsLoading,
-    accessLoading,
-  } = React.useContext(AdminContext);
 
   React.useEffect(() => {
     if (!apiUsers && !usersLoading) getAllUsers();
     if (!allApps && !appsLoading) getAllApps();
     if (!appAccess && !accessLoading) getAllAccess();
-  }, [apiUsers, usersLoading, allApps, appAccess]);
+  }, [apiUsers, usersLoading, allApps, appsLoading, appAccess, accessLoading]);
 
   const activeUserApps = allApps?.map((app) => {
     const match = appAccess?.find(
@@ -36,6 +40,19 @@ const ManageUsers = ({
     );
     return { ...app, access: match ? true : false };
   });
+
+  function handleToggleAccess(activeUser, app) {
+    const access = appAccess.find(
+      (a) => a.userId === activeUser && a.appId === app.id
+    );
+
+    // if access, add, else delete
+    if (access) {
+      removeAppAccess(activeUser, app.id);
+    } else {
+      addAppAccess(activeUser, app.id);
+    }
+  }
 
   const panes = [
     {
@@ -47,6 +64,7 @@ const ManageUsers = ({
               <AppSelector
                 activeUser={activeUser}
                 activeUserApps={activeUserApps}
+                handleToggleAccess={handleToggleAccess}
               />
             ) : activeUser ? (
               <Spinner />
@@ -95,7 +113,17 @@ function mapStateToProps(state) {
   return {
     apiUsers: state.app.apiUsers,
     usersLoading: state.app.usersLoading,
+    allApps: state.admin.allApps,
+    appAccess: state.admin.appAccess,
+    appsLoading: state.admin.appsLoading,
+    accessLoading: state.admin.accessLoading,
   };
 }
 
-export default connect(mapStateToProps, { getAllUsers })(ManageUsers);
+export default connect(mapStateToProps, {
+  getAllUsers,
+  getAllApps,
+  getAllAccess,
+  addAppAccess,
+  removeAppAccess,
+})(ManageUsers);

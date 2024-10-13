@@ -1,7 +1,6 @@
 import Tab from "../components/Tab";
 import ManageUsers from "./tabs/ManageUsers/ManageUsers";
 import BuildLog from "./tabs/BuildLog/BuildLog";
-import { AdminProvider } from "./Context/adminContext";
 
 const AdminConsole = () => {
   const mainPanes = [
@@ -18,11 +17,7 @@ const AdminConsole = () => {
       },
     },
   ];
-  return (
-    <AdminProvider>
-      <Tab panes={mainPanes} />
-    </AdminProvider>
-  );
+  return <Tab panes={mainPanes} />;
 };
 
 export default AdminConsole;

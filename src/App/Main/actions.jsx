@@ -61,3 +61,21 @@ export function getApps() {
 //       toast.error(`Error updating change log: ${err}`);
 //     });
 // }
+
+// function publishBuild(versionType, changes, affectedUsers) {
+//     setBuildLoading(true);
+//     const users = Array.from(new Set(affectedUsers));
+//     apiCall("post", "/api/admin/build", {
+//       credentials: "include",
+//       versionType,
+//       changes,
+//       users,
+//     })
+//       .then((res) => {
+//         toast.success("Successfully published build #" + res.versionId);
+//       })
+//       .catch((err) => {
+//         toast.error(`Error publishing build: ${err}`);
+//       })
+//       .finally(() => setBuildLoading(false));
+//   }

@@ -5,6 +5,7 @@ import activities from "../Main/activity/reducers";
 import physique from "../Main/physique/reducers";
 import nutrition from "../Main/nutrition/reducers";
 import app from "../Main/reducers";
+import admin from "../Main/admin/reducers";
 
 const rootReducer = combineReducers({
   app,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   physique,
   nutrition,
   checkIns,
+  admin,
 });
 
 export default rootReducer;
