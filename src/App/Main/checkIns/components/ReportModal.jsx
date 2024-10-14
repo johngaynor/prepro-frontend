@@ -18,7 +18,10 @@ import {
 import CheckInDoc from "./Pdf/ReportPdf";
 import { DateTime } from "luxon";
 import Spinner from "../../components/Spinner";
-import { getSupplementLogs, getSupplements } from "../../supplements/actions";
+import {
+  getSupplementLogs,
+  getSupplements,
+} from "../../nutrition/supplements/actions";
 import { getWeightLogs } from "../../nutrition/actions";
 import { sendPdfToCoach } from "../actions";
 import { connect } from "react-redux";

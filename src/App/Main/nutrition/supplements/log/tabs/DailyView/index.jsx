@@ -14,7 +14,7 @@ import {
   Button,
 } from "semantic-ui-react";
 import { DateTime } from "luxon";
-import { InputField } from "../../../../components/FormFields";
+import { InputField } from "../../../../../components/FormFields";
 import MissedModal from "./components/MissedModal";
 import { connect } from "react-redux";
 import { toggleSupplementLog, addMissedSupplement } from "../../../actions";

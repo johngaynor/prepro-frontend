@@ -7,7 +7,7 @@ import {
   LOAD_EDIT_SUPPLEMENT_LOGS,
   FETCH_ADD_MISSED_SUPPLEMENT_LOGS,
   LOAD_ADD_MISSED_SUPPLEMENT_LOGS,
-} from "../../store/actionTypes";
+} from "../../../store/actionTypes";
 
 const DEFAULT_STATE = {
   supplements: null,

@@ -7,8 +7,8 @@ import {
   FETCH_EDIT_SUPPLEMENT_LOGS,
   LOAD_ADD_MISSED_SUPPLEMENT_LOGS,
   FETCH_ADD_MISSED_SUPPLEMENT_LOGS,
-} from "../../store/actionTypes";
-import API from "../../services/api";
+} from "../../../store/actionTypes";
+import API from "../../../services/api";
 
 export function getSupplements() {
   return API.get(

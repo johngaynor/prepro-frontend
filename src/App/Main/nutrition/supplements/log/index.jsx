@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import DailyView from "./tabs/DailyView";
 import MonthlyView from "./tabs/MonthlyView";
-import Tab from "../../components/Tab";
-import Spinner from "../../components/Spinner";
+import Tab from "../../../components/Tab";
+import Spinner from "../../../components/Spinner";
 import { getSupplements, getSupplementLogs } from "../actions";
 import { connect } from "react-redux";
 
