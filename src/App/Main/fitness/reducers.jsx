@@ -3,8 +3,8 @@ import {
   LOAD_WORKOUT_LOGS,
   FETCH_EDIT_WORKOUT_SUMMARY,
   LOAD_EDIT_WORKOUT_SUMMARY,
-  FETCH_EDIT_WORKOUT_EXERCISES,
-  LOAD_EDIT_WORKOUT_EXERCISES,
+  FETCH_EDIT_WORKOUT_EXERCISE,
+  LOAD_EDIT_WORKOUT_EXERCISE,
   FETCH_DELETE_WORKOUT_SUMMARY,
   LOAD_DELETE_WORKOUT_SUMMARY,
   FETCH_DELETE_WORKOUT_EXERCISE,
@@ -43,22 +43,33 @@ export default (state = DEFAULT_STATE, action) => {
       return { ...state, logsLoading: true };
     case LOAD_WORKOUT_LOGS:
       return { ...state, workoutLogs: action.workoutLogs, logsLoading: false };
-    // case FETCH_EDIT_WORKOUT_SUMMARY:
-    //   return { ...state };
-    // case LOAD_EDIT_WORKOUT_SUMMARY:
-    //   return { ...state };
-    // case FETCH_EDIT_WORKOUT_EXERCISES:
-    //   return { ...state };
-    // case LOAD_EDIT_WORKOUT_EXERCISES:
-    //   return { ...state };
-    // case FETCH_DELETE_WORKOUT_SUMMARY:
-    //   return { ...state };
-    // case LOAD_DELETE_WORKOUT_SUMMARY:
-    //   return { ...state };
-    // case FETCH_DELETE_WORKOUT_EXERCISE:
-    //   return { ...state };
-    // case LOAD_DELETE_WORKOUT_EXERCISE:
-    //   return { ...state };
+    case FETCH_EDIT_WORKOUT_SUMMARY:
+      return { ...state, editLoading: true };
+    case LOAD_EDIT_WORKOUT_SUMMARY:
+      return { ...state, editLoading: false, workoutLogs: null };
+    case FETCH_EDIT_WORKOUT_EXERCISE:
+      return { ...state, editLoading: true };
+    case LOAD_EDIT_WORKOUT_EXERCISE:
+      // will want to optimistically update the state here
+      return { ...state, editLoading: false, workoutLogs: null };
+    case FETCH_DELETE_WORKOUT_SUMMARY:
+      // update locally
+      const newLogs = state.workoutLogs.filter(
+        (l) => l.id !== action.workoutId
+      );
+      return { ...state, workoutLogs: newLogs, editLoading: true };
+    case LOAD_DELETE_WORKOUT_SUMMARY:
+      // handle failure case
+      return {
+        ...state,
+        editLoading: false,
+        workoutLogs: action.failed ? null : state.workoutLogs,
+      };
+    case FETCH_DELETE_WORKOUT_EXERCISE:
+      // will want to set this up to only modify the active workout and not refresh the entire state
+      return { ...state, editLoading: true };
+    case LOAD_DELETE_WORKOUT_EXERCISE:
+      return { ...state, editLoading: false, workoutLogs: null };
     case FETCH_EXERCISE_TYPES:
       return { ...state, typesLoading: true };
     case LOAD_EXERCISE_TYPES:
@@ -87,14 +98,19 @@ export default (state = DEFAULT_STATE, action) => {
     //   return { ...state };
     // case LOAD_DELETE_TEMPLATE_EXERCISE:
     //   return { ...state };
-    // case FETCH_COPY_WORKOUT_FROM_TEMPLATE:
-    //   return { ...state };
-    // case LOAD_COPY_WORKOUT_FROM_TEMPLATE:
-    //   return { ...state };
-    // case FETCH_CHANGE_EXERCISE_POSITION:
-    //   return { ...state };
-    // case LOAD_CHANGE_EXERCISE_POSITION:
-    //   return { ...state };
+    case FETCH_COPY_WORKOUT_FROM_TEMPLATE:
+      return { ...state, editLoading: true };
+    case LOAD_COPY_WORKOUT_FROM_TEMPLATE:
+      return { ...state, editLoading: false, workoutLogs: null };
+    case FETCH_CHANGE_EXERCISE_POSITION:
+      return { ...state, editLoading: true };
+    case LOAD_CHANGE_EXERCISE_POSITION:
+      return {
+        ...state,
+        editLoading: false,
+        workoutLogs: action.exercise.workoutId ? null : state.workoutLogs,
+        templates: action.exercise.templateId ? null : state.templates,
+      };
     default:
       return state;
   }

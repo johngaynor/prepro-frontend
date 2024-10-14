@@ -6,112 +6,12 @@ export const FitnessContext = createContext();
 
 export const FitnessProvider = ({ children }) => {
   // const [period, setPeriod] = useState(null); // will be used later to only grab logs within a certain period
-  const [workoutLogs, setWorkoutLogs] = useState(null);
   const [exerciseTypes, setExerciseTypes] = useState(null);
   const [workoutTemplates, setWorkoutTemplates] = useState(null);
   // loading states
-  const [logsLoading, setLogsLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
   const [exerciseTypesLoading, setExerciseTypesLoading] = useState(false);
   const [templatesLoading, setTemplatesLoading] = useState(false);
-
-  // get workout logs
-  // function getWorkoutLogs() {
-  //   setLogsLoading(true);
-  //   apiCall("get", "/api/fitness/logs")
-  //     .then((res) => {
-  //       if (res.result) {
-  //         setWorkoutLogs(res.result);
-  //       } else {
-  //         throw new Error("No result from API call...");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error(`Error getting workout logs: ${err.message}`);
-  //     })
-  //     .finally(() => setLogsLoading(false));
-  // }
-
-  // edit workout summaries
-  function editWorkoutSummary(values) {
-    setEditLoading(true);
-    apiCall("post", "/api/fitness/logs/summary", values)
-      .then(() => {
-        setWorkoutLogs(null);
-        toast.success("Successfully edited workout log!");
-      })
-      .catch((err) => {
-        toast.error(
-          `Error ${values.workoutId ? "updating" : "adding"} workout: ${
-            err.message
-          }`
-        );
-      })
-      .finally(() => setEditLoading(false));
-  }
-
-  // edit workout exercises/sets
-  function editWorkoutExercises(values) {
-    setEditLoading(true);
-    apiCall("post", "/api/fitness/logs/exercises", { ...values })
-      .then(() => {
-        setWorkoutLogs(null);
-        toast.success("Successfully edited workout exercise!");
-      })
-      .catch((err) => {
-        toast.error(
-          `Error ${
-            values.workoutId ? "updating" : "adding"
-          } workout exercise: ${err.message}`
-        );
-      })
-      .finally(() => setEditLoading(false));
-  }
-
-  // delete workout summary
-  function deleteWorkoutSummary(id) {
-    setEditLoading(true);
-    apiCall("delete", `/api/fitness/logs/summary/${id}`)
-      .then(() => {
-        setWorkoutLogs(null);
-        toast.success("Successfully deleted workout summary!");
-      })
-      .catch((err) => {
-        toast.error(`Error deleting workout summary: ${err.message}`);
-      })
-      .finally(() => setEditLoading(false));
-  }
-
-  // delete workout exercise/sets
-  function deleteWorkoutExercise(id) {
-    setEditLoading(true);
-    apiCall("delete", `/api/fitness/logs/exercise/${id}`)
-      .then(() => {
-        setWorkoutLogs(null);
-        toast.success("Successfully deleted workout exercise!");
-      })
-      .catch((err) => {
-        toast.error(`Error deleting workout exercise: ${err.message}`);
-      })
-      .finally(() => setEditLoading(false));
-  }
-
-  // get exercise types
-  // function getExerciseTypes() {
-  //   setExerciseTypesLoading(true);
-  //   apiCall("get", "/api/fitness/exercises/types")
-  //     .then((res) => {
-  //       if (res.result) {
-  //         setExerciseTypes(res.result);
-  //       } else {
-  //         throw new Error("No result from API call...");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error(`Error getting exercise types: ${err.message}`);
-  //     })
-  //     .finally(() => setExerciseTypesLoading(false));
-  // }
 
   // add new exercise type
   function addExerciseType(name, target) {
@@ -140,23 +40,6 @@ export const FitnessProvider = ({ children }) => {
       })
       .finally(() => setEditLoading(false));
   }
-
-  // get exercise templates
-  // function getWorkoutTemplates() {
-  //   setTemplatesLoading(true);
-  //   apiCall("get", "/api/fitness/templates")
-  //     .then((res) => {
-  //       if (res.result) {
-  //         setWorkoutTemplates(res.result);
-  //       } else {
-  //         throw new Error("No result from API call...");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error(`Error getting workout templates: ${err.message}`);
-  //     })
-  //     .finally(() => setTemplatesLoading(false));
-  // }
 
   // edit template exercises/sets
   function editTemplateExercises(values) {
@@ -188,60 +71,18 @@ export const FitnessProvider = ({ children }) => {
       .finally(() => setEditLoading(false));
   }
 
-  // copy workout from template
-  function copyWorkoutFromTemplate(workoutId, templateId) {
-    setEditLoading(true);
-    apiCall("post", "/api/fitness/logs/copy", { workoutId, templateId })
-      .then(() => {
-        setWorkoutLogs(null);
-        toast.success("Successfully copied workout template!");
-      })
-      .catch((err) => {
-        toast.error(`Error copying workout from template: ${err.message}`);
-      })
-      .finally(() => setEditLoading(false));
-  }
-
-  // change position of exercise relative to others
-  function changeExercisePosition(direction, exercise) {
-    setEditLoading(true);
-    apiCall("post", "/api/fitness/exercise/order", { direction, exercise })
-      .then(() => {
-        if (exercise.workoutId) {
-          setWorkoutLogs(null);
-        }
-        if (exercise.templateId) {
-          setWorkoutTemplates(null);
-        }
-
-        toast.success("Successfully changed order of exercise!");
-      })
-      .catch((err) => {
-        toast.error(`Error changing exercise order: ${err}`);
-      })
-      .finally(() => setEditLoading(false));
-  }
-
   return (
     <FitnessContext.Provider
       value={{
         editLoading,
-        editWorkoutSummary,
-        exerciseTypes,
-        exerciseTypesLoading,
-        workoutLogs,
-        logsLoading,
-        deleteWorkoutExercise,
         deleteExerciseType,
         addExerciseType,
-        editWorkoutExercises,
         workoutTemplates,
         templatesLoading,
         editTemplateExercises,
         deleteTemplateExercise,
-        copyWorkoutFromTemplate,
-        deleteWorkoutSummary,
-        changeExercisePosition,
+        exerciseTypes,
+        exerciseTypesLoading,
       }}
     >
       {children}

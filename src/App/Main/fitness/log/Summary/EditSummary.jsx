@@ -1,9 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Form, Button, Container } from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../../components/FormFields";
-import FitnessContext from "../../context/fitnessContext";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
+import { editWorkoutSummary, deleteWorkoutSummary } from "../../actions";
+import { connect } from "react-redux";
 
 const defaultValues = {
   comments: "",
@@ -11,7 +12,15 @@ const defaultValues = {
   timeCompleted: "",
 };
 
-const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
+const EditSummary = ({
+  selectedWorkout,
+  setEditMode,
+  setActiveTab,
+  date,
+  editLoading,
+  editWorkoutSummary,
+  deleteWorkoutSummary,
+}) => {
   const [formValues, setFormValues] = useState(defaultValues);
   const [formErrors, setFormErrors] = useState({});
 
@@ -22,9 +31,6 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
   }, [selectedWorkout]);
 
   const navigate = useNavigate();
-
-  const { editLoading, editWorkoutSummary, deleteWorkoutSummary } =
-    useContext(FitnessContext);
 
   function validateForm(vals) {
     const errors = {
@@ -127,4 +133,13 @@ const EditSummary = ({ selectedWorkout, setEditMode, setActiveTab, date }) => {
   );
 };
 
-export default EditSummary;
+function mapStateToProps(state) {
+  return {
+    editLoading: state.fitness.editLoading,
+  };
+}
+
+export default connect(mapStateToProps, {
+  editWorkoutSummary,
+  deleteWorkoutSummary,
+})(EditSummary);

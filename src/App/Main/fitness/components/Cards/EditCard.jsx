@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Grid,
   Button,
@@ -8,7 +8,7 @@ import {
   Container,
 } from "semantic-ui-react";
 import { InputField, DropdownField } from "../../../../components/FormFields";
-import FitnessContext from "../../../Context/fitnessContext";
+import { connect } from "react-redux";
 
 // exercise object needs the following params:
 // id: auto incremented identifier for the exercise
@@ -37,10 +37,9 @@ const ExerciseCard = ({
   handleCancel,
   handleSubmit,
   handleDelete,
+  exerciseTypes,
 }) => {
   const [item, setItem] = React.useState(exercise);
-
-  const { exerciseTypes } = useContext(FitnessContext);
 
   return (
     <Grid.Column
@@ -200,4 +199,10 @@ const ExerciseCard = ({
   );
 };
 
-export default ExerciseCard;
+function mapStateToProps(state) {
+  return {
+    exerciseTypes: state.fitness.exerciseTypes,
+  };
+}
+
+export default connect(mapStateToProps, {})(ExerciseCard);

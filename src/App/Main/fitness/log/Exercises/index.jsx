@@ -1,20 +1,22 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Grid, Button, Segment } from "semantic-ui-react";
-import FitnessContext from "../../context/fitnessContext";
 import CopyFromTemplate from "./components/CopyFromTemplate";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
 import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";
+import { connect } from "react-redux";
+import { editWorkoutExercise, deleteWorkoutExercise } from "../../actions";
+import { changeExercisePosition } from "../../actions";
 
-const Exercises = ({ selectedWorkout, lastWorkout }) => {
+const Exercises = ({
+  selectedWorkout,
+  lastWorkout,
+  editWorkoutExercise,
+  deleteWorkoutExercise,
+  changeExercisePosition,
+}) => {
   const [copyOpen, setCopyOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [activeExercise, setActiveExercise] = useState(null);
-
-  const {
-    editWorkoutExercises,
-    deleteWorkoutExercise,
-    changeExercisePosition,
-  } = useContext(FitnessContext);
 
   function handleEdit(id) {
     setActiveExercise(id);
@@ -29,8 +31,6 @@ const Exercises = ({ selectedWorkout, lastWorkout }) => {
     (e) => e.exerciseId === activeExerciseId
   );
 
-  console.log(selectedWorkout?.exercises);
-
   return (
     <Segment>
       <EditExerciseModal
@@ -40,7 +40,7 @@ const Exercises = ({ selectedWorkout, lastWorkout }) => {
           (e) => e.id === activeExercise
         )}
         setActiveExercise={setActiveExercise}
-        handleSubmit={editWorkoutExercises}
+        handleSubmit={editWorkoutExercise}
         handleDelete={deleteWorkoutExercise}
         handleChangePosition={changeExercisePosition}
         parentId={selectedWorkout.id}
@@ -89,4 +89,12 @@ const Exercises = ({ selectedWorkout, lastWorkout }) => {
   );
 };
 
-export default Exercises;
+function mapStateToProps(state) {
+  return {};
+}
+
+export default connect(mapStateToProps, {
+  editWorkoutExercise,
+  deleteWorkoutExercise,
+  changeExercisePosition,
+})(Exercises);

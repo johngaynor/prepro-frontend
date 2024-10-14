@@ -4,8 +4,10 @@ import FitnessContext from "../../context/fitnessContext";
 import { DropdownField } from "../../../components/FormFields";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
 import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";
+import { changeExercisePosition } from "../../actions";
+import { connect } from "react-redux";
 
-const Workouts = () => {
+const Workouts = ({ changeExercisePosition }) => {
   const [activeTemplate, setActiveTemplate] = useState(null);
   const [activeExercise, setActiveExercise] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
@@ -19,7 +21,6 @@ const Workouts = () => {
     getExerciseTypes,
     editTemplateExercises,
     deleteTemplateExercise,
-    changeExercisePosition,
   } = useContext(FitnessContext);
 
   useEffect(() => {
@@ -86,4 +87,19 @@ const Workouts = () => {
   );
 };
 
-export default Workouts;
+function mapStateToProps(state) {
+  return {
+    workoutTemplates: state.fitness.workoutTemplates,
+    templatesLoading: state.fitness.templatesLoading,
+    exerciseTypes: state.fitness.exerciseTypes,
+    exerciseTypesLoading: state.fitness.exerciseTypesLoading,
+  };
+}
+
+export default connect(mapStateToProps, {
+  // getWorkoutTemplates,
+  // getExerciseTypes,
+  // editTemplateExercises,
+  // deleteTemplateExercise,
+  changeExercisePosition,
+})(Workouts);

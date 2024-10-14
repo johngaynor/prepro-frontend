@@ -3,8 +3,8 @@ import {
   LOAD_WORKOUT_LOGS,
   FETCH_EDIT_WORKOUT_SUMMARY,
   LOAD_EDIT_WORKOUT_SUMMARY,
-  FETCH_EDIT_WORKOUT_EXERCISES,
-  LOAD_EDIT_WORKOUT_EXERCISES,
+  FETCH_EDIT_WORKOUT_EXERCISE,
+  LOAD_EDIT_WORKOUT_EXERCISE,
   FETCH_DELETE_WORKOUT_SUMMARY,
   LOAD_DELETE_WORKOUT_SUMMARY,
   FETCH_DELETE_WORKOUT_EXERCISE,
@@ -37,6 +37,44 @@ export function getWorkoutLogs() {
   );
 }
 
+export function editWorkoutSummary(values) {
+  return API.post(
+    "/api/fitness/logs/summary",
+    "Error updating workout summary",
+    values,
+    () => ({ type: LOAD_EDIT_WORKOUT_SUMMARY }),
+    () => ({ type: FETCH_EDIT_WORKOUT_SUMMARY })
+  );
+}
+
+export function deleteWorkoutSummary(workoutId) {
+  return API.delete(
+    `/api/fitness/logs/summary/${workoutId}`,
+    "Error deleting workout summary",
+    (failed) => ({ type: LOAD_DELETE_WORKOUT_SUMMARY, failed }),
+    () => ({ type: FETCH_DELETE_WORKOUT_SUMMARY, workoutId })
+  );
+}
+
+export function editWorkoutExercise(values) {
+  return API.post(
+    "/api/fitness/logs/exercise",
+    "Error updating workout exercise",
+    values,
+    () => ({ type: LOAD_EDIT_WORKOUT_EXERCISE }),
+    () => ({ type: FETCH_EDIT_WORKOUT_EXERCISE })
+  );
+}
+
+export function deleteWorkoutExercise(exerciseId) {
+  return API.delete(
+    `/api/fitness/logs/exercise/${exerciseId}`,
+    "Error deleting workout exercise",
+    () => ({ type: LOAD_DELETE_WORKOUT_EXERCISE }),
+    () => ({ type: FETCH_DELETE_WORKOUT_EXERCISE })
+  );
+}
+
 export function getExerciseTypes() {
   return API.get(
     "/api/fitness/exercises/types",
@@ -46,12 +84,32 @@ export function getExerciseTypes() {
   );
 }
 
+export function copyWorkoutFromTemplate(workoutId, templateId) {
+  return API.post(
+    "/api/fitness/logs/copy",
+    "Error copying workout from template",
+    { workoutId, templateId },
+    () => ({ type: LOAD_COPY_WORKOUT_FROM_TEMPLATE }),
+    () => ({ type: FETCH_COPY_WORKOUT_FROM_TEMPLATE })
+  );
+}
+
 export function getWorkoutTemplates() {
   return API.get(
     "/api/fitness/templates",
     "Error getting workout templates",
     (templates) => ({ type: LOAD_WORKOUT_TEMPLATES, templates }),
     () => ({ type: FETCH_WORKOUT_TEMPLATES })
+  );
+}
+
+export function changeExercisePosition(direction, exercise) {
+  return API.post(
+    "/api/fitness/exercise/order",
+    "Error changing exercise position",
+    { direction, exercise },
+    () => ({ type: LOAD_CHANGE_EXERCISE_POSITION, exercise }),
+    () => ({ type: FETCH_CHANGE_EXERCISE_POSITION })
   );
 }
 

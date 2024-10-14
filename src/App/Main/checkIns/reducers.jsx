@@ -53,7 +53,7 @@ export default (state = DEFAULT_STATE, action) => {
       const newCheckIns = state.checkIns.filter(
         (c) => c.id !== action.checkInId
       );
-      return { ...state, checkIns: newCheckIns };
+      return { ...state, checkIns: newCheckIns, editLoading: true };
     case LOAD_DELETE_CHECKIN:
       // handle failure case
       return {

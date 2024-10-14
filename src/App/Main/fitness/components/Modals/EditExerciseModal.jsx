@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DropdownField,
   InputField,
@@ -17,8 +17,8 @@ import {
   Container,
   Header,
 } from "semantic-ui-react";
-import FitnessContext from "../../context/fitnessContext";
 import { cloneDeep } from "lodash";
+import { connect } from "react-redux";
 
 const defaultValues = {
   exerciseId: "",
@@ -37,6 +37,7 @@ const EditExerciseModal = ({
   handleChangePosition,
   parentId,
   prevExercise,
+  exerciseTypes,
 }) => {
   const [formValues, setFormValues] = useState(defaultValues);
 
@@ -45,8 +46,6 @@ const EditExerciseModal = ({
       setFormValues(cloneDeep(exercise)); // make a deep clone to avoid mutating original object
     }
   }, [exercise]);
-
-  const { exerciseTypes } = useContext(FitnessContext);
 
   function handleCloseModal() {
     setModalOpen(false);
@@ -269,4 +268,10 @@ const EditExerciseModal = ({
   );
 };
 
-export default EditExerciseModal;
+function mapStateToProps(state) {
+  return {
+    exerciseTypes: state.fitness.exerciseTypes,
+  };
+}
+
+export default connect(mapStateToProps, {})(EditExerciseModal);

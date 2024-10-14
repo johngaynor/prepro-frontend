@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { DropdownField } from "../../../../components/FormFields";
 import {
   ModalHeader,
@@ -10,14 +10,18 @@ import {
   Grid,
   Form,
 } from "semantic-ui-react";
-import FitnessContext from "../../../context/fitnessContext";
 import toast from "react-hot-toast";
+import { copyWorkoutFromTemplate } from "../../../actions";
+import { connect } from "react-redux";
 
-const CopyFromTemplate = ({ open, setOpen, selectedWorkout }) => {
+const CopyFromTemplate = ({
+  open,
+  setOpen,
+  selectedWorkout,
+  copyWorkoutFromTemplate,
+  workoutTemplates,
+}) => {
   const [template, setTemplate] = useState("");
-
-  const { workoutTemplates, copyWorkoutFromTemplate } =
-    useContext(FitnessContext);
 
   function handleConfirm() {
     if (!template) {
@@ -70,4 +74,10 @@ const CopyFromTemplate = ({ open, setOpen, selectedWorkout }) => {
   );
 };
 
-export default CopyFromTemplate;
+function mapStateToProps(state) {
+  return { workoutTemplates: state.fitness.templates };
+}
+
+export default connect(mapStateToProps, {
+  copyWorkoutFromTemplate,
+})(CopyFromTemplate);
