@@ -12,7 +12,7 @@ import API from "../../../services/api";
 
 export function getSupplements() {
   return API.get(
-    "/api/supplements",
+    "/api/nutrition/supplements",
     "Error getting supplements",
     (supplements) => ({ type: LOAD_SUPPLEMENTS, supplements }),
     () => ({ type: FETCH_SUPPLEMENTS })
@@ -21,7 +21,7 @@ export function getSupplements() {
 
 export function getSupplementLogs() {
   return API.get(
-    `/api/supplements/logs`,
+    `/api/nutrition/supplements/logs`,
     "Error getting supplement logs",
     (logs) => ({
       type: LOAD_SUPPLEMENT_LOGS,
@@ -33,7 +33,7 @@ export function getSupplementLogs() {
 
 export function toggleSupplementLog(item, date) {
   return API.post(
-    "/api/supplements/logs",
+    "/api/nutrition/supplements/logs",
     "Error toggling supplement log",
     { item, date },
     (failed) => ({ type: LOAD_EDIT_SUPPLEMENT_LOGS, failed }),
@@ -43,19 +43,10 @@ export function toggleSupplementLog(item, date) {
 
 export function addMissedSupplement(item, date, reason) {
   return API.post(
-    "/api/supplements/logs/missed",
+    "/api/nutrition/supplements/logs/missed",
     "Error adding missed supplement",
     { item, date, reason },
     (failed) => ({ type: LOAD_ADD_MISSED_SUPPLEMENT_LOGS, failed }),
     () => ({ type: FETCH_ADD_MISSED_SUPPLEMENT_LOGS, item, date, reason })
   );
 }
-
-// export function toggleSupplementLog(item, date) {
-//   return API.post(
-//     "/api/supplements/logs",
-//     "Error toggling supplement log",
-//     { item, date },
-//     getCompletedSupplements
-//   );
-// }
