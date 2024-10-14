@@ -125,6 +125,7 @@ export const DropdownField = ({
   search = false,
   allowAdditions = false,
   error = false,
+  name,
 }) => {
   return (
     <Grid.Column>
@@ -144,10 +145,11 @@ export const DropdownField = ({
         placeholder={placeholder ?? label}
         options={options}
         value={value}
-        onChange={onChange}
+        onChange={(e, { name, value }) => onChange(e, { name, value })}
         multiple={multiple}
         search={search}
         allowAdditions={allowAdditions}
+        name={name}
       />
       {error && (
         <div>

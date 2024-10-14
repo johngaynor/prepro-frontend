@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button, Container, Form, Segment } from "semantic-ui-react";
-import { InputField, TextAreaField } from "../../components/FormFields";
+import {
+  DropdownField,
+  InputField,
+  TextAreaField,
+} from "../../components/FormFields";
 import { cloneDeep } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
@@ -75,11 +79,16 @@ const EditCheckIn = ({
             value={formValues.timeline || ""}
             onChange={handleChange}
           />
-          <InputField
-            label="Current diet phase (bulk, cut, etc.)"
+          <DropdownField
+            label="Current diet phase (bulk, cut, maintenance)"
             name="phase"
             value={formValues.phase || ""}
             onChange={handleChange}
+            options={[
+              { key: "bulk", text: "Bulk", value: "Bulk" },
+              { key: "cut", text: "Cut", value: "Cut" },
+              { key: "maintenance", text: "Maintenance", value: "Maintenance" },
+            ]}
           />
           <InputField
             label="Hormone altering or fat loss supplements used"
