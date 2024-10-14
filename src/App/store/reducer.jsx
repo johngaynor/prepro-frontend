@@ -6,6 +6,7 @@ import nutrition from "../Main/nutrition/reducers";
 import supplements from "../Main/nutrition/supplements/reducers";
 import app from "../Main/reducers";
 import admin from "../Main/admin/reducers";
+import fitness from "../Main/fitness/reducers";
 
 const rootReducer = combineReducers({
   app,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   nutrition,
   checkIns,
   admin,
+  fitness,
 });
 
 export default rootReducer;

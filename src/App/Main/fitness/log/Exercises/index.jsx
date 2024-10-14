@@ -29,6 +29,8 @@ const Exercises = ({ selectedWorkout, lastWorkout }) => {
     (e) => e.exerciseId === activeExerciseId
   );
 
+  console.log(selectedWorkout?.exercises);
+
   return (
     <Segment>
       <EditExerciseModal

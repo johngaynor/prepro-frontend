@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Grid, Button, Card, Header, Label } from "semantic-ui-react";
 import { ViewInput } from "../../../components/FormFields/view";
-import FitnessContext from "../../context/fitnessContext";
+import { connect } from "react-redux";
 
 // exercise object needs the following params:
 // id: auto incremented identifier for the exercise
@@ -22,9 +22,7 @@ import FitnessContext from "../../context/fitnessContext";
  *
  * @returns {JSX.Element} The rendered ViewExerciseCard component
  */
-const ViewExerciseCard = ({ exercise, index, handleEdit }) => {
-  const { exerciseTypes } = useContext(FitnessContext);
-
+const ViewExerciseCard = ({ exercise, index, handleEdit, exerciseTypes }) => {
   return (
     <Grid.Column
       mobile={16} // < 768
@@ -110,4 +108,10 @@ const ViewExerciseCard = ({ exercise, index, handleEdit }) => {
   );
 };
 
-export default ViewExerciseCard;
+function mapStateToProps(state) {
+  return {
+    exerciseTypes: state.fitness.exerciseTypes,
+  };
+}
+
+export default connect(mapStateToProps, {})(ViewExerciseCard);

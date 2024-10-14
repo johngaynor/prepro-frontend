@@ -16,21 +16,21 @@ export const FitnessProvider = ({ children }) => {
   const [templatesLoading, setTemplatesLoading] = useState(false);
 
   // get workout logs
-  function getWorkoutLogs() {
-    setLogsLoading(true);
-    apiCall("get", "/api/fitness/logs")
-      .then((res) => {
-        if (res.result) {
-          setWorkoutLogs(res.result);
-        } else {
-          throw new Error("No result from API call...");
-        }
-      })
-      .catch((err) => {
-        toast.error(`Error getting workout logs: ${err.message}`);
-      })
-      .finally(() => setLogsLoading(false));
-  }
+  // function getWorkoutLogs() {
+  //   setLogsLoading(true);
+  //   apiCall("get", "/api/fitness/logs")
+  //     .then((res) => {
+  //       if (res.result) {
+  //         setWorkoutLogs(res.result);
+  //       } else {
+  //         throw new Error("No result from API call...");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       toast.error(`Error getting workout logs: ${err.message}`);
+  //     })
+  //     .finally(() => setLogsLoading(false));
+  // }
 
   // edit workout summaries
   function editWorkoutSummary(values) {
@@ -97,21 +97,21 @@ export const FitnessProvider = ({ children }) => {
   }
 
   // get exercise types
-  function getExerciseTypes() {
-    setExerciseTypesLoading(true);
-    apiCall("get", "/api/fitness/exercises/types")
-      .then((res) => {
-        if (res.result) {
-          setExerciseTypes(res.result);
-        } else {
-          throw new Error("No result from API call...");
-        }
-      })
-      .catch((err) => {
-        toast.error(`Error getting exercise types: ${err.message}`);
-      })
-      .finally(() => setExerciseTypesLoading(false));
-  }
+  // function getExerciseTypes() {
+  //   setExerciseTypesLoading(true);
+  //   apiCall("get", "/api/fitness/exercises/types")
+  //     .then((res) => {
+  //       if (res.result) {
+  //         setExerciseTypes(res.result);
+  //       } else {
+  //         throw new Error("No result from API call...");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       toast.error(`Error getting exercise types: ${err.message}`);
+  //     })
+  //     .finally(() => setExerciseTypesLoading(false));
+  // }
 
   // add new exercise type
   function addExerciseType(name, target) {
@@ -142,21 +142,21 @@ export const FitnessProvider = ({ children }) => {
   }
 
   // get exercise templates
-  function getWorkoutTemplates() {
-    setTemplatesLoading(true);
-    apiCall("get", "/api/fitness/templates")
-      .then((res) => {
-        if (res.result) {
-          setWorkoutTemplates(res.result);
-        } else {
-          throw new Error("No result from API call...");
-        }
-      })
-      .catch((err) => {
-        toast.error(`Error getting workout templates: ${err.message}`);
-      })
-      .finally(() => setTemplatesLoading(false));
-  }
+  // function getWorkoutTemplates() {
+  //   setTemplatesLoading(true);
+  //   apiCall("get", "/api/fitness/templates")
+  //     .then((res) => {
+  //       if (res.result) {
+  //         setWorkoutTemplates(res.result);
+  //       } else {
+  //         throw new Error("No result from API call...");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       toast.error(`Error getting workout templates: ${err.message}`);
+  //     })
+  //     .finally(() => setTemplatesLoading(false));
+  // }
 
   // edit template exercises/sets
   function editTemplateExercises(values) {
@@ -229,15 +229,12 @@ export const FitnessProvider = ({ children }) => {
         editWorkoutSummary,
         exerciseTypes,
         exerciseTypesLoading,
-        getExerciseTypes,
         workoutLogs,
         logsLoading,
-        getWorkoutLogs,
         deleteWorkoutExercise,
         deleteExerciseType,
         addExerciseType,
         editWorkoutExercises,
-        getWorkoutTemplates,
         workoutTemplates,
         templatesLoading,
         editTemplateExercises,

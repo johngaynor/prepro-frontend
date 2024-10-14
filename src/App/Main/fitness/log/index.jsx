@@ -1,39 +1,43 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, Icon } from "semantic-ui-react";
 import Summary from "./Summary";
 import Exercises from "./Exercises";
-import FitnessContext, { FitnessProvider } from "../context/fitnessContext";
+import { FitnessProvider } from "../context/fitnessContext";
 import Spinner from "../../components/Spinner";
 import { useParams, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
+import { connect } from "react-redux";
+import {
+  getWorkoutLogs,
+  getExerciseTypes,
+  getWorkoutTemplates,
+} from "../actions";
 
-const Log = () => {
+const Log = ({
+  workoutLogs,
+  logsLoading,
+  getWorkoutLogs,
+  exerciseTypes,
+  exerciseTypesLoading,
+  getExerciseTypes,
+  templates,
+  templatesLoading,
+  getWorkoutTemplates,
+  ...props
+}) => {
   const [activeTab, setActiveTab] = useState(0);
   const [editMode, setEditMode] = useState(false);
-
-  const {
-    editLoading,
-    exerciseTypes,
-    exerciseTypesLoading,
-    getExerciseTypes,
-    workoutLogs,
-    logsLoading,
-    getWorkoutLogs,
-    workoutTemplates,
-    templatesLoading,
-    getWorkoutTemplates,
-  } = useContext(FitnessContext);
 
   useEffect(() => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
     if (!workoutLogs && !logsLoading) getWorkoutLogs();
-    if (!workoutTemplates && !templatesLoading) getWorkoutTemplates();
+    if (!templates && !templatesLoading) getWorkoutTemplates();
   }, [
     exerciseTypes,
     exerciseTypesLoading,
     workoutLogs,
     logsLoading,
-    workoutTemplates,
+    templates,
     templatesLoading,
   ]);
 
@@ -64,7 +68,7 @@ const Log = () => {
   return (
     <React.Fragment>
       <Accordion fluid styled>
-        {(logsLoading || editLoading) && <Spinner />}
+        {logsLoading && <Spinner />}
         <Accordion.Title
           active={activeTab === 1 || !selectedWorkout}
           onClick={() => {
@@ -95,12 +99,27 @@ const Log = () => {
   );
 };
 
-const ExerciseLog = () => {
+const ExerciseLog = (props) => {
   return (
     <FitnessProvider>
-      <Log />
+      <Log {...props} />
     </FitnessProvider>
   );
 };
 
-export default ExerciseLog;
+function mapStateToProps(state) {
+  return {
+    workoutLogs: state.fitness.workoutLogs,
+    logsLoading: state.fitness.logsLoading,
+    exerciseTypes: state.fitness.exerciseTypes,
+    exerciseTypesLoading: state.fitness.typesLoading,
+    templates: state.fitness.templates,
+    templatesLoading: state.fitness.templatesLoading,
+  };
+}
+
+export default connect(mapStateToProps, {
+  getWorkoutLogs,
+  getExerciseTypes,
+  getWorkoutTemplates,
+})(ExerciseLog);

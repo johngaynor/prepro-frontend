@@ -7,7 +7,7 @@ import { Segment } from "semantic-ui-react";
 import { connect } from "react-redux";
 // page imports
 import Logs from "./logs";
-import ExerciseLog from "./fitness/exerciseLog";
+import ExerciseLog from "./fitness/log";
 import DailyLogForm from "./logs/components/DailyLogForm/DailyLogForm";
 import AdminConsole from "./admin";
 import ExerciseManager from "./fitness/exercises";
