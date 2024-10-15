@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Accordion, Icon } from "semantic-ui-react";
 import Summary from "./Summary";
 import Exercises from "./Exercises";
-import { FitnessProvider } from "../context/fitnessContext";
 import Spinner from "../../components/Spinner";
 import { useParams, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
@@ -13,7 +12,7 @@ import {
   getWorkoutTemplates,
 } from "../actions";
 
-const Log = ({
+const FitnessLog = ({
   workoutLogs,
   logsLoading,
   getWorkoutLogs,
@@ -23,7 +22,6 @@ const Log = ({
   templates,
   templatesLoading,
   getWorkoutTemplates,
-  ...props
 }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [editMode, setEditMode] = useState(false);
@@ -99,14 +97,6 @@ const Log = ({
   );
 };
 
-const ExerciseLog = (props) => {
-  return (
-    <FitnessProvider>
-      <Log {...props} />
-    </FitnessProvider>
-  );
-};
-
 function mapStateToProps(state) {
   return {
     workoutLogs: state.fitness.workoutLogs,
@@ -122,4 +112,4 @@ export default connect(mapStateToProps, {
   getWorkoutLogs,
   getExerciseTypes,
   getWorkoutTemplates,
-})(ExerciseLog);
+})(FitnessLog);

@@ -1,11 +1,10 @@
 import React from "react";
-import { FitnessProvider } from "../context/fitnessContext";
 import Tab from "../../components/Tab";
 import Exercises from "./tabs/Exercises";
 import Gyms from "./tabs/Gyms";
 import Workouts from "./tabs/Workouts";
 
-const ExerciseManager = () => {
+const FitnessLogAdmin = () => {
   const mainPanes = [
     {
       menuItem: "Manage Workouts",
@@ -27,11 +26,7 @@ const ExerciseManager = () => {
       },
     },
   ];
-  return (
-    <FitnessProvider>
-      <Tab panes={mainPanes} />
-    </FitnessProvider>
-  );
+  return <Tab panes={mainPanes} />;
 };
 
-export default ExerciseManager;
+export default FitnessLogAdmin;

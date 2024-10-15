@@ -113,22 +113,40 @@ export function changeExercisePosition(direction, exercise) {
   );
 }
 
-// export function toggleSupplementLog(item, date) {
-//   return API.post(
-//     "/api/nutrition/supplements/logs",
-//     "Error toggling supplement log",
-//     { item, date },
-//     (failed) => ({ type: LOAD_EDIT_SUPPLEMENT_LOGS, failed }),
-//     () => ({ type: FETCH_EDIT_SUPPLEMENT_LOGS, item, date })
-//   );
-// }
+export function editTemplateExercise(values) {
+  return API.post(
+    "/api/fitness/templates/exercise",
+    "Error updating template exercise",
+    values,
+    () => ({ type: LOAD_EDIT_TEMPLATE_EXERCISE }),
+    () => ({ type: FETCH_EDIT_TEMPLATE_EXERCISE })
+  );
+}
 
-// export function addMissedSupplement(item, date, reason) {
-//   return API.post(
-//     "/api/nutrition/supplements/logs/missed",
-//     "Error adding missed supplement",
-//     { item, date, reason },
-//     (failed) => ({ type: LOAD_ADD_MISSED_SUPPLEMENT_LOGS, failed }),
-//     () => ({ type: FETCH_ADD_MISSED_SUPPLEMENT_LOGS, item, date, reason })
-//   );
-// }
+export function deleteTemplateExercise(exerciseId) {
+  return API.delete(
+    `/api/fitness/templates/exercise/${exerciseId}`,
+    "Error deleting template exercise",
+    () => ({ type: LOAD_DELETE_TEMPLATE_EXERCISE }),
+    () => ({ type: FETCH_DELETE_TEMPLATE_EXERCISE })
+  );
+}
+
+export function addExerciseType(name, target) {
+  return API.post(
+    "/api/fitness/exercises/type",
+    "Error adding exercise type",
+    { name, target },
+    () => ({ type: LOAD_ADD_EXERCISE_TYPE }),
+    () => ({ type: FETCH_ADD_EXERCISE_TYPE })
+  );
+}
+
+export function deleteExerciseType(id) {
+  return API.delete(
+    `/api/fitness/exercises/type/${id}`,
+    "Error deleting exercise type",
+    () => ({ type: LOAD_DELETE_EXERCISE_TYPE }),
+    () => ({ type: FETCH_DELETE_EXERCISE_TYPE })
+  );
+}

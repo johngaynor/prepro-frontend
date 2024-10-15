@@ -1,34 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Grid, Header, Tab } from "semantic-ui-react";
-import FitnessContext from "../../context/fitnessContext";
 import { DropdownField } from "../../../components/FormFields";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
 import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";
-import { changeExercisePosition } from "../../actions";
+import {
+  changeExercisePosition,
+  getWorkoutTemplates,
+  getExerciseTypes,
+  editTemplateExercise,
+  deleteTemplateExercise,
+} from "../../actions";
 import { connect } from "react-redux";
 
-const Workouts = ({ changeExercisePosition }) => {
+const Workouts = ({
+  changeExercisePosition,
+  templates,
+  templatesLoading,
+  getWorkoutTemplates,
+  exerciseTypes,
+  exerciseTypesLoading,
+  getExerciseTypes,
+  editTemplateExercise,
+  deleteTemplateExercise,
+}) => {
   const [activeTemplate, setActiveTemplate] = useState(null);
   const [activeExercise, setActiveExercise] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
 
-  const {
-    workoutTemplates,
-    templatesLoading,
-    getWorkoutTemplates,
-    exerciseTypes,
-    exerciseTypesLoading,
-    getExerciseTypes,
-    editTemplateExercises,
-    deleteTemplateExercise,
-  } = useContext(FitnessContext);
-
   useEffect(() => {
-    if (!workoutTemplates && !templatesLoading) getWorkoutTemplates();
+    if (!templates && !templatesLoading) getWorkoutTemplates();
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
-  }, [workoutTemplates, templatesLoading]);
+  }, [templates, templatesLoading, exerciseTypes, exerciseTypesLoading]);
 
-  const template = workoutTemplates?.find((t) => t.id === activeTemplate);
+  const template = templates?.find((t) => t.id === activeTemplate);
 
   function handleOpenModal(id) {
     setEditOpen(true);
@@ -41,9 +45,7 @@ const Workouts = ({ changeExercisePosition }) => {
       <DropdownField
         label="Workout Templates"
         options={
-          workoutTemplates
-            ? workoutTemplates.map((t) => ({ text: t.name, value: t.id }))
-            : []
+          templates ? templates.map((t) => ({ text: t.name, value: t.id })) : []
         }
         onChange={(e, { value }) => setActiveTemplate(value)}
       />
@@ -54,7 +56,7 @@ const Workouts = ({ changeExercisePosition }) => {
             setModalOpen={setEditOpen}
             exercise={template.exercises?.find((e) => e.id === activeExercise)}
             setActiveExercise={setActiveExercise}
-            handleSubmit={editTemplateExercises}
+            handleSubmit={editTemplateExercise}
             handleDelete={deleteTemplateExercise}
             handleChangePosition={changeExercisePosition}
             parentId={template.id}
@@ -89,7 +91,7 @@ const Workouts = ({ changeExercisePosition }) => {
 
 function mapStateToProps(state) {
   return {
-    workoutTemplates: state.fitness.workoutTemplates,
+    templates: state.fitness.templates,
     templatesLoading: state.fitness.templatesLoading,
     exerciseTypes: state.fitness.exerciseTypes,
     exerciseTypesLoading: state.fitness.exerciseTypesLoading,
@@ -97,9 +99,9 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  // getWorkoutTemplates,
-  // getExerciseTypes,
-  // editTemplateExercises,
-  // deleteTemplateExercise,
+  getWorkoutTemplates,
+  getExerciseTypes,
+  editTemplateExercise,
+  deleteTemplateExercise,
   changeExercisePosition,
 })(Workouts);

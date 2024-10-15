@@ -1,22 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
-import FitnessContext from "../../context/fitnessContext";
+import React, { useEffect, useState } from "react";
 import { Header, Tab, Grid, Confirm, Button } from "semantic-ui-react";
 import ExerciseCard from "../components/ExerciseCard";
-import Spinner from "../../../components/Spinner";
 import TypeForm from "../components/TypeForm";
+import {
+  getExerciseTypes,
+  addExerciseType,
+  deleteExerciseType,
+} from "../../actions";
+import { connect } from "react-redux";
 
-const Exercises = () => {
+const Exercises = ({
+  exerciseTypes,
+  exerciseTypesLoading,
+  getExerciseTypes,
+  deleteExerciseType,
+  addExerciseType,
+}) => {
   const [addOpen, setAddOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-
-  const {
-    editLoading,
-    exerciseTypes,
-    exerciseTypesLoading,
-    getExerciseTypes,
-    deleteExerciseType,
-    addExerciseType,
-  } = useContext(FitnessContext);
 
   useEffect(() => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
@@ -24,7 +25,6 @@ const Exercises = () => {
 
   return (
     <Tab.Pane>
-      {editLoading && <Spinner />}
       <TypeForm
         open={addOpen}
         onCancel={() => setAddOpen(false)}
@@ -66,4 +66,15 @@ const Exercises = () => {
   );
 };
 
-export default Exercises;
+function mapStateToProps(state) {
+  return {
+    exerciseTypes: state.fitness.exerciseTypes,
+    exerciseTypesLoading: state.fitness.typesLoading,
+  };
+}
+
+export default connect(mapStateToProps, {
+  getExerciseTypes,
+  deleteExerciseType,
+  addExerciseType,
+})(Exercises);

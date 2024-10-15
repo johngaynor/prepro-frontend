@@ -78,26 +78,26 @@ export default (state = DEFAULT_STATE, action) => {
         exerciseTypes: action.exerciseTypes,
         typesLoading: false,
       };
-    // case FETCH_ADD_EXERCISE_TYPE:
-    //   return { ...state };
-    // case LOAD_ADD_EXERCISE_TYPE:
-    //   return { ...state };
-    // case FETCH_DELETE_EXERCISE_TYPE:
-    //   return { ...state };
-    // case LOAD_DELETE_EXERCISE_TYPE:
-    //   return { ...state };
+    case FETCH_ADD_EXERCISE_TYPE:
+      return { ...state, editLoading: true };
+    case LOAD_ADD_EXERCISE_TYPE:
+      return { ...state, editLoading: false, exerciseTypes: null };
+    case FETCH_DELETE_EXERCISE_TYPE:
+      return { ...state, editLoading: true };
+    case LOAD_DELETE_EXERCISE_TYPE:
+      return { ...state, editLoading: false, exerciseTypes: null };
     case FETCH_WORKOUT_TEMPLATES:
       return { ...state, templatesLoading: true };
     case LOAD_WORKOUT_TEMPLATES:
       return { ...state, templates: action.templates, templatesLoading: false };
-    // case FETCH_EDIT_TEMPLATE_EXERCISE:
-    //   return { ...state };
-    // case LOAD_EDIT_TEMPLATE_EXERCISE:
-    //   return { ...state };
-    // case FETCH_DELETE_TEMPLATE_EXERCISE:
-    //   return { ...state };
-    // case LOAD_DELETE_TEMPLATE_EXERCISE:
-    //   return { ...state };
+    case FETCH_EDIT_TEMPLATE_EXERCISE:
+      return { ...state, editLoading: true };
+    case LOAD_EDIT_TEMPLATE_EXERCISE:
+      return { ...state, editLoading: false, templates: null };
+    case FETCH_DELETE_TEMPLATE_EXERCISE:
+      return { ...state, editLoading: true };
+    case LOAD_DELETE_TEMPLATE_EXERCISE:
+      return { ...state, editLoading: false, templates: null };
     case FETCH_COPY_WORKOUT_FROM_TEMPLATE:
       return { ...state, editLoading: true };
     case LOAD_COPY_WORKOUT_FROM_TEMPLATE:

@@ -10,7 +10,7 @@ import Logs from "./logs";
 import ExerciseLog from "./fitness/log";
 import DailyLogForm from "./logs/components/DailyLogForm/DailyLogForm";
 import AdminConsole from "./admin";
-import ExerciseManager from "./fitness/exercises";
+import FitnessLogAdmin from "./fitness/admin";
 import CheckInLogs from "./checkIns";
 import ActivityLogs from "./activity";
 import SupplementLogPage from "./nutrition/supplements/log";
@@ -39,7 +39,6 @@ const Main = ({ user, apps, ...props }) => {
 
   return (
     <div style={{ margin: "1rem" }}>
-      {/* {!apps && <Spinner />} */}
       <BreadCrumb path={location.pathname} />
       <Routes>
         <Route path="/" element={<Homepage startsWith={"/"} />} />
@@ -50,7 +49,7 @@ const Main = ({ user, apps, ...props }) => {
         <Route path="/logs/new/:logType" element={withAuth(DailyLogForm, 3)} />
         <Route
           path="/fitness/exercises"
-          element={withAuth(ExerciseManager, 4)}
+          element={withAuth(FitnessLogAdmin, 4)}
         />
         <Route path="/checkins" element={withAuth(CheckInLogs, 5)} />
 
