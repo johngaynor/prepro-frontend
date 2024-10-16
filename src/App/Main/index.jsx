@@ -14,6 +14,7 @@ import FitnessLogAdmin from "./fitness/admin";
 import CheckInLogs from "./checkIns";
 import ActivityLogs from "./activity";
 import SupplementLogPage from "./nutrition/supplements/log";
+import WeightLog from "./nutrition/weight/log";
 
 const Main = ({ user, apps, ...props }) => {
   const location = useLocation();
@@ -58,6 +59,11 @@ const Main = ({ user, apps, ...props }) => {
         <Route
           path="/nutrition/supplements"
           element={withAuth(SupplementLogPage, 7)}
+        />
+        <Route path="/nutrition/weight/log" element={withAuth(WeightLog, 8)} />
+        <Route
+          path="/nutrition/weight/log/:date"
+          element={withAuth(WeightLog, 8)}
         />
         <Route path="*" element={<Homepage startsWith={location.pathname} />} />
       </Routes>
