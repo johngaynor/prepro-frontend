@@ -23,6 +23,7 @@ export const InputField = ({
   disabled = false,
   loading = false,
   error = false,
+  name,
 }) => {
   return (
     <Grid.Column>
@@ -41,6 +42,7 @@ export const InputField = ({
         type={type}
         fluid
         value={value}
+        name={name}
         onChange={(e, { name, value }) => onChange(e, { name, value })}
         disabled={disabled}
         loading={loading}
