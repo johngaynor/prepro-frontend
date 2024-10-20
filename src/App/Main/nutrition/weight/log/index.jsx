@@ -13,6 +13,7 @@ const WeightLog = ({
   logsLoading,
   getWeightLogs,
   editWeightLog,
+  editLoading,
 }) => {
   const [weight, setWeight] = useState("");
 
@@ -63,7 +64,7 @@ const WeightLog = ({
 
   return (
     <Grid columns={1}>
-      {logsLoading && <Spinner />}
+      {(logsLoading || editLoading) && <Spinner />}
       <Grid.Column>
         <Header>Daily Weight Log</Header>
         <Segment
@@ -146,6 +147,7 @@ function mapStateToProps(state) {
   return {
     weightLogs: state.nutrition.weightLogs,
     logsLoading: state.nutrition.logsLoading,
+    editLoading: state.nutrition.editLoading,
   };
 }
 
