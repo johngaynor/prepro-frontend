@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Segment, Header, Button } from "semantic-ui-react";
-import { getWeightLogs } from "../../actions";
+import { editWeightLog, getWeightLogs } from "../../actions";
 import { connect } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { DateTime } from "luxon";
 import Spinner from "../../../components/Spinner";
 import { InputField } from "../../../components/FormFields";
+import useDebounce from "../../../customHooks/useDebounce";
 
-const WeightLog = ({ weightLogs, logsLoading, getWeightLogs }) => {
+const WeightLog = ({
+  weightLogs,
+  logsLoading,
+  getWeightLogs,
+  editWeightLog,
+}) => {
   const [weight, setWeight] = useState("");
 
   useEffect(() => {
@@ -28,7 +34,7 @@ const WeightLog = ({ weightLogs, logsLoading, getWeightLogs }) => {
 
   useEffect(() => {
     if (activeDate) {
-      setWeight(activeDate.amWeight || "");
+      setWeight(activeDate.weight || "");
     } else {
       setWeight("");
     }
@@ -46,6 +52,14 @@ const WeightLog = ({ weightLogs, logsLoading, getWeightLogs }) => {
 
     navigate(`/nutrition/weight/log/${newDate.toFormat("yyyy-MM-dd")}`);
   }
+
+  useDebounce(
+    async () => {
+      await editWeightLog(date, weight);
+    },
+    [weight],
+    600
+  );
 
   return (
     <Grid columns={1}>
@@ -135,4 +149,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getWeightLogs })(WeightLog);
+export default connect(mapStateToProps, { getWeightLogs, editWeightLog })(
+  WeightLog
+);
