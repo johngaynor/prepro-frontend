@@ -62,7 +62,7 @@ const ReportModal = ({
       const dateB = DateTime.fromISO(b.date);
       return dateA - dateB;
     })
-    .map((l) => ({ date: l.date, weight: parseFloat(l.amWeight) }));
+    .map((l) => ({ date: l.date, weight: parseFloat(l.weight) }));
 
   const filename = `${user.name} ${selectedDay?.date} Check In`;
 
