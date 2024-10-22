@@ -6,9 +6,7 @@ import Spinner from "./components/Spinner";
 import { Segment } from "semantic-ui-react";
 import { connect } from "react-redux";
 // page imports
-import Logs from "./logs";
 import ExerciseLog from "./fitness/log";
-import DailyLogForm from "./logs/components/DailyLogForm/DailyLogForm";
 import AdminConsole from "./admin";
 import FitnessLogAdmin from "./fitness/admin";
 import CheckInLogs from "./checkIns";
@@ -44,10 +42,8 @@ const Main = ({ user, apps, ...props }) => {
       <Routes>
         <Route path="/" element={<Homepage startsWith={"/"} />} />
         <Route path="/admin" element={withAuth(AdminConsole, 1)} />
-        <Route path="/logs" element={withAuth(Logs, 2)} />
         <Route path="/fitness/log" element={withAuth(ExerciseLog, 3)} />
         <Route path="/fitness/log/:date" element={withAuth(ExerciseLog, 3)} />
-        <Route path="/logs/new/:logType" element={withAuth(DailyLogForm, 3)} />
         <Route
           path="/fitness/exercises"
           element={withAuth(FitnessLogAdmin, 4)}
