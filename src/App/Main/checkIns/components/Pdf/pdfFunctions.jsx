@@ -371,7 +371,7 @@ export function DrawLineGraph({
   );
 }
 
-export function SupplementHeatmap({ last7Supplements, supplements }) {
+export function SupplementHeatmap({ last7SupplementLogs, supplements }) {
   return (
     <View
       style={{
@@ -382,7 +382,7 @@ export function SupplementHeatmap({ last7Supplements, supplements }) {
       {/* date headers */}
       <View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
         <View style={{ width: 100, marginRight: 20 }} />
-        {last7Supplements?.map((log, index) => (
+        {last7SupplementLogs?.map((log, index) => (
           <View
             key={"supp-day-header-" + index}
             style={{
@@ -427,7 +427,7 @@ export function SupplementHeatmap({ last7Supplements, supplements }) {
               </Text>
             </View>
 
-            {last7Supplements?.map((log, index) => {
+            {last7SupplementLogs?.map((log, index) => {
               const match = log.logs?.find((l) => l.supplementId === item.id);
 
               return (

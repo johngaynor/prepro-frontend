@@ -86,9 +86,147 @@ const RenderPdf = ({
   last7Supplements,
   supplements,
   supplementLogs,
+  last7Sleep,
 }) => {
+  const last7SleepHours = last7Sleep.map((log) => ({
+    date: log.date,
+    value: log.totalSleep,
+  }));
+
+  const last7SleepRecoveryIndex = last7Sleep.map((log) => ({
+    date: log.date,
+    value: log.recoveryIndex,
+  }));
+
+  console.log(last7SleepHours, last7SleepRecoveryIndex);
   return (
     <Document>
+      {/* Total sleep */}
+      <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
+        <Text
+          style={{
+            textDecoration: "underline",
+            marginBottom: 10,
+            fontSize: 12,
+          }}
+        >
+          Total Sleep - Summary
+        </Text>
+        <LogTable
+          lastWeight={lastWeight}
+          todayWeight={todayWeight}
+          phase={selectedDay?.phase}
+        />
+        {/* Last 7 Days (total hours asleep) */}
+        <View>
+          <Text
+            style={{
+              textDecoration: "underline",
+              marginBottom: -20,
+              fontSize: 12,
+            }}
+          >
+            Last 7 Days - Total Hours Asleep
+          </Text>
+          <View style={{ width: "100%", marginBottom: -5 }}>
+            <Svg style={{ height: 80, width: "120%" }}>
+              {last7SleepHours.map((log, index) => {
+                const x = 128 + 50 * index;
+
+                return (
+                  <Text
+                    style={{ fontSize: 8 }}
+                    transform={`translateX(${x}) translateY(${
+                      80 - 2
+                    }) rotate(-90)`}
+                    key={`log-${index}`}
+                  >
+                    {log && DateTime.fromISO(log.date).toFormat("yyyy-MM-dd")}
+                  </Text>
+                );
+              })}
+            </Svg>
+          </View>
+          <DrawLineGraph
+            max={getMax(last7SleepHours) + 2 || 300}
+            min={getMin(last7SleepHours) - 2 || 0}
+            data={last7SleepHours}
+          />
+          <View style={{ width: "100%", marginTop: -55 }}>
+            <Svg style={{ height: 80, width: "120%" }}>
+              {last7SleepHours.map((log, index) => {
+                const x = 128 + 50 * index;
+                return (
+                  <Text
+                    style={{ fontSize: 8 }}
+                    transform={`translateX(${x}) translateY(${
+                      80 - 2
+                    }) rotate(-90)`}
+                    key={`log-${index}`}
+                  >
+                    {log.value ? parseFloat(log.value).toFixed(1) : ""}
+                  </Text>
+                );
+              })}
+            </Svg>
+          </View>
+        </View>
+        {/* Last 7 Days (recovery index score) */}
+        <View>
+          <Text
+            style={{
+              textDecoration: "underline",
+              marginBottom: -20,
+              fontSize: 12,
+            }}
+          >
+            Last 7 Days - Recovery Score
+          </Text>
+          <View style={{ width: "100%", marginBottom: -5 }}>
+            <Svg style={{ height: 80, width: "120%" }}>
+              {last7SleepRecoveryIndex.map((log, index) => {
+                const x = 128 + 50 * index;
+
+                return (
+                  <Text
+                    style={{ fontSize: 8 }}
+                    transform={`translateX(${x}) translateY(${
+                      80 - 2
+                    }) rotate(-90)`}
+                    key={`log-${index}`}
+                  >
+                    {log && DateTime.fromISO(log.date).toFormat("yyyy-MM-dd")}
+                  </Text>
+                );
+              })}
+            </Svg>
+          </View>
+          <DrawLineGraph
+            max={100}
+            min={0}
+            data={last7SleepRecoveryIndex}
+            step={10}
+          />
+          <View style={{ width: "100%", marginTop: -55 }}>
+            <Svg style={{ height: 80, width: "120%" }}>
+              {last7SleepRecoveryIndex.map((log, index) => {
+                const x = 128 + 50 * index;
+                return (
+                  <Text
+                    style={{ fontSize: 8 }}
+                    transform={`translateX(${x}) translateY(${
+                      80 - 2
+                    }) rotate(-90)`}
+                    key={`log-${index}`}
+                  >
+                    {log.value ? parseFloat(log.value).toFixed(1) : ""}
+                  </Text>
+                );
+              })}
+            </Svg>
+          </View>
+        </View>
+      </Page>
       <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         {/* Header section */}
         <View
@@ -254,6 +392,7 @@ const RenderPdf = ({
           </View>
         </View>
       </Page>
+
       {/* Supplement log */}
       <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         <Text

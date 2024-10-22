@@ -1,20 +1,6 @@
 import { DateTime } from "luxon";
 import RenderPdf from "./RenderPdf";
 
-function getMax(values) {
-  const filteredValues = values
-    .map((v) => v.value)
-    .filter((v) => v !== null && v !== undefined);
-  return filteredValues.length > 0 ? Math.max(...filteredValues) : null;
-}
-
-function getMin(values) {
-  const filteredValues = values
-    .map((v) => v.value)
-    .filter((v) => v !== null && v !== undefined);
-  return filteredValues.length > 0 ? Math.min(...filteredValues) : null;
-}
-
 const CheckInDoc = ({
   selectedDay,
   dailyLogs = [],
@@ -91,8 +77,6 @@ const CheckInDoc = ({
           .reverse()
       : [];
 
-  console.log(last7Sleep);
-
   return (
     <RenderPdf
       selectedDay={selectedDay}
@@ -103,6 +87,7 @@ const CheckInDoc = ({
       last7Supplements={last7Supplements}
       supplements={supplements}
       supplementLogs={supplementLogs}
+      last7Sleep={last7Sleep}
     />
   );
 };
