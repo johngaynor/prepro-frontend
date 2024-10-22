@@ -84,6 +84,7 @@ const ReportModal = ({
     lastCheckIn,
     supplements,
     supplementLogs,
+    sleepLogs,
   };
 
   async function handleSendPdf(reportPdf, filename, checkInId) {
@@ -101,7 +102,9 @@ const ReportModal = ({
       onClose={handleCloseModal}
       open={modalOpen === "true" ? true : false}
     >
-      {(supplementsLoading || supplementLogsLoading) && <Spinner />}
+      {(supplementsLoading || supplementLogsLoading || sleepLogsLoading) && (
+        <Spinner />
+      )}
       <ModalHeader>
         <Container style={{ display: "flex", justifyContent: "space-between" }}>
           <Header>Check In Report</Header>
