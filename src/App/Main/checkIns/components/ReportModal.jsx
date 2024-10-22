@@ -23,6 +23,7 @@ import {
   getSupplements,
 } from "../../nutrition/supplements/actions";
 import { getWeightLogs } from "../../nutrition/actions";
+import { getSleepLogs } from "../../sleep/actions";
 import { sendPdfToCoach } from "../actions";
 import { connect } from "react-redux";
 
@@ -43,6 +44,9 @@ const ReportModal = ({
   getWeightLogs,
   sendPdfToCoach,
   user,
+  sleepLogs,
+  sleepLogsLoading,
+  getSleepLogs,
 }) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
 
@@ -50,7 +54,15 @@ const ReportModal = ({
     if (!supplements && !supplementsLoading) getSupplements();
     if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
     if (!weightLogs && !weightLogsLoading) getWeightLogs();
-  }, [supplements, supplementsLoading, supplementLogs, supplementLogsLoading]);
+    if (!sleepLogs && !sleepLogsLoading) getSleepLogs();
+  }, [
+    supplements,
+    supplementsLoading,
+    supplementLogs,
+    supplementLogsLoading,
+    sleepLogs,
+    sleepLogsLoading,
+  ]);
 
   useEffect(() => {
     if (!pdf.loading) update(CheckInDoc({ selectedDay }));
@@ -140,6 +152,8 @@ function mapStateToProps(state) {
     weightLogs: state.nutrition.weightLogs,
     weightLogsLoading: state.nutrition.logsLoading,
     user: state.app.user,
+    sleepLogs: state.sleep.logs,
+    sleepLogsLoading: state.sleep.logsLoading,
   };
 }
 
@@ -148,4 +162,5 @@ export default connect(mapStateToProps, {
   getSupplementLogs,
   getWeightLogs,
   sendPdfToCoach,
+  getSleepLogs,
 })(ReportModal);
