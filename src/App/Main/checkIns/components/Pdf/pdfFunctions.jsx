@@ -499,3 +499,10 @@ export function SupplementHeatmap({ last7SupplementLogs, supplements }) {
     </View>
   );
 }
+
+export function getTime(time) {
+  const hours = Math.floor(time);
+  const minutes = Math.floor((time - hours) * 60);
+
+  return `${hours}h ${minutes}m`;
+}

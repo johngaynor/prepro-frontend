@@ -77,6 +77,25 @@ const CheckInDoc = ({
           .reverse()
       : [];
 
+  const last30Sleep =
+    selectedDay && sleepLogs
+      ? Array.from({ length: 30 })
+          .map((_, index) => {
+            const currentDay = DateTime.fromISO(selectedDay.date);
+            const day = currentDay
+              .minus({ days: index })
+              .startOf("day")
+              .toISODate();
+            const log = sleepLogs.find((l) => l.date === day);
+            return {
+              date: day,
+              totalSleep: parseFloat(log?.totalSleep) || null,
+              recoveryIndex: log?.recoveryIndex || null,
+            };
+          })
+          .reverse()
+      : [];
+
   return (
     <RenderPdf
       selectedDay={selectedDay}
@@ -88,6 +107,7 @@ const CheckInDoc = ({
       supplements={supplements}
       supplementLogs={supplementLogs}
       last7Sleep={last7Sleep}
+      last30Sleep={last30Sleep}
     />
   );
 };
