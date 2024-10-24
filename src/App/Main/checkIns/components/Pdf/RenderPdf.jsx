@@ -151,145 +151,6 @@ const RenderPdf = ({
 
   return (
     <Document>
-      {/* Total sleep */}
-      <Page size="letter" style={{ padding: "75 100", fontSize: 10 }}>
-        <Text
-          style={{
-            textDecoration: "underline",
-            marginBottom: 10,
-            fontSize: 12,
-          }}
-        >
-          Summary - Total Sleep (hours)
-        </Text>
-        <SleepLogTable
-          last7={last7SleepHours}
-          last30={last30SleepHours}
-          hours
-        />
-        {/* Last 30 days - sleep hours */}
-        <View>
-          <Text
-            style={{
-              textDecoration: "underline",
-              marginBottom: -20,
-              fontSize: 12,
-            }}
-          >
-            Last 30 Days - Total Sleep (hours)
-          </Text>
-          <View style={{ width: "100%", marginBottom: -5 }}>
-            <Svg style={{ height: 80, width: "120%" }}>
-              {last30SleepHours.map((log, index) => {
-                const x = 52 + 13.5 * index;
-
-                return (
-                  <Text
-                    style={{ fontSize: 8 }}
-                    transform={`translateX(${x}) translateY(${
-                      80 - 2
-                    }) rotate(-90)`}
-                    key={`log-${index}`}
-                  >
-                    {log && DateTime.fromISO(log.date).toFormat("yyyy-MM-dd")}
-                  </Text>
-                );
-              })}
-            </Svg>
-          </View>
-          <DrawLineGraph
-            max={getMax(last30SleepHours) + 1 || 300}
-            min={getMin(last30SleepHours) - 2 || 0}
-            data={last30SleepHours}
-          />
-          <View style={{ width: "100%", marginTop: -55 }}>
-            <Svg style={{ height: 80, width: "120%" }}>
-              {last30SleepHours.map((log, index) => {
-                const x = 52 + 13.5 * index;
-                return (
-                  <Text
-                    style={{ fontSize: 8 }}
-                    transform={`translateX(${x}) translateY(${
-                      80 - 2
-                    }) rotate(-90)`}
-                    key={`log-${index}`}
-                  >
-                    {log.value ? parseFloat(log.value).toFixed(1) : ""}
-                  </Text>
-                );
-              })}
-            </Svg>
-          </View>
-        </View>
-        <Text
-          style={{
-            textDecoration: "underline",
-            marginBottom: 10,
-            fontSize: 12,
-          }}
-        >
-          Summary - Recovery Score (1-100)
-        </Text>
-        <SleepLogTable
-          last7={last7SleepRecoveryIndex}
-          last30={last30SleepRecoveryIndex}
-        />
-        {/* Last 30 days - recovery index */}
-        <View>
-          <Text
-            style={{
-              textDecoration: "underline",
-              marginBottom: -20,
-              fontSize: 12,
-            }}
-          >
-            Last 30 Days - Recovery Score (1-100)
-          </Text>
-          <View style={{ width: "100%", marginBottom: 10 }}>
-            <Svg style={{ height: 80, width: "120%" }}>
-              {last30SleepRecoveryIndex.map((log, index) => {
-                const x = 52 + 13.5 * index;
-
-                return (
-                  <Text
-                    style={{ fontSize: 8 }}
-                    transform={`translateX(${x}) translateY(${
-                      80 - 2
-                    }) rotate(-90)`}
-                    key={`log-${index}`}
-                  >
-                    {log && DateTime.fromISO(log.date).toFormat("yyyy-MM-dd")}
-                  </Text>
-                );
-              })}
-            </Svg>
-          </View>
-          <DrawLineGraph
-            max={100}
-            min={0}
-            data={last30SleepRecoveryIndex}
-            step={10}
-          />
-          <View style={{ width: "100%", marginTop: -55 }}>
-            <Svg style={{ height: 80, width: "120%" }}>
-              {last30SleepRecoveryIndex.map((log, index) => {
-                const x = 52 + 13.5 * index;
-                return (
-                  <Text
-                    style={{ fontSize: 8 }}
-                    transform={`translateX(${x}) translateY(${
-                      80 - 2
-                    }) rotate(-90)`}
-                    key={`log-${index}`}
-                  >
-                    {log.value ? parseFloat(log.value).toFixed(1) : ""}
-                  </Text>
-                );
-              })}
-            </Svg>
-          </View>
-        </View>
-      </Page>
       <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         {/* Header section */}
         <View
@@ -438,6 +299,146 @@ const RenderPdf = ({
           <View style={{ width: "100%", marginTop: -55 }}>
             <Svg style={{ height: 80, width: "120%" }}>
               {last30Weight.map((log, index) => {
+                const x = 52 + 13.5 * index;
+                return (
+                  <Text
+                    style={{ fontSize: 8 }}
+                    transform={`translateX(${x}) translateY(${
+                      80 - 2
+                    }) rotate(-90)`}
+                    key={`log-${index}`}
+                  >
+                    {log.value ? parseFloat(log.value).toFixed(1) : ""}
+                  </Text>
+                );
+              })}
+            </Svg>
+          </View>
+        </View>
+      </Page>
+
+      {/* Sleep report */}
+      <Page size="letter" style={{ padding: "75 100", fontSize: 10 }}>
+        <Text
+          style={{
+            textDecoration: "underline",
+            marginBottom: 10,
+            fontSize: 12,
+          }}
+        >
+          Summary - Total Sleep (hours)
+        </Text>
+        <SleepLogTable
+          last7={last7SleepHours}
+          last30={last30SleepHours}
+          hours
+        />
+        {/* Last 30 days - sleep hours */}
+        <View>
+          <Text
+            style={{
+              textDecoration: "underline",
+              marginBottom: -20,
+              fontSize: 12,
+            }}
+          >
+            Last 30 Days - Total Sleep (hours)
+          </Text>
+          <View style={{ width: "100%", marginBottom: -5 }}>
+            <Svg style={{ height: 80, width: "120%" }}>
+              {last30SleepHours.map((log, index) => {
+                const x = 52 + 13.5 * index;
+
+                return (
+                  <Text
+                    style={{ fontSize: 8 }}
+                    transform={`translateX(${x}) translateY(${
+                      80 - 2
+                    }) rotate(-90)`}
+                    key={`log-${index}`}
+                  >
+                    {log && DateTime.fromISO(log.date).toFormat("yyyy-MM-dd")}
+                  </Text>
+                );
+              })}
+            </Svg>
+          </View>
+          <DrawLineGraph
+            max={getMax(last30SleepHours) + 1 || 300}
+            min={getMin(last30SleepHours) - 2 || 0}
+            data={last30SleepHours}
+          />
+          <View style={{ width: "100%", marginTop: -55 }}>
+            <Svg style={{ height: 80, width: "120%" }}>
+              {last30SleepHours.map((log, index) => {
+                const x = 52 + 13.5 * index;
+                return (
+                  <Text
+                    style={{ fontSize: 8 }}
+                    transform={`translateX(${x}) translateY(${
+                      80 - 2
+                    }) rotate(-90)`}
+                    key={`log-${index}`}
+                  >
+                    {log.value ? parseFloat(log.value).toFixed(1) : ""}
+                  </Text>
+                );
+              })}
+            </Svg>
+          </View>
+        </View>
+        <Text
+          style={{
+            textDecoration: "underline",
+            marginBottom: 10,
+            fontSize: 12,
+          }}
+        >
+          Summary - Recovery Score (1-100)
+        </Text>
+        <SleepLogTable
+          last7={last7SleepRecoveryIndex}
+          last30={last30SleepRecoveryIndex}
+        />
+        {/* Last 30 days - recovery index */}
+        <View>
+          <Text
+            style={{
+              textDecoration: "underline",
+              marginBottom: -20,
+              fontSize: 12,
+            }}
+          >
+            Last 30 Days - Recovery Score (1-100)
+          </Text>
+          <View style={{ width: "100%", marginBottom: 10 }}>
+            <Svg style={{ height: 80, width: "120%" }}>
+              {last30SleepRecoveryIndex.map((log, index) => {
+                const x = 52 + 13.5 * index;
+
+                return (
+                  <Text
+                    style={{ fontSize: 8 }}
+                    transform={`translateX(${x}) translateY(${
+                      80 - 2
+                    }) rotate(-90)`}
+                    key={`log-${index}`}
+                  >
+                    {log && DateTime.fromISO(log.date).toFormat("yyyy-MM-dd")}
+                  </Text>
+                );
+              })}
+            </Svg>
+          </View>
+          <DrawLineGraph
+            max={100}
+            min={0}
+            data={last30SleepRecoveryIndex}
+            step={10}
+          />
+          <View style={{ width: "100%", marginTop: -55 }}>
+            <Svg style={{ height: 80, width: "120%" }}>
+              {last30SleepRecoveryIndex.map((log, index) => {
                 const x = 52 + 13.5 * index;
                 return (
                   <Text
