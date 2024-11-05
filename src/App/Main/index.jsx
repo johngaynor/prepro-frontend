@@ -13,6 +13,7 @@ import CheckInLogs from "./checkIns";
 import ActivityLogs from "./activity";
 import SupplementLogPage from "./nutrition/supplements/log";
 import WeightLog from "./nutrition/weight/log";
+import Dashboards from "./dashboards";
 
 const Main = ({ user, apps, ...props }) => {
   const location = useLocation();
@@ -61,6 +62,7 @@ const Main = ({ user, apps, ...props }) => {
           path="/nutrition/weight/log/:date"
           element={withAuth(WeightLog, 8)}
         />
+        <Route path="/dashboards" element={withAuth(Dashboards, 9)} />
         <Route path="*" element={<Homepage startsWith={location.pathname} />} />
       </Routes>
     </div>
