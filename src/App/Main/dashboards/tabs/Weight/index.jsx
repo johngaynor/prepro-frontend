@@ -10,8 +10,14 @@ import { DropdownField } from "../../../components/FormFields";
 const smallOptions = [
   { text: "Last 7 Days", value: 7 },
   { text: "Last 14 Days", value: 14 },
-  { text: "Last 30 Days", value: 30 },
-  { text: "Last 60 Days", value: 60 },
+  { text: "Last Month", value: 30 },
+  { text: "Last 2 Months", value: 60 },
+];
+
+const largeOptions = [
+  { text: "Last 6 Months", value: 120 },
+  { text: "Last Year", value: 365 },
+  { text: "All Time", value: "all" },
 ];
 
 const Weight = ({
@@ -22,6 +28,7 @@ const Weight = ({
 }) => {
   const [primary, setPrimary] = useState(7);
   const [secondary, setSecondary] = useState(30);
+  const [tertiary, setTertiary] = useState(120);
 
   useEffect(() => {
     if (!weightLogs && !logsLoading) getWeightLogs();
@@ -32,9 +39,28 @@ const Weight = ({
         .map((_, index) => {
           const date = DateTime.now().minus({ days: index }).startOf("day");
           const log = weightLogs.find((l) => l.date === date.toISODate());
+
+          let count = 0;
+
+          const previous = (
+            Array.from({ length: primary }).reduce((acc, _, i) => {
+              // const retArr = [...acc];
+              const movingDate = date.minus({ days: i }).startOf("day");
+              const movingLog = weightLogs.find(
+                (l) => l.date === movingDate.toISODate()
+              );
+
+              if (movingLog && movingLog.weight) {
+                count++;
+                return (acc += parseFloat(movingLog.weight));
+              }
+            }, 0) / count
+          ).toFixed(1);
+
           return {
             date: date.toFormat("MMM dd"),
             value: log?.weight || null,
+            moving: !isNaN(previous) ? previous : null,
           };
         })
         .reverse()
@@ -45,9 +71,28 @@ const Weight = ({
         .map((_, index) => {
           const date = DateTime.now().minus({ days: index }).startOf("day");
           const log = weightLogs.find((l) => l.date === date.toISODate());
+
+          let count = 0;
+
+          const previous = (
+            Array.from({ length: secondary }).reduce((acc, _, i) => {
+              // const retArr = [...acc];
+              const movingDate = date.minus({ days: i }).startOf("day");
+              const movingLog = weightLogs.find(
+                (l) => l.date === movingDate.toISODate()
+              );
+
+              if (movingLog && movingLog.weight) {
+                count++;
+                return (acc += parseFloat(movingLog.weight));
+              }
+            }, 0) / count
+          ).toFixed(1);
+
           return {
             date: date.toFormat("MMM dd"),
             value: log?.weight || null,
+            moving: !isNaN(previous) ? previous : null,
           };
         })
         .reverse()
@@ -59,8 +104,13 @@ const Weight = ({
         .reduce((min, current) => (current < min ? current : min))
     : null;
 
-  const allTime = weightLogs
-    ? Array.from({ length: DateTime.now().diff(oldestDate, "days").days + 1 })
+  const tertiaryData = weightLogs
+    ? Array.from({
+        length:
+          tertiary === "all"
+            ? DateTime.now().diff(oldestDate, "days").days + 1
+            : tertiary,
+      })
         .map((_, index) => {
           const date = DateTime.now().minus({ days: index }).startOf("day");
           const log = weightLogs.find((l) => l.date === date.toISODate());
@@ -78,39 +128,87 @@ const Weight = ({
       <Grid columns={2}>
         <Grid.Column>
           <Segment>
-            <DropdownField
-              options={smallOptions}
-              value={primary}
-              onChange={(e, { value }) => setPrimary(value)}
-            />
+            <Grid columns={2}>
+              <DropdownField
+                options={smallOptions}
+                value={primary}
+                onChange={(e, { value }) => setPrimary(value)}
+              />
+              <Grid.Column
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Header as="h2">
+                  {primaryData[0]?.date} -{" "}
+                  {primaryData[primaryData.length - 1]?.date}
+                </Header>
+              </Grid.Column>
+            </Grid>
             <WeightChart
               data={primaryData}
-              lineColor="#06AED5"
+              primaryLine="#086788"
+              secondaryLine="#06AED5"
               style={{ marginTop: 30 }}
             />
           </Segment>
         </Grid.Column>
         <Grid.Column>
           <Segment>
-            <DropdownField
-              options={smallOptions}
-              value={secondary}
-              onChange={(e, { value }) => setSecondary(value)}
-            />
+            <Grid columns={2}>
+              <DropdownField
+                options={smallOptions}
+                value={secondary}
+                onChange={(e, { value }) => setSecondary(value)}
+              />
+              <Grid.Column
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Header as="h2">
+                  {secondaryData[0]?.date} -{" "}
+                  {secondaryData[secondaryData.length - 1]?.date}
+                </Header>
+              </Grid.Column>
+            </Grid>
+
             <WeightChart
               data={secondaryData}
-              lineColor="#086788"
+              primaryLine="#086788"
+              secondaryLine="#06AED5"
               style={{ marginTop: 30 }}
             />
           </Segment>
         </Grid.Column>
       </Grid>
       <Segment>
-        <Header as="h2">
-          All Time ({oldestDate?.toFormat("MMM dd, yyyy")} -{" "}
-          {DateTime.now().toFormat("MMM dd, yyyy")})
-        </Header>
-        <WeightChart data={allTime} dot={false} lineColor="#078BAF" />
+        <Grid columns={2}>
+          <DropdownField
+            options={largeOptions}
+            value={tertiary}
+            onChange={(e, { value }) => setTertiary(value)}
+          />
+          <Grid.Column
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Header as="h2">
+              {tertiaryData[0]?.date} -{" "}
+              {tertiaryData[tertiaryData.length - 1]?.date}
+            </Header>
+          </Grid.Column>
+        </Grid>
+        <WeightChart
+          data={tertiaryData}
+          dot={false}
+          primaryLine="#086788"
+          secondaryLine="#06AED5"
+        />
       </Segment>
     </Tab.Pane>
   );
