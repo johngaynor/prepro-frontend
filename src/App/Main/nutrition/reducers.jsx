@@ -5,6 +5,8 @@ import {
   LOAD_EDIT_WEIGHT_LOG,
   FETCH_DIET_LOGS,
   LOAD_DIET_LOGS,
+  FETCH_EDIT_DIET_LOG,
+  LOAD_EDIT_DIET_LOG,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -29,6 +31,10 @@ export default (state = DEFAULT_STATE, action) => {
       return { ...state, dietLogsLoading: true };
     case LOAD_DIET_LOGS:
       return { ...state, dietLogs: action.dietLogs, dietLogsLoading: false };
+    case FETCH_EDIT_DIET_LOG:
+      return { ...state, editLoading: true };
+    case LOAD_EDIT_DIET_LOG:
+      return { ...state, editLoading: false, dietLogs: null };
     default:
       return state;
   }

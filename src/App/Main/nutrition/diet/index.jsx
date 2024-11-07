@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import History from "./tabs/History";
 import Tab from "../../components/Tab";
 import Spinner from "../../components/Spinner";
@@ -7,6 +7,8 @@ import { connect } from "react-redux";
 import { Button, Grid, Header } from "semantic-ui-react";
 
 const DietLog = ({ dietLogs, dietLogsLoading, getDietLogs }) => {
+  const [modalOpen, setModalOpen] = useState(null);
+
   useEffect(() => {
     if (!dietLogs && !dietLogsLoading) getDietLogs();
   }, [dietLogs, dietLogsLoading]);
@@ -15,7 +17,13 @@ const DietLog = ({ dietLogs, dietLogsLoading, getDietLogs }) => {
     {
       menuItem: "Historical",
       render: () => {
-        return <History />;
+        return (
+          <History
+            dietLogs={dietLogs}
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+          />
+        );
       },
     },
   ];
@@ -27,7 +35,12 @@ const DietLog = ({ dietLogs, dietLogsLoading, getDietLogs }) => {
           <Header as="h3">Diet Logs</Header>
         </Grid.Column>
         <Grid.Column textAlign="right">
-          <Button color="green" icon="plus" content="Add Macro Change" />
+          <Button
+            color="green"
+            icon="plus"
+            content="Add Macro Change"
+            onClick={() => setModalOpen(true)}
+          />
         </Grid.Column>
       </Grid>
       <Tab panes={mainPanes} />

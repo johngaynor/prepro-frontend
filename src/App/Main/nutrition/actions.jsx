@@ -5,6 +5,8 @@ import {
   LOAD_EDIT_WEIGHT_LOG,
   FETCH_DIET_LOGS,
   LOAD_DIET_LOGS,
+  FETCH_EDIT_DIET_LOG,
+  LOAD_EDIT_DIET_LOG,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -33,5 +35,24 @@ export function getDietLogs() {
     "Error getting diet logs",
     (dietLogs) => ({ type: LOAD_DIET_LOGS, dietLogs }),
     () => ({ type: FETCH_DIET_LOGS })
+  );
+}
+
+export function editDietLog(values) {
+  return API.post(
+    "/api/nutrition/diet",
+    "Error editing diet log",
+    { ...values },
+    () => ({ type: LOAD_EDIT_DIET_LOG }),
+    () => ({ type: FETCH_EDIT_DIET_LOG })
+  );
+}
+
+export function deleteDietLog(id) {
+  return API.delete(
+    `/api/nutrition/diet/log/${id}`,
+    "Error deleting diet log",
+    () => ({ type: LOAD_EDIT_DIET_LOG }),
+    () => ({ type: FETCH_EDIT_DIET_LOG })
   );
 }
