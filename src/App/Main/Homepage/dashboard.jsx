@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Header,
@@ -8,11 +8,28 @@ import {
   Grid,
   Transition,
   Container,
+  Button,
+  Popup,
+  Rating,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
+import { getFavorites, updateFavorite } from "../actions";
 
-const Dashboard = ({ startsWith, user, apps }) => {
+const Dashboard = ({
+  startsWith,
+  user,
+  apps,
+  favorites,
+  favoritesLoading,
+  getFavorites,
+  updateFavorite,
+}) => {
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState(true);
+
+  useEffect(() => {
+    if (!favorites && !favoritesLoading) getFavorites();
+  }, [favorites, favoritesLoading]);
 
   const cardGroup = apps
     .filter(
@@ -20,8 +37,32 @@ const Dashboard = ({ startsWith, user, apps }) => {
         app.link.startsWith(startsWith) &&
         app.name.toLowerCase().includes(search.toLowerCase())
     )
+    .sort((a, b) => {
+      if (!sort || !favorites) {
+        if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+        if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+        return 0;
+      } else {
+        if (favorites.includes(a.id) && !favorites.includes(b.id)) return -1;
+        if (!favorites.includes(a.id) && favorites.includes(b.id)) return 1;
+        return 0;
+      }
+    })
     .map((app) => (
       <Card link style={{ height: "10rem", margin: 5 }} key={app.id}>
+        <Rating
+          style={{
+            position: "absolute",
+            zIndex: 10,
+            top: 5,
+            left: 5,
+            fontSize: "1.4em",
+          }}
+          onClick={() => updateFavorite(app.id)}
+          rating={favorites && favorites.includes(app.id) ? 1 : 0}
+          maxRating={1}
+          icon="star"
+        />
         <Link
           to={app.link}
           key={app.id}
@@ -79,6 +120,31 @@ const Dashboard = ({ startsWith, user, apps }) => {
             value={search}
           />
         </Grid.Column>
+        <Grid.Column>
+          <Popup
+            hideOnScroll
+            content={
+              sort
+                ? "Click to sort alphabetically"
+                : "Click to show favorites first"
+            }
+            trigger={
+              sort ? (
+                <Button
+                  content="Sort"
+                  icon="sort alphabet down"
+                  onClick={() => setSort(!sort)}
+                />
+              ) : (
+                <Button
+                  content="Favorites"
+                  icon="favorite"
+                  onClick={() => setSort(!sort)}
+                />
+              )
+            }
+          />
+        </Grid.Column>
       </Grid>
       {cardGroup.length || !apps.length ? (
         <Transition.Group
@@ -102,7 +168,11 @@ function mapStateToProps(state) {
   return {
     user: state.app.user,
     apps: state.app.apps,
+    favorites: state.app.favorites,
+    favoritesLoading: state.app.favoritesLoading,
   };
 }
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps, { getFavorites, updateFavorite })(
+  Dashboard
+);

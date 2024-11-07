@@ -7,6 +7,10 @@ import {
   LOAD_APPS,
   FETCH_CHANGELOG,
   LOAD_CHANGELOG,
+  FETCH_APP_FAVORITES,
+  LOAD_APP_FAVORITES,
+  FETCH_UPDATE_APP_FAVORITE,
+  LOAD_UPDATE_APP_FAVORITE,
 } from "../store/actionTypes";
 import API from "../services/api";
 
@@ -34,6 +38,25 @@ export function getApps() {
     "Error getting apps",
     (apps) => ({ type: LOAD_APPS, apps }),
     () => ({ type: FETCH_APPS })
+  );
+}
+
+export function getFavorites() {
+  return API.get(
+    "/api/dashboard/favorites",
+    "Error getting favorites",
+    (favorites) => ({ type: LOAD_APP_FAVORITES, favorites }),
+    () => ({ type: FETCH_APP_FAVORITES })
+  );
+}
+
+export function updateFavorite(appId) {
+  return API.post(
+    "/api/dashboard/favorite",
+    "Error updating favorite",
+    { appId },
+    () => ({ type: LOAD_UPDATE_APP_FAVORITE }),
+    () => ({ type: FETCH_UPDATE_APP_FAVORITE })
   );
 }
 

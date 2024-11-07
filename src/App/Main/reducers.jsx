@@ -7,6 +7,10 @@ import {
   LOAD_APPS,
   FETCH_CHANGELOG,
   LOAD_CHANGELOG,
+  FETCH_APP_FAVORITES,
+  LOAD_APP_FAVORITES,
+  FETCH_UPDATE_APP_FAVORITE,
+  LOAD_UPDATE_APP_FAVORITE,
 } from "../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -19,6 +23,8 @@ const DEFAULT_STATE = {
   changeLog: null,
   logLoading: false,
   usersLoading: false,
+  favorites: null,
+  favoritesLoading: false,
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -39,6 +45,14 @@ export default (state = DEFAULT_STATE, action) => {
       return { ...state, logLoading: true };
     case LOAD_CHANGELOG:
       return { ...state, changeLog: action.payload, logLoading: false };
+    case FETCH_APP_FAVORITES:
+      return { ...state, favoritesLoading: true };
+    case LOAD_APP_FAVORITES:
+      return { ...state, favorites: action.favorites, favoritesLoading: false };
+    case FETCH_UPDATE_APP_FAVORITE:
+      return { ...state, favoritesLoading: true };
+    case LOAD_UPDATE_APP_FAVORITE:
+      return { ...state, favorites: null, favoritesLoading: false };
     default:
       return state;
   }
