@@ -3,6 +3,8 @@ import {
   LOAD_WEIGHT_LOGS,
   FETCH_EDIT_WEIGHT_LOG,
   LOAD_EDIT_WEIGHT_LOG,
+  FETCH_DIET_LOGS,
+  LOAD_DIET_LOGS,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -22,5 +24,14 @@ export function editWeightLog(date, weight) {
     { date, weight },
     () => ({ type: LOAD_EDIT_WEIGHT_LOG }),
     () => ({ type: FETCH_EDIT_WEIGHT_LOG })
+  );
+}
+
+export function getDietLogs() {
+  return API.get(
+    "/api/nutrition/diet",
+    "Error getting diet logs",
+    (dietLogs) => ({ type: LOAD_DIET_LOGS, dietLogs }),
+    () => ({ type: FETCH_DIET_LOGS })
   );
 }
