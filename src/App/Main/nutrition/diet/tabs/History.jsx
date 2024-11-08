@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Segment,
   TableRow,
@@ -9,6 +9,7 @@ import {
   Table,
   ButtonGroup,
   Button,
+  Confirm,
 } from "semantic-ui-react";
 import { DateTime } from "luxon";
 import DietForm from "../components/DietForm";
@@ -22,6 +23,8 @@ const History = ({
   editDietLog,
   deleteDietLog,
 }) => {
+  const [confirm, setConfirm] = useState(null);
+
   const formattedLogs = dietLogs?.sort(
     (a, b) =>
       DateTime.fromISO(b.effectiveDate) - DateTime.fromISO(a.effectiveDate)
@@ -35,6 +38,17 @@ const History = ({
         onCancel={() => setModalOpen(null)}
         onConfirm={(values) => editDietLog(values)}
       />
+
+      <Confirm
+        open={!!confirm}
+        content="Are you sure you want to delete this entry? This action cannot be undone."
+        onCancel={() => setConfirm(null)}
+        onConfirm={() => {
+          deleteDietLog(confirm);
+          setConfirm(null);
+        }}
+      />
+
       <Table striped>
         <TableHeader>
           <TableRow>
@@ -66,7 +80,7 @@ const History = ({
               <TableCell>
                 <ButtonGroup>
                   <Button icon="edit" onClick={() => setModalOpen(log)} />
-                  <Button icon="trash" onClick={() => deleteDietLog(log.id)} />
+                  <Button icon="trash" onClick={() => setConfirm(log.id)} />
                 </ButtonGroup>
               </TableCell>
             </TableRow>
