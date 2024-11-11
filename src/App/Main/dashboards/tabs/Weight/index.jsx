@@ -3,7 +3,7 @@ import { Tab, Header, Segment, Grid } from "semantic-ui-react";
 import Spinner from "../../../components/Spinner";
 import { connect } from "react-redux";
 import WeightChart from "./WeightChart";
-import { getWeightLogs } from "../../../nutrition/actions";
+import { getWeightLogs, getDietLogs } from "../../../nutrition/actions";
 import { DateTime } from "luxon";
 import { DropdownField } from "../../../components/FormFields";
 
@@ -23,16 +23,22 @@ const largeOptions = [
 const Weight = ({
   // from redux
   weightLogs,
-  logsLoading,
+  weightLogsLoading,
   getWeightLogs,
+  dietLogs,
+  dietLogsLoading,
+  getDietLogs,
 }) => {
   const [primary, setPrimary] = useState(7);
   const [secondary, setSecondary] = useState(30);
   const [tertiary, setTertiary] = useState(120);
 
   useEffect(() => {
-    if (!weightLogs && !logsLoading) getWeightLogs();
-  }, [weightLogs, logsLoading]);
+    if (!weightLogs && !weightLogsLoading) getWeightLogs();
+    if (!dietLogs && !dietLogsLoading) getDietLogs();
+  }, [weightLogs, weightLogsLoading, dietLogs, dietLogsLoading]);
+
+  // console.log(dietLogs);
 
   const primaryData = weightLogs
     ? Array.from({ length: primary })
@@ -58,7 +64,8 @@ const Weight = ({
           ).toFixed(1);
 
           return {
-            date: date.toFormat("MMM dd"),
+            // date: date.toFormat("MMM dd"),
+            date,
             value: log?.weight || null,
             moving: !isNaN(previous) ? previous : null,
           };
@@ -90,7 +97,8 @@ const Weight = ({
           ).toFixed(1);
 
           return {
-            date: date.toFormat("MMM dd"),
+            // date: date.toFormat("MMM dd"),
+            date,
             value: log?.weight || null,
             moving: !isNaN(previous) ? previous : null,
           };
@@ -115,7 +123,8 @@ const Weight = ({
           const date = DateTime.now().minus({ days: index }).startOf("day");
           const log = weightLogs.find((l) => l.date === date.toISODate());
           return {
-            date: date.toFormat("MMM dd, yyyy"),
+            // date: date.toFormat("MMM dd, yyyy"),
+            date,
             value: log?.weight || null,
           };
         })
@@ -124,7 +133,7 @@ const Weight = ({
 
   return (
     <Tab.Pane>
-      {logsLoading && <Spinner />}
+      {(weightLogsLoading || dietLogsLoading) && <Spinner />}
       <Grid columns={2}>
         <Grid.Column>
           <Segment>
@@ -141,8 +150,8 @@ const Weight = ({
                 }}
               >
                 <Header as="h2">
-                  {primaryData[0]?.date} -{" "}
-                  {primaryData[primaryData.length - 1]?.date}
+                  {primaryData[0]?.date.toFormat("MMM dd")} -{" "}
+                  {primaryData[primaryData.length - 1]?.date.toFormat("MMM dd")}
                 </Header>
               </Grid.Column>
             </Grid>
@@ -151,6 +160,8 @@ const Weight = ({
               primaryLine="#086788"
               secondaryLine="#06AED5"
               style={{ marginTop: 30 }}
+              shortenDate
+              dietLogs={dietLogs || []}
             />
           </Segment>
         </Grid.Column>
@@ -169,8 +180,10 @@ const Weight = ({
                 }}
               >
                 <Header as="h2">
-                  {secondaryData[0]?.date} -{" "}
-                  {secondaryData[secondaryData.length - 1]?.date}
+                  {secondaryData[0]?.date.toFormat("MMM dd")} -{" "}
+                  {secondaryData[secondaryData.length - 1]?.date.toFormat(
+                    "MMM dd"
+                  )}
                 </Header>
               </Grid.Column>
             </Grid>
@@ -180,6 +193,8 @@ const Weight = ({
               primaryLine="#086788"
               secondaryLine="#06AED5"
               style={{ marginTop: 30 }}
+              shortenDate
+              dietLogs={dietLogs || []}
             />
           </Segment>
         </Grid.Column>
@@ -198,8 +213,10 @@ const Weight = ({
             }}
           >
             <Header as="h2">
-              {tertiaryData[0]?.date} -{" "}
-              {tertiaryData[tertiaryData.length - 1]?.date}
+              {tertiaryData[0]?.date.toFormat("MMM dd, yyyy")} -{" "}
+              {tertiaryData[tertiaryData.length - 1]?.date.toFormat(
+                "MMM dd, yyyy"
+              )}
             </Header>
           </Grid.Column>
         </Grid>
@@ -208,6 +225,7 @@ const Weight = ({
           dot={false}
           primaryLine="#086788"
           secondaryLine="#06AED5"
+          dietLogs={dietLogs || []}
         />
       </Segment>
     </Tab.Pane>
@@ -217,8 +235,10 @@ const Weight = ({
 function mapStateToProps(state) {
   return {
     weightLogs: state.nutrition.weightLogs,
-    logsLoading: state.nutrition.logsLoading,
+    weightLogsLoading: state.nutrition.logsLoading,
+    dietLogs: state.nutrition.dietLogs,
+    dietLogsLoading: state.nutrition.dietLogsLoading,
   };
 }
 
-export default connect(mapStateToProps, { getWeightLogs })(Weight);
+export default connect(mapStateToProps, { getWeightLogs, getDietLogs })(Weight);

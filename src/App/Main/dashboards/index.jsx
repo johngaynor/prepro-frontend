@@ -5,15 +5,15 @@ import Diet from "./tabs/Diet";
 const Dashboards = () => {
   const mainPanes = [
     {
-      menuItem: "Diet",
-      render: () => {
-        return <Diet />;
-      },
-    },
-    {
       menuItem: "Weight",
       render: () => {
         return <Weight />;
+      },
+    },
+    {
+      menuItem: "Diet",
+      render: () => {
+        return <Diet />;
       },
     },
   ];
