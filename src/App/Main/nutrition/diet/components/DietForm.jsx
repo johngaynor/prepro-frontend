@@ -20,6 +20,8 @@ const defaultValues = {
   carbs: "",
   fat: "",
   cardio: "",
+  cardioMinutes: "",
+  notes: "",
 };
 
 const DietForm = ({ open, onCancel, onConfirm, log }) => {
@@ -90,10 +92,24 @@ const DietForm = ({ open, onCancel, onConfirm, log }) => {
                 value={formValues.fat || ""}
                 onChange={handleChange}
               />
+              <InputField
+                type="number"
+                label="Cardio (Minutes / Week)"
+                name="cardioMinutes"
+                value={formValues.cardioMinutes || ""}
+                onChange={handleChange}
+              />
               <TextAreaField
                 label="Cardio (style, duration, number of times per week)"
                 name="cardio"
                 value={formValues.cardio || ""}
+                onChange={handleChange}
+                fullWidth
+              />
+              <TextAreaField
+                label="General Notes"
+                name="notes"
+                value={formValues.notes || ""}
                 onChange={handleChange}
                 fullWidth
               />
