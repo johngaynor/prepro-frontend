@@ -67,7 +67,7 @@ const WeightChart = ({
             key={index}
             x={log.effectiveDate}
             stroke={"#ffc658"}
-            label={log.calories}
+            label={parseInt(log.calories)}
           />
         ))}
         <YAxis domain={[Math.floor(minY - 1), Math.ceil(maxY + 1)]} />
