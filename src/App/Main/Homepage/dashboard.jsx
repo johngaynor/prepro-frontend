@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Header,
   Card,
@@ -11,6 +11,7 @@ import {
   Button,
   Popup,
   Rating,
+  Form,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { getFavorites, updateFavorite } from "../actions";
@@ -26,6 +27,7 @@ const Dashboard = ({
 }) => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!favorites && !favoritesLoading) getFavorites();
@@ -47,39 +49,8 @@ const Dashboard = ({
         if (!favorites.includes(a.id) && favorites.includes(b.id)) return 1;
         return 0;
       }
-    })
-    .map((app) => (
-      <Card link style={{ height: "10rem", margin: 5 }} key={app.id}>
-        <Rating
-          style={{
-            position: "absolute",
-            zIndex: 10,
-            top: 5,
-            left: 5,
-            fontSize: "1.4em",
-          }}
-          onClick={() => updateFavorite(app.id)}
-          rating={favorites && favorites.includes(app.id) ? 1 : 0}
-          maxRating={1}
-          icon="star"
-        />
-        <Link
-          to={app.link}
-          key={app.id}
-          style={{ margin: 0, padding: 0 }}
-          className="appTile"
-        >
-          <Card>
-            <Card.Content style={{ height: "10rem" }}>
-              <Card.Header>{app.name}</Card.Header>
-              <Card.Description style={{ margin: 0 }}>
-                {app.description}
-              </Card.Description>
-            </Card.Content>
-          </Card>
-        </Link>
-      </Card>
-    ));
+    });
+
   if (
     cardGroup.length === 0 &&
     startsWith !== "/" &&
@@ -112,13 +83,19 @@ const Dashboard = ({
       <Grid columns={3} stackable>
         <Grid.Column />
         <Grid.Column>
-          <Input
-            onChange={(e, v) => setSearch(v.value)}
-            icon="search"
-            fluid
-            placeholder="Search for an app..."
-            value={search}
-          />
+          <Form
+            onSubmit={() =>
+              cardGroup[0] ? navigate(cardGroup[0]?.link) : setSearch("")
+            }
+          >
+            <Input
+              onChange={(e, v) => setSearch(v.value)}
+              icon="search"
+              fluid
+              placeholder="Search for an app..."
+              value={search}
+            />
+          </Form>
         </Grid.Column>
         <Grid.Column>
           <Popup
@@ -153,7 +130,38 @@ const Dashboard = ({
           animation="fade"
           className="ui centered relaxed grid container"
         >
-          {cardGroup}
+          {cardGroup.map((app) => (
+            <Card link style={{ height: "10rem", margin: 5 }} key={app.id}>
+              <Rating
+                style={{
+                  position: "absolute",
+                  zIndex: 10,
+                  top: 5,
+                  left: 5,
+                  fontSize: "1.4em",
+                }}
+                onClick={() => updateFavorite(app.id)}
+                rating={favorites && favorites.includes(app.id) ? 1 : 0}
+                maxRating={1}
+                icon="star"
+              />
+              <Link
+                to={app.link}
+                key={app.id}
+                style={{ margin: 0, padding: 0 }}
+                className="appTile"
+              >
+                <Card>
+                  <Card.Content style={{ height: "10rem" }}>
+                    <Card.Header>{app.name}</Card.Header>
+                    <Card.Description style={{ margin: 0 }}>
+                      {app.description}
+                    </Card.Description>
+                  </Card.Content>
+                </Card>
+              </Link>
+            </Card>
+          ))}
         </Transition.Group>
       ) : (
         <Segment basic textAlign="center">
