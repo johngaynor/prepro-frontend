@@ -68,6 +68,7 @@ const WeightChart = ({
             x={log.effectiveDate}
             stroke={"#ffc658"}
             label={parseInt(log.calories)}
+            strokeDasharray="3 3"
           />
         ))}
         <YAxis domain={[Math.floor(minY - 1), Math.ceil(maxY + 1)]} />
@@ -80,7 +81,6 @@ const WeightChart = ({
           dot={dot}
           name="Weight (lbs)"
         />
-        <ReferenceLine x="Nov 05" stroke="red" label="test" />
         <Line
           type={type}
           dataKey="moving"

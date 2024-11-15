@@ -6,6 +6,7 @@ import { DateTime } from "luxon";
 import { DropdownField } from "../../../components/FormFields";
 import { getSleepLogs } from "../../../sleep/actions";
 import CycleChart from "./CycleChart";
+import SimpleChart from "./SimpleChart";
 
 const smallOptions = [
   { text: "Last 7 Days", value: 7 },
@@ -20,7 +21,7 @@ const Sleep = ({
   sleepLogsLoading,
   getSleepLogs,
 }) => {
-  const [primary, setPrimary] = useState(7);
+  const [primary, setPrimary] = useState(14);
   const [secondary, setSecondary] = useState(30);
   const [tertiary, setTertiary] = useState(30);
 
@@ -37,8 +38,6 @@ const Sleep = ({
       remQty: parseFloat(s.remQty),
       deepQty: parseFloat(s.deepQty),
     }));
-
-  console.log(sortedSleepLogs);
 
   return (
     <Tab.Pane>
@@ -58,21 +57,16 @@ const Sleep = ({
                   alignItems: "center",
                 }}
               >
-                <Header as="h2">
-                  {/* {primaryData[0]?.date.toFormat("MMM dd")} -{" "}
-                  {primaryData[primaryData.length - 1]?.date.toFormat("MMM dd")} */}
-                  test
-                </Header>
+                <Header as="h2">Recovery & Readiness</Header>
               </Grid.Column>
             </Grid>
-            {/* <WeightChart
-              data={primaryData}
+            <SimpleChart
+              data={sortedSleepLogs?.slice(-primary)}
               primaryLine="#086788"
               secondaryLine="#06AED5"
               style={{ marginTop: 30 }}
-              shortenDate
-              dietLogs={dietLogs || []}
-            /> */}
+              dot={false}
+            />
           </Segment>
         </Grid.Column>
         <Grid.Column>
