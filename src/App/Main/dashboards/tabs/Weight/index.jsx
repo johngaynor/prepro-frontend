@@ -38,8 +38,6 @@ const Weight = ({
     if (!dietLogs && !dietLogsLoading) getDietLogs();
   }, [weightLogs, weightLogsLoading, dietLogs, dietLogsLoading]);
 
-  // console.log(dietLogs);
-
   const primaryData = weightLogs
     ? Array.from({ length: primary })
         .map((_, index) => {
