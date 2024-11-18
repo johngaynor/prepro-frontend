@@ -7,6 +7,7 @@ import { DropdownField } from "../../../components/FormFields";
 import { getSleepLogs } from "../../../sleep/actions";
 import CycleChart from "./CycleChart";
 import SimpleChart from "./SimpleChart";
+import EfficiencyChart from "./EfficiencyChart";
 
 const smallOptions = [
   { text: "Last 7 Days", value: 7 },
@@ -37,6 +38,9 @@ const Sleep = ({
       lightQty: parseFloat(s.lightQty),
       remQty: parseFloat(s.remQty),
       deepQty: parseFloat(s.deepQty),
+      totalBed: parseFloat(s.totalBed),
+      totalSleep: parseFloat(s.totalSleep),
+      bedSleepDiff: parseFloat(s.totalBed - s.totalSleep).toFixed(2),
     }));
 
   return (
@@ -83,23 +87,13 @@ const Sleep = ({
                   alignItems: "center",
                 }}
               >
-                <Header as="h2">
-                  {/* {secondaryData[0]?.date.toFormat("MMM dd")} -{" "}
-                  {secondaryData[secondaryData.length - 1]?.date.toFormat(
-                    "MMM dd"
-                  )} */}
-                  test
-                </Header>
+                <Header as="h2">Time in Bed vs. Asleep</Header>
               </Grid.Column>
             </Grid>
-            {/* <WeightChart
-              data={secondaryData}
-              primaryLine="#086788"
-              secondaryLine="#06AED5"
+            <EfficiencyChart
+              data={sortedSleepLogs?.slice(-secondary)}
               style={{ marginTop: 30 }}
-              shortenDate
-              dietLogs={dietLogs || []}
-            /> */}
+            />
           </Segment>
         </Grid.Column>
       </Grid>
@@ -116,13 +110,7 @@ const Sleep = ({
               alignItems: "center",
             }}
           >
-            <Header as="h2">
-              Sleep Cycles
-              {/* {tertiaryData[0]?.date.toFormat("MMM dd, yyyy")} -{" "}
-              {tertiaryData[tertiaryData.length - 1]?.date.toFormat(
-                "MMM dd, yyyy"
-              )} */}
-            </Header>
+            <Header as="h2">Sleep Cycles</Header>
           </Grid.Column>
         </Grid>
         <CycleChart
