@@ -16,27 +16,31 @@ import { DateTime } from "luxon";
 import DietForm from "../components/DietForm";
 import { connect } from "react-redux";
 import { editDietLog, deleteDietLog } from "../../actions";
+import { useQuery } from "../../../customHooks";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const History = ({
-  dietLogs,
-  modalOpen,
-  setModalOpen,
-  editDietLog,
-  deleteDietLog,
-}) => {
+const History = ({ dietLogs, editDietLog, deleteDietLog }) => {
   const [confirm, setConfirm] = useState(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const query = useQuery(location.search, navigate);
 
   const formattedLogs = dietLogs?.sort(
     (a, b) =>
       DateTime.fromISO(b.effectiveDate) - DateTime.fromISO(a.effectiveDate)
   );
 
+  const activeLog = formattedLogs?.find(
+    (log) => log.id === parseInt(query.active)
+  );
+
   return (
     <Segment>
       <DietForm
-        open={!!modalOpen}
-        log={modalOpen?.id ? modalOpen : null}
-        onCancel={() => setModalOpen(null)}
+        open={!!query.active}
+        log={activeLog || null}
+        onCancel={() => query.update({ active: null })}
         onConfirm={(values) => editDietLog(values)}
       />
       <Confirm
@@ -89,7 +93,10 @@ const History = ({
               </TableCell>
               <TableCell>
                 <ButtonGroup>
-                  <Button icon="edit" onClick={() => setModalOpen(log)} />
+                  <Button
+                    icon="edit"
+                    onClick={() => query.update({ active: log.id })}
+                  />
                   <Button icon="trash" onClick={() => setConfirm(log.id)} />
                 </ButtonGroup>
               </TableCell>

@@ -1,13 +1,13 @@
 /**
  *
  * @param {String} rawQuery
- * @param {history} history
+ * @param {navigate} navigate
  * @returns {{
  *  update: Function,
  *  forceUpdate: Function
  * }}
  */
-function useQuery(rawQuery, history, initialValues = {}) {
+function useQuery(rawQuery, navigate, initialValues = {}) {
   const searchQuery = rawQuery
     .replace("?", "")
     .split("&")
@@ -17,6 +17,7 @@ function useQuery(rawQuery, history, initialValues = {}) {
       if (key) retObj[key] = decodeURIComponent(value);
       return retObj;
     }, initialValues);
+
   searchQuery.update = (values) => {
     const newQuery = { ...searchQuery };
     Object.keys(values).forEach((key) => {
@@ -29,10 +30,8 @@ function useQuery(rawQuery, history, initialValues = {}) {
         acc + `${ind ? "&" : ""}${cur}=${encodeURIComponent(newQuery[cur])}`
       );
     }, "?");
-    if (history) {
-      history.push({
-        search: newSearch,
-      });
+    if (navigate) {
+      navigate(newSearch);
     }
   };
   searchQuery.forceUpdate = (values) => {
@@ -43,10 +42,8 @@ function useQuery(rawQuery, history, initialValues = {}) {
         acc + `${ind ? "&" : ""}${cur}=${encodeURIComponent(newQuery[cur])}`
       );
     }, "?");
-    if (history) {
-      history.push({
-        search: newSearch,
-      });
+    if (navigate) {
+      navigate(newSearch);
     }
   };
   return searchQuery;

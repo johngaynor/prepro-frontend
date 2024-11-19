@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import History from "./tabs/History";
 import Tab from "../../components/Tab";
 import Spinner from "../../components/Spinner";
 import { getDietLogs } from "../actions";
 import { connect } from "react-redux";
 import { Button, Grid, Header } from "semantic-ui-react";
+import { useQuery } from "../../customHooks";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const DietLog = ({ dietLogs, dietLogsLoading, getDietLogs }) => {
-  const [modalOpen, setModalOpen] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const query = useQuery(location.search, navigate);
 
   useEffect(() => {
     if (!dietLogs && !dietLogsLoading) getDietLogs();
@@ -17,13 +21,7 @@ const DietLog = ({ dietLogs, dietLogsLoading, getDietLogs }) => {
     {
       menuItem: "Historical",
       render: () => {
-        return (
-          <History
-            dietLogs={dietLogs}
-            modalOpen={modalOpen}
-            setModalOpen={setModalOpen}
-          />
-        );
+        return <History dietLogs={dietLogs} />;
       },
     },
   ];
@@ -39,7 +37,7 @@ const DietLog = ({ dietLogs, dietLogsLoading, getDietLogs }) => {
             color="green"
             icon="plus"
             content="Add Macro Change"
-            onClick={() => setModalOpen(true)}
+            onClick={() => query.update({ active: "new" })}
           />
         </Grid.Column>
       </Grid>
