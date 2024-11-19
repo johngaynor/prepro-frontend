@@ -21,6 +21,7 @@ import { getDietLogs, getWeightLogs } from "../../../nutrition/actions";
 import { DropdownField } from "../../../components/FormFields";
 import { generateData } from "./helperFunctions";
 import { DateTime } from "luxon";
+import { useNavigate } from "react-router-dom";
 
 const largeOptions = [
   { text: "Last Month", value: 30 },
@@ -40,6 +41,8 @@ const Diet = ({
 }) => {
   const [secondary, setSecondary] = useState(90);
   const [tertiary, setTertiary] = useState(90);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!weightLogs && !weightLogsLoading) getWeightLogs();
@@ -71,6 +74,7 @@ const Diet = ({
     return [
       ...acc,
       {
+        id: log.id,
         date: log.effectiveDate,
         delta: (end.weight - start.weight).toFixed(1),
         calories: log.calories,
@@ -124,6 +128,8 @@ const Diet = ({
                     <TableRow
                       key={"diet-weight-table-" + index}
                       positive={index === 0 ? true : false}
+                      onClick={() => navigate(`/nutrition/diet?active=${d.id}`)}
+                      style={{ cursor: "pointer" }}
                     >
                       <TableCell>
                         {DateTime.fromISO(d.date).toFormat("MMM dd, yyyy")}
