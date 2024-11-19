@@ -6,17 +6,18 @@ import Sleep from "./tabs/Sleep";
 const Dashboards = () => {
   const mainPanes = [
     {
-      menuItem: "Sleep",
-      render: () => {
-        return <Sleep />;
-      },
-    },
-    {
       menuItem: "Weight",
       render: () => {
         return <Weight />;
       },
     },
+    {
+      menuItem: "Sleep",
+      render: () => {
+        return <Sleep />;
+      },
+    },
+
     {
       menuItem: "Diet",
       render: () => {

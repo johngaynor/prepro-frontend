@@ -10,6 +10,7 @@ import {
   ButtonGroup,
   Button,
   Confirm,
+  Popup,
 } from "semantic-ui-react";
 import { DateTime } from "luxon";
 import DietForm from "../components/DietForm";
@@ -38,7 +39,6 @@ const History = ({
         onCancel={() => setModalOpen(null)}
         onConfirm={(values) => editDietLog(values)}
       />
-
       <Confirm
         open={!!confirm}
         content="Are you sure you want to delete this entry? This action cannot be undone."
@@ -76,6 +76,16 @@ const History = ({
               <TableCell>{parseInt(log.fat)}</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
                 {parseInt(log.calories)}
+                <Popup
+                  content={log.notes || "No notes!"}
+                  trigger={
+                    <Button
+                      icon="info circle"
+                      size="mini"
+                      style={{ marginLeft: 5 }}
+                    />
+                  }
+                />
               </TableCell>
               <TableCell>
                 <ButtonGroup>

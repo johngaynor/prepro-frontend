@@ -59,7 +59,7 @@ const DietForm = ({ open, onCancel, onConfirm, log }) => {
 
   return (
     <Modal onClose={handleCancel} open={open}>
-      <ModalHeader>Add New Diet Log</ModalHeader>
+      <ModalHeader>{log?.id ? "Edit" : "Add New"} Diet Log</ModalHeader>
       <ModalContent>
         <ModalDescription>
           <Form onSubmit={handleSubmit}>
