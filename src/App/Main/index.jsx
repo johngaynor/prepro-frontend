@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import Homepage from "./homepage";
+import Homepage from "./Homepage";
 import BreadCrumb from "./components/Breadcrumb";
 import Spinner from "./components/Spinner";
 import { Segment } from "semantic-ui-react";
