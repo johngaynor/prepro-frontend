@@ -318,7 +318,7 @@ const RenderPdf = ({
       </Page>
 
       {/* Sleep report */}
-      <Page size="letter" style={{ padding: "75 100", fontSize: 10 }}>
+      {/* <Page size="letter" style={{ padding: "75 100", fontSize: 10 }}>
         <Text
           style={{
             textDecoration: "underline",
@@ -332,9 +332,9 @@ const RenderPdf = ({
           last7={last7SleepHours}
           last30={last30SleepHours}
           hours
-        />
-        {/* Last 30 days - sleep hours */}
-        <View>
+        /> */}
+      {/* Last 30 days - sleep hours */}
+      {/* <View>
           <Text
             style={{
               textDecoration: "underline",
@@ -399,10 +399,10 @@ const RenderPdf = ({
         <SleepLogTable
           last7={last7SleepRecoveryIndex}
           last30={last30SleepRecoveryIndex}
-        />
-        {/* Last 30 days - recovery index */}
-        <View>
-          <Text
+        /> */}
+      {/* Last 30 days - recovery index */}
+      {/* <View> */}
+      {/* <Text
             style={{
               textDecoration: "underline",
               marginBottom: -20,
@@ -455,10 +455,10 @@ const RenderPdf = ({
             </Svg>
           </View>
         </View>
-      </Page>
+      </Page> */}
 
       {/* Supplement log */}
-      <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
+      {/* <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         <Text
           style={{
             textDecoration: "underline",
@@ -507,7 +507,7 @@ const RenderPdf = ({
 
           return null;
         })}
-      </Page>
+      </Page> */}
       {/* Questions section */}
       <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         {/* Questions */}
