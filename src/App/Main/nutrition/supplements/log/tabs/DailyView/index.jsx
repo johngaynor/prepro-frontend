@@ -31,16 +31,26 @@ const DailyView = ({
   const [missedItem, setMissedItem] = useState(null);
 
   const formattedDate = DateTime.fromISO(selectedDay).toFormat("yyyy-MM-dd");
+
   const filteredLogs = supplements?.reduce((acc, val) => {
-    const retArr = [...acc];
+    const retObj = { ...acc };
 
     const match = logs?.find(
       (l) => l.date === formattedDate && l.supplementId === val.id
     );
 
-    retArr.push({ ...val, reason: match?.reason, completed: match?.completed });
-    return retArr;
-  }, []);
+    if (!retObj[val.categoryName]) {
+      retObj[val.categoryName] = [];
+    }
+
+    retObj[val.categoryName].push({
+      ...val,
+      reason: match?.reason,
+      completed: match?.completed,
+    });
+
+    return retObj;
+  }, {});
 
   return (
     <Tab.Pane>
@@ -86,7 +96,7 @@ const DailyView = ({
       <Table striped>
         <TableHeader>
           <TableRow>
-            <TableHeaderCell>Supplement</TableHeaderCell>
+            <TableHeaderCell>Item</TableHeaderCell>
             <TableHeaderCell>Description</TableHeaderCell>
             <TableHeaderCell>Dosage</TableHeaderCell>
             <TableHeaderCell>Completed?</TableHeaderCell>
@@ -94,61 +104,73 @@ const DailyView = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredLogs?.map((item, i) => {
-            return (
-              <TableRow
-                verticalAlign="top"
-                key={"supp-item-" + i}
-                positive={!!item.completed}
-                negative={item.completed === 0}
-              >
-                <TableCell style={{ fontWeight: "bold" }}>
-                  <Icon
-                    name={
-                      item.completed
-                        ? "checkmark"
-                        : item.completed === 0
-                        ? "cancel"
-                        : "question"
-                    }
-                  />
-                  {item.name}
-                </TableCell>
-                <TableCell>{item.description}</TableCell>
-                <TableCell>--</TableCell>
-                <TableCell verticalAlign="top">
-                  <Checkbox
-                    checked={!!item.completed}
-                    onChange={() => {
-                      toggleSupplementLog(item, formattedDate);
-                    }}
-                    disabled={item.completed === 0}
-                  />
-                </TableCell>
-                <TableCell>
-                  {!item.completed && item.completed !== 0 && (
-                    <Icon
-                      name="cancel"
-                      onClick={() => setMissedItem(item)}
-                      style={{ cursor: "pointer" }}
-                    />
-                  )}
-                  {item.reason && (
-                    <Popup
-                      content={item.reason}
-                      trigger={
-                        <Icon
-                          name="info circle"
-                          style={{ cursor: "pointer" }}
-                        />
-                      }
-                      position="top center"
-                    />
-                  )}
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {filteredLogs &&
+            Object.keys(filteredLogs).map((category, i) => {
+              return (
+                <React.Fragment key={"supp-category-" + i}>
+                  <TableRow key={"supp-category-" + i}>
+                    <TableCell colSpan={5} style={{ fontWeight: "bold" }}>
+                      {category.toUpperCase()}(S)
+                    </TableCell>
+                  </TableRow>
+                  {filteredLogs[category].map((item, i) => {
+                    return (
+                      <TableRow
+                        verticalAlign="top"
+                        key={"supp-item-" + i}
+                        positive={!!item.completed}
+                        negative={item.completed === 0}
+                      >
+                        <TableCell style={{ fontWeight: "bold" }}>
+                          <Icon
+                            name={
+                              item.completed
+                                ? "checkmark"
+                                : item.completed === 0
+                                ? "cancel"
+                                : "question"
+                            }
+                          />
+                          {item.name}
+                        </TableCell>
+                        <TableCell>{item.description}</TableCell>
+                        <TableCell>--</TableCell>
+                        <TableCell verticalAlign="top">
+                          <Checkbox
+                            checked={!!item.completed}
+                            onChange={() => {
+                              toggleSupplementLog(item, formattedDate);
+                            }}
+                            disabled={item.completed === 0}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {!item.completed && item.completed !== 0 && (
+                            <Icon
+                              name="cancel"
+                              onClick={() => setMissedItem(item)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          )}
+                          {item.reason && (
+                            <Popup
+                              content={item.reason}
+                              trigger={
+                                <Icon
+                                  name="info circle"
+                                  style={{ cursor: "pointer" }}
+                                />
+                              }
+                              position="top center"
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </React.Fragment>
+              );
+            })}
         </TableBody>
       </Table>
     </Tab.Pane>
