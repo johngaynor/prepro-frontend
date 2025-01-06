@@ -69,7 +69,7 @@ const TableCell = ({
 const WeightLogTable = ({ phase, todayWeight, lastWeight }) => {
   const change = (todayWeight - lastWeight).toFixed(1);
   return (
-    <View style={{ marginBottom: 30 }}>
+    <View style={{ marginBottom: 10 }}>
       {/* header */}
       <View style={{ display: "flex", flexDirection: "row" }}>
         <TableCell text="Phase" width="20%" borderLeft borderTop />
@@ -100,7 +100,7 @@ const SleepLogTable = ({ last7, last30, hours = false }) => {
     : Math.floor(avg7 - avg30);
 
   return (
-    <View style={{ marginBottom: 30 }}>
+    <View style={{ marginBottom: 10 }}>
       {/* header */}
       <View style={{ display: "flex", flexDirection: "row" }}>
         <TableCell text="Last 7 Days" width="20%" borderLeft borderTop />
@@ -188,6 +188,43 @@ const RenderPdf = ({
               style={{ height: 500 }}
             />
           ))}
+        </View>
+      </Page>
+      {/* Questions section */}
+      <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
+        {/* Questions */}
+        <View>
+          {/* {selectedDay?.questions?.map((q, i) => (
+                <FormQuestionBox question={q} key={"form-question-" + i} />
+              ))} */}
+          <FormQuestionBox
+            question="Hormone altering or fat loss supplements used"
+            answer={selectedDay?.hormones}
+          />
+          <FormQuestionBox
+            question="Current diet phase (bulk, cut, etc.)"
+            answer={selectedDay?.phase}
+          />
+          <FormQuestionBox
+            question="Timeline (how many weeks into diet)"
+            answer={selectedDay?.timeline}
+          />
+          <FormQuestionBox
+            question="Cardio (style, duration, number of times per week)"
+            answer={selectedDay?.cardio}
+          />
+          <FormQuestionBox
+            question="Training (style and days per week)"
+            answer={selectedDay?.training}
+          />
+          <FormQuestionBox
+            question="Cheat/missed meals (PLEASE BE HONEST, this is necessary for making accurate changes)"
+            answer={selectedDay?.cheats}
+          />
+          <FormQuestionBox
+            question="Overall comments/thoughts from the week (training, mood, sleep, energy, etc.)"
+            answer={selectedDay?.comments}
+          />
         </View>
       </Page>
       {/* Weight Log */}
@@ -316,9 +353,8 @@ const RenderPdf = ({
           </View>
         </View>
       </Page>
-
       {/* Sleep report */}
-      {/* <Page size="letter" style={{ padding: "75 100", fontSize: 10 }}>
+      <Page size="letter" style={{ padding: "75 100", fontSize: 10 }}>
         <Text
           style={{
             textDecoration: "underline",
@@ -332,9 +368,9 @@ const RenderPdf = ({
           last7={last7SleepHours}
           last30={last30SleepHours}
           hours
-        /> */}
-      {/* Last 30 days - sleep hours */}
-      {/* <View>
+        />
+        {/* Last 30 days - sleep hours */}
+        <View>
           <Text
             style={{
               textDecoration: "underline",
@@ -368,7 +404,7 @@ const RenderPdf = ({
             min={getMin(last30SleepHours) - 2 || 0}
             data={last30SleepHours}
           />
-          <View style={{ width: "100%", marginTop: -55 }}>
+          <View style={{ width: "100%", marginTop: -55, marginBottom: 30 }}>
             <Svg style={{ height: 80, width: "120%" }}>
               {last30SleepHours.map((log, index) => {
                 const x = 52 + 13.5 * index;
@@ -399,10 +435,10 @@ const RenderPdf = ({
         <SleepLogTable
           last7={last7SleepRecoveryIndex}
           last30={last30SleepRecoveryIndex}
-        /> */}
-      {/* Last 30 days - recovery index */}
-      {/* <View> */}
-      {/* <Text
+        />
+        {/* Last 30 days - recovery index */}
+        <View>
+          <Text
             style={{
               textDecoration: "underline",
               marginBottom: -20,
@@ -455,10 +491,10 @@ const RenderPdf = ({
             </Svg>
           </View>
         </View>
-      </Page> */}
+      </Page>
 
       {/* Supplement log */}
-      {/* <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
+      <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         <Text
           style={{
             textDecoration: "underline",
@@ -507,43 +543,6 @@ const RenderPdf = ({
 
           return null;
         })}
-      </Page> */}
-      {/* Questions section */}
-      <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
-        {/* Questions */}
-        <View>
-          {/* {selectedDay?.questions?.map((q, i) => (
-                <FormQuestionBox question={q} key={"form-question-" + i} />
-              ))} */}
-          <FormQuestionBox
-            question="Hormone altering or fat loss supplements used"
-            answer={selectedDay?.hormones}
-          />
-          <FormQuestionBox
-            question="Current diet phase (bulk, cut, etc.)"
-            answer={selectedDay?.phase}
-          />
-          <FormQuestionBox
-            question="Timeline (how many weeks into diet)"
-            answer={selectedDay?.timeline}
-          />
-          <FormQuestionBox
-            question="Cardio (style, duration, number of times per week)"
-            answer={selectedDay?.cardio}
-          />
-          <FormQuestionBox
-            question="Training (style and days per week)"
-            answer={selectedDay?.training}
-          />
-          <FormQuestionBox
-            question="Cheat/missed meals (PLEASE BE HONEST, this is necessary for making accurate changes)"
-            answer={selectedDay?.cheats}
-          />
-          <FormQuestionBox
-            question="Overall comments/thoughts from the week (training, mood, sleep, energy, etc.)"
-            answer={selectedDay?.comments}
-          />
-        </View>
       </Page>
     </Document>
   );
