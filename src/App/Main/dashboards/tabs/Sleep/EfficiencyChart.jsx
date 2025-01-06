@@ -62,13 +62,13 @@ const EfficiencyChart = ({ data = [], style = {} }) => {
         <Tooltip content={renderTooltipContent} />
         <YAxis />
         <ReferenceLine
-          y="9"
+          y="8"
           stroke="#244780"
           strokeDasharray="3 3"
           label="In Bed Target"
         />
         <ReferenceLine
-          y="8"
+          y="7"
           stroke="#468cc2"
           strokeDasharray="3 3"
           label="Actual Sleep Target"
