@@ -9,6 +9,7 @@ import {
   Svg,
 } from "@react-pdf/renderer";
 import { DateTime } from "luxon";
+import React from "react";
 
 const font = {
   regular: "Times-Roman",
@@ -372,6 +373,18 @@ export function DrawLineGraph({
 }
 
 export function SupplementHeatmap({ last7Supplements, supplements }) {
+  const filteredSupplements = supplements?.reduce((acc, val) => {
+    const retObj = { ...acc };
+
+    if (!retObj[val.categoryName]) {
+      retObj[val.categoryName] = [];
+    }
+
+    retObj[val.categoryName].push(val);
+
+    return retObj;
+  }, {});
+
   return (
     <View
       style={{
@@ -398,59 +411,73 @@ export function SupplementHeatmap({ last7Supplements, supplements }) {
         ))}
       </View>
       {/* heatmap */}
-      {supplements?.map((item, i) => {
-        return (
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 4,
-              marginTop: 4,
-            }}
-            key={"supp-item-row-" + i}
-          >
-            <View
-              style={{
-                width: 100,
-                display: "flex",
-                justifyContent: "center",
-                marginRight: 20,
-              }}
-            >
-              <Text
-                style={{
-                  textAlign: "right",
-                  width: "100%",
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
+      {filteredSupplements &&
+        Object.keys(filteredSupplements).map((category, i) => {
+          return (
+            <React.Fragment key={"supp-category-" + i}>
+              <Text style={{ textAlign: "right" }}>{category}</Text>
+              {filteredSupplements[category]
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .sort((a, b) => b.priority - a.priority)
+                .map((item, i) => {
+                  return (
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 4,
+                        marginTop: 4,
+                      }}
+                      key={"supp-item-row-" + i}
+                    >
+                      <View
+                        style={{
+                          width: 100,
+                          display: "flex",
+                          justifyContent: "center",
+                          marginRight: 20,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            textAlign: "right",
+                            width: "100%",
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                      </View>
 
-            {last7Supplements?.map((log, index) => {
-              const match = log.logs?.find((l) => l.supplementId === item.id);
+                      {last7Supplements?.map((log, index) => {
+                        const match = log.logs?.find(
+                          (l) => l.supplementId === item.id
+                        );
 
-              return (
-                <View
-                  key={"supp-item-day-" + index}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    borderRadius: 4,
-                    backgroundColor:
-                      match && match.completed
-                        ? "#7bc96f"
-                        : match && match.completed === 0
-                        ? "#ff6347"
-                        : "#ebedf0",
-                    border: "2px solid grey",
-                  }}
-                />
-              );
-            })}
-          </View>
-        );
-      })}
+                        return (
+                          <View
+                            key={"supp-item-day-" + index}
+                            style={{
+                              width: 25,
+                              height: 25,
+                              borderRadius: 4,
+                              backgroundColor:
+                                match && match.completed
+                                  ? "#7bc96f"
+                                  : match && match.completed === 0
+                                  ? "#ff6347"
+                                  : "#ebedf0",
+                              border: "2px solid grey",
+                            }}
+                          />
+                        );
+                      })}
+                    </View>
+                  );
+                })}
+            </React.Fragment>
+          );
+        })}
+
       {/* Legend */}
       <View
         style={{ display: "flex", flexDirection: "row", gap: 4, marginTop: 10 }}
