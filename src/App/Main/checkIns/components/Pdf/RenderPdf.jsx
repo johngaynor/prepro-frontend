@@ -492,8 +492,7 @@ const RenderPdf = ({
           </View>
         </View>
       </Page>
-
-      {/* Supplement log */}
+      {/* Daily log */}
       <Page size="letter" style={{ padding: 100, fontSize: 10 }}>
         <Text
           style={{
@@ -502,7 +501,7 @@ const RenderPdf = ({
             fontSize: 12,
           }}
         >
-          Supplement Log - Last 7 Days
+          Daily Log - Last 7 Days
         </Text>
         <SupplementHeatmap
           last7Supplements={last7Supplements}
@@ -515,7 +514,7 @@ const RenderPdf = ({
             fontSize: 12,
           }}
         >
-          Missed Supplements
+          Missed Items
         </Text>
         {supplements?.map((item, index) => {
           const missed = supplementLogs?.filter(
