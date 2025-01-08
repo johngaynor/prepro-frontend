@@ -9,6 +9,7 @@ import CommentsDisplay from "./CommentsDisplay";
 import PhotosDisplay from "./PhotosDisplay";
 import { connect } from "react-redux";
 import { addPhoto, deletePhoto, assignPose } from "../../physique/actions";
+import { generateSleepSummary } from "../actions";
 
 const ViewCheckIn = ({
   selectedDay,
@@ -18,6 +19,7 @@ const ViewCheckIn = ({
   addPhoto,
   deletePhoto,
   assignPose,
+  generateSleepSummary,
 }) => {
   const [fileOpen, setFileOpen] = useState(false);
   const navigate = useNavigate();
@@ -44,6 +46,15 @@ const ViewCheckIn = ({
           marginBottom: -5,
         }}
       >
+        {/* {selectedDay && !selectedDay?.recoveryAnalysis && ( */}
+        <Button
+          onClick={() => generateSleepSummary(selectedDay?.date)}
+          color="blue"
+          type="button"
+          content="AI Sleep Analysis"
+          icon="microchip"
+        />
+        {/* )} */}
         <Button
           onClick={() => setFileOpen(true)}
           color="purple"
@@ -128,7 +139,12 @@ const ViewCheckIn = ({
           />
           <ViewInput
             value={selectedDay?.comments}
-            label="Overall comments/thoughts from the week (training, mood, sleep, energy, etc.)"
+            label="Overall comments/thoughts from the week (training, mood, energy, etc.)"
+            fullRow
+          />
+          <ViewInput
+            value={selectedDay?.recoveryAnalysis}
+            label="Sleep/recovery analysis"
             fullRow
           />
         </Grid>
@@ -159,6 +175,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { addPhoto, deletePhoto, assignPose })(
-  ViewCheckIn
-);
+export default connect(mapStateToProps, {
+  addPhoto,
+  deletePhoto,
+  assignPose,
+  generateSleepSummary,
+})(ViewCheckIn);
