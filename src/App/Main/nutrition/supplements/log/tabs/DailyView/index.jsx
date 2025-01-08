@@ -18,6 +18,7 @@ import { InputField } from "../../../../../components/FormFields";
 import MissedModal from "./components/MissedModal";
 import { connect } from "react-redux";
 import { toggleSupplementLog, addMissedSupplement } from "../../../actions";
+import { isMobile } from "../../../../../customHooks";
 
 const DailyView = ({
   supplements,
@@ -47,6 +48,7 @@ const DailyView = ({
       ...val,
       reason: match?.reason,
       completed: match?.completed,
+      time: match?.time,
     });
 
     return retObj;
@@ -94,15 +96,18 @@ const DailyView = ({
         </Grid.Column>
       </Grid>
       <Table striped>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderCell>Item</TableHeaderCell>
-            <TableHeaderCell>Description</TableHeaderCell>
-            <TableHeaderCell>Dosage</TableHeaderCell>
-            <TableHeaderCell>Completed?</TableHeaderCell>
-            <TableHeaderCell>Missed?</TableHeaderCell>
-          </TableRow>
-        </TableHeader>
+        {!isMobile && (
+          <TableHeader>
+            <TableRow>
+              <TableHeaderCell>Item</TableHeaderCell>
+              <TableHeaderCell>Description</TableHeaderCell>
+              <TableHeaderCell>Dosage</TableHeaderCell>
+              <TableHeaderCell>Completed?</TableHeaderCell>
+              <TableHeaderCell>Missed?</TableHeaderCell>
+            </TableRow>
+          </TableHeader>
+        )}
+
         <TableBody>
           {filteredLogs &&
             Object.keys(filteredLogs).map((category, i) => {
@@ -132,9 +137,17 @@ const DailyView = ({
                             }
                           />
                           {item.name}
+                          {isMobile && item.dosage && ` - ${item.dosage}`}
+                          {(item.completed || item.reason) &&
+                            item.time &&
+                            ` (${DateTime.fromISO(item.time, { zone: "utc" })
+                              .toLocal()
+                              .toFormat("M/d/yy h:mm a")})`}
                         </TableCell>
                         <TableCell>{item.description}</TableCell>
-                        <TableCell>--</TableCell>
+                        {!isMobile && (
+                          <TableCell>{item.dosage || "--"}</TableCell>
+                        )}
                         <TableCell verticalAlign="top">
                           <Checkbox
                             checked={!!item.completed}

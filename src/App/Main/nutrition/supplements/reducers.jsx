@@ -8,6 +8,7 @@ import {
   FETCH_ADD_MISSED_SUPPLEMENT_LOGS,
   LOAD_ADD_MISSED_SUPPLEMENT_LOGS,
 } from "../../../store/actionTypes";
+import { DateTime } from "luxon";
 
 const DEFAULT_STATE = {
   supplements: null,
@@ -50,6 +51,7 @@ export default (state = DEFAULT_STATE, action) => {
           supplementId: action.item.id,
           date: action.date,
           completed: 1,
+          time: DateTime.now().toUTC().toISO(),
         });
         return { ...state, logs: newLogs, editLoading: true };
       }
