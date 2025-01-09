@@ -78,10 +78,10 @@ export function sendPdfToCoach(formData) {
 }
 
 export function generateSleepSummary(date) {
-  return API.get(
-    "/api/checkins",
+  return API.post(
+    "/api/checkins/sleep/summary",
     "Error generating sleep summary",
-    // date,
+    { date },
     () => ({ type: LOAD_CHECKIN_SLEEP_SUMMARY }),
     () => ({ type: FETCH_CHECKIN_SLEEP_SUMMARY })
   );
