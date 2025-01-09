@@ -50,7 +50,6 @@ const EditCheckIn = ({
   }, [selectedDay]);
 
   function handleSubmit() {
-    // handle validation
     editCheckIn({ ...selectedDay, ...formValues });
     setEditMode(false);
   }
@@ -61,7 +60,14 @@ const EditCheckIn = ({
 
   function handleCopyFromLast() {
     const newVals = cloneDeep(lastCheckIn);
-    setFormValues({ ...newVals, date, id: null });
+    setFormValues({
+      ...newVals,
+      date,
+      id: null,
+      timeline: parseInt(newVals.timeline) + 1,
+      cheats: "",
+      comments: "",
+    });
   }
 
   return (
@@ -74,12 +80,6 @@ const EditCheckIn = ({
             name="date"
             value={formValues.date}
             onChange={(e, { value }) => navigate(`/checkins/${value}`)}
-          />
-          <InputField
-            label="Timeline (how many weeks into diet)"
-            name="timeline"
-            value={formValues.timeline || ""}
-            onChange={handleChange}
           />
           <DropdownField
             label="Current diet phase (bulk, cut, maintenance)"
@@ -170,7 +170,13 @@ const EditCheckIn = ({
             />
           )}
 
-          <Button type="submit" content="Save" icon="save" color="blue" />
+          <Button
+            type="submit"
+            content="Save"
+            icon="save"
+            color="blue"
+            disabled={!formValues.phase}
+          />
         </Container>
       </Form>
     </Segment>
