@@ -20,6 +20,7 @@ const CheckInLog = ({
   checkInsLoading,
   getCheckIns,
   pdfLoading,
+  editLoading,
 }) => {
   const [editMode, setEditMode] = useState(false);
 
@@ -65,9 +66,11 @@ const CheckInLog = ({
 
   return (
     <>
-      {(checkInsLoading || posesLoading || photosLoading || pdfLoading) && (
-        <Spinner />
-      )}
+      {(checkInsLoading ||
+        posesLoading ||
+        photosLoading ||
+        pdfLoading ||
+        editLoading) && <Spinner />}
       <ReportModal
         handleCloseModal={handleCloseReport}
         selectedDay={selectedDay}
@@ -97,6 +100,7 @@ function mapStateToProps(state) {
     checkIns: state.checkIns.checkIns,
     checkInsLoading: state.checkIns.checkInsLoading,
     pdfLoading: state.checkIns.pdfLoading,
+    editLoading: state.checkIns.editLoading,
   };
 }
 
