@@ -8,6 +8,7 @@ import ReportModal from "./components/ReportModal";
 import { connect } from "react-redux";
 import { getCheckIns } from "./actions";
 import { getPoses, getPhotos } from "../physique/actions";
+import { getDietLogs } from "../nutrition/actions";
 
 const CheckInLog = ({
   poses,
@@ -21,6 +22,9 @@ const CheckInLog = ({
   getCheckIns,
   pdfLoading,
   editLoading,
+  dietLogs,
+  dietLogsLoading,
+  getDietLogs,
 }) => {
   const [editMode, setEditMode] = useState(false);
 
@@ -28,7 +32,17 @@ const CheckInLog = ({
     if (!checkIns && !checkInsLoading) getCheckIns();
     if (!poses && !posesLoading) getPoses();
     if (!photos && !photosLoading) getPhotos();
-  }, [checkIns, checkInsLoading, poses, posesLoading, photos, photosLoading]);
+    if (!dietLogs && !dietLogsLoading) getDietLogs();
+  }, [
+    checkIns,
+    checkInsLoading,
+    poses,
+    posesLoading,
+    photos,
+    photosLoading,
+    dietLogs,
+    dietLogsLoading,
+  ]);
 
   const { date } = useParams();
   const navigate = useNavigate();
@@ -60,6 +74,18 @@ const CheckInLog = ({
       return dateB - dateA;
     })[0];
 
+  const activeDietLog = dietLogs
+    ?.filter((l) => {
+      const today = DateTime.fromISO(date).startOf("day");
+      const dietLogDate = DateTime.fromISO(l.effectiveDate).startOf("day");
+      return dietLogDate < today;
+    })
+    .sort((a, b) => {
+      const dateA = DateTime.fromISO(a.effectiveDate);
+      const dateB = DateTime.fromISO(b.effectiveDate);
+      return dateB - dateA;
+    })[0];
+
   function handleCloseReport() {
     navigate(`/checkins/${date}?report=false`);
   }
@@ -78,7 +104,11 @@ const CheckInLog = ({
         lastCheckIn={lastCheckIn}
       />
       {selectedDay && !editMode ? (
-        <ViewCheckIn selectedDay={selectedDay} setEditMode={setEditMode} />
+        <ViewCheckIn
+          selectedDay={selectedDay}
+          setEditMode={setEditMode}
+          activeDietLog={activeDietLog}
+        />
       ) : (
         <EditCheckIn
           selectedDay={selectedDay}
@@ -101,6 +131,8 @@ function mapStateToProps(state) {
     checkInsLoading: state.checkIns.checkInsLoading,
     pdfLoading: state.checkIns.pdfLoading,
     editLoading: state.checkIns.editLoading,
+    dietLogs: state.nutrition.dietLogs,
+    dietLogsLoading: state.nutrition.dietLogsLoading,
   };
 }
 
@@ -108,4 +140,5 @@ export default connect(mapStateToProps, {
   getPoses,
   getPhotos,
   getCheckIns,
+  getDietLogs,
 })(CheckInLog);

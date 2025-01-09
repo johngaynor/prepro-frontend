@@ -26,19 +26,17 @@ const EditCheckIn = ({
     cheats: "",
     comments: "",
     training: "",
-    cardio: "",
     recoveryAnalysis: "",
   });
 
   const defaultValues = {
     date,
-    hormones: "",
+    hormones: "", // remove this soon
     phase: "",
     timeline: "",
     cheats: "",
     comments: "",
     training: "",
-    cardio: "",
     recoveryAnalysis: "",
   };
 
@@ -91,18 +89,6 @@ const EditCheckIn = ({
               { key: "cut", text: "Cut", value: "Cut" },
               { key: "maintenance", text: "Maintenance", value: "Maintenance" },
             ]}
-          />
-          <InputField
-            label="Hormone altering or fat loss supplements used"
-            name="hormones"
-            value={formValues.hormones || ""}
-            onChange={handleChange}
-          />
-          <InputField
-            label="Cardio (style, duration, number of times per week)"
-            name="cardio"
-            value={formValues.cardio || ""}
-            onChange={handleChange}
           />
           <InputField
             label="Training (style and days per week)"

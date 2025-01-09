@@ -20,6 +20,7 @@ const ViewCheckIn = ({
   deletePhoto,
   assignPose,
   generateSleepSummary,
+  activeDietLog,
 }) => {
   const [fileOpen, setFileOpen] = useState(false);
   const navigate = useNavigate();
@@ -125,7 +126,7 @@ const ViewCheckIn = ({
             label="Hormone altering or fat loss supplements used"
           />
           <ViewInput
-            value={selectedDay?.cardio}
+            value={activeDietLog?.cardio}
             label="Cardio (style, duration, number of times per week)"
           />
           <ViewInput

@@ -24,7 +24,7 @@ import {
   getSupplementLogs,
   getSupplements,
 } from "../../nutrition/supplements/actions";
-import { getWeightLogs } from "../../nutrition/actions";
+import { getWeightLogs, getDietLogs } from "../../nutrition/actions";
 import { getSleepLogs } from "../../sleep/actions";
 import { sendPdfToCoach } from "../actions";
 import { connect } from "react-redux";
@@ -49,6 +49,9 @@ const ReportModal = ({
   sleepLogs,
   sleepLogsLoading,
   getSleepLogs,
+  dietLogs,
+  dietLogsLoading,
+  getDietLogs,
 }) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
   const [coachNotes, setCoachNotes] = useState("");
@@ -58,6 +61,7 @@ const ReportModal = ({
     if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
     if (!weightLogs && !weightLogsLoading) getWeightLogs();
     if (!sleepLogs && !sleepLogsLoading) getSleepLogs();
+    if (!dietLogs && !dietLogsLoading) getDietLogs();
   }, [
     supplements,
     supplementsLoading,
@@ -65,6 +69,8 @@ const ReportModal = ({
     supplementLogsLoading,
     sleepLogs,
     sleepLogsLoading,
+    dietLogs,
+    dietLogsLoading,
   ]);
 
   useEffect(() => {
@@ -79,6 +85,18 @@ const ReportModal = ({
     })
     .map((l) => ({ date: l.date, weight: parseFloat(l.weight) }));
 
+  const activeDietLog = dietLogs
+    ?.filter((l) => {
+      const today = DateTime.fromISO(selectedDay?.date).startOf("day");
+      const dietLogDate = DateTime.fromISO(l.effectiveDate).startOf("day");
+      return dietLogDate < today;
+    })
+    .sort((a, b) => {
+      const dateA = DateTime.fromISO(a.effectiveDate);
+      const dateB = DateTime.fromISO(b.effectiveDate);
+      return dateB - dateA;
+    })[0];
+
   const filename = `${user.name} ${selectedDay?.date} Check In`;
 
   const reportProps = {
@@ -88,6 +106,7 @@ const ReportModal = ({
     supplements,
     supplementLogs,
     sleepLogs,
+    activeDietLog,
   };
 
   async function handleSendPdf(reportPdf, filename, checkInId, message) {
@@ -173,6 +192,8 @@ function mapStateToProps(state) {
     user: state.app.user,
     sleepLogs: state.sleep.logs,
     sleepLogsLoading: state.sleep.logsLoading,
+    dietLogs: state.nutrition.dietLogs,
+    dietLogsLoading: state.nutrition.dietLogsLoading,
   };
 }
 
@@ -182,4 +203,5 @@ export default connect(mapStateToProps, {
   getWeightLogs,
   sendPdfToCoach,
   getSleepLogs,
+  getDietLogs,
 })(ReportModal);

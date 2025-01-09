@@ -8,6 +8,7 @@ const CheckInDoc = ({
   supplementLogs,
   supplements,
   sleepLogs,
+  activeDietLog,
 }) => {
   const last7Weight = selectedDay
     ? Array.from({ length: 7 })
@@ -108,6 +109,7 @@ const CheckInDoc = ({
       supplementLogs={supplementLogs}
       last7Sleep={last7Sleep}
       last30Sleep={last30Sleep}
+      activeDietLog={activeDietLog}
     />
   );
 };

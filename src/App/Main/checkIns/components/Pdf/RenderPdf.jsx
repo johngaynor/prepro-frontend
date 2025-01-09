@@ -128,6 +128,7 @@ const RenderPdf = ({
   supplementLogs,
   last7Sleep,
   last30Sleep,
+  activeDietLog = {},
 }) => {
   const last7SleepHours = last7Sleep.map((log) => ({
     date: log.date,
@@ -148,6 +149,8 @@ const RenderPdf = ({
     date: log.date,
     value: log.recoveryIndex,
   }));
+
+  const { protein, carbs, fat, calories, cardio } = activeDietLog;
 
   return (
     <Document>
@@ -210,8 +213,14 @@ const RenderPdf = ({
             answer={selectedDay?.timeline}
           />
           <FormQuestionBox
+            question="Diet (including macros)"
+            answer={`${parseInt(calories)}kcal, ${parseInt(fat)}f ${parseInt(
+              protein
+            )}p ${parseInt(carbs)}c`}
+          />
+          <FormQuestionBox
             question="Cardio (style, duration, number of times per week)"
-            answer={selectedDay?.cardio}
+            answer={cardio}
           />
           <FormQuestionBox
             question="Training (style and days per week)"
