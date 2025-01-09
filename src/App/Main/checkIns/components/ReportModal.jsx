@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ModalHeader,
   ModalDescription,
@@ -8,6 +8,8 @@ import {
   Modal,
   Container,
   Header,
+  Input,
+  Grid,
 } from "semantic-ui-react";
 import {
   PDFDownloadLink,
@@ -49,6 +51,7 @@ const ReportModal = ({
   getSleepLogs,
 }) => {
   const [pdf, update] = usePDF({ document: CheckInDoc({ selectedDay }) });
+  const [coachNotes, setCoachNotes] = useState("");
 
   useEffect(() => {
     if (!supplements && !supplementsLoading) getSupplements();
@@ -87,11 +90,12 @@ const ReportModal = ({
     sleepLogs,
   };
 
-  async function handleSendPdf(reportPdf, filename, checkInId) {
+  async function handleSendPdf(reportPdf, filename, checkInId, message) {
     const blob = await reactPDF(reportPdf).toBlob();
     const formData = new FormData();
     formData.append("filename", filename);
     formData.append("checkInId", checkInId);
+    formData.append("message", message);
     formData.append("file", blob, "test-name-report");
     // send pdf
     sendPdfToCoach(formData);
@@ -119,28 +123,40 @@ const ReportModal = ({
         </ModalDescription>
       </ModalContent>
       <ModalActions>
-        <Button
-          color="purple"
-          icon="send"
-          content="Email to Coach"
-          onClick={() => {
-            handleCloseModal();
-            handleSendPdf(
-              <CheckInDoc {...reportProps} />,
-              filename,
-              selectedDay?.id
-            );
-          }}
-        />
-
-        <PDFDownloadLink
-          document={<CheckInDoc {...reportProps} />}
-          fileName={filename}
-          className="ui yellow button"
-        >
-          <i aria-hidden="true" className={"download icon"} />
-          Download PDF
-        </PDFDownloadLink>
+        <Grid columns="2" doubling stackable>
+          <Grid.Column>
+            <Input
+              placeholder="Add notes for coach email..."
+              fluid
+              value={coachNotes}
+              onChange={(e, { value }) => setCoachNotes(value)}
+            />
+          </Grid.Column>
+          <Grid.Column>
+            <Button
+              color="purple"
+              icon="send"
+              content="Email to Coach"
+              onClick={() => {
+                handleCloseModal();
+                handleSendPdf(
+                  <CheckInDoc {...reportProps} />,
+                  filename,
+                  selectedDay?.id,
+                  coachNotes
+                );
+              }}
+            />
+            <PDFDownloadLink
+              document={<CheckInDoc {...reportProps} />}
+              fileName={filename}
+              className="ui yellow button"
+            >
+              <i aria-hidden="true" className={"download icon"} />
+              Download PDF
+            </PDFDownloadLink>
+          </Grid.Column>
+        </Grid>
       </ModalActions>
     </Modal>
   );
