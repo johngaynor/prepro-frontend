@@ -222,8 +222,12 @@ const RenderPdf = ({
             answer={selectedDay?.cheats}
           />
           <FormQuestionBox
-            question="Overall comments/thoughts from the week (training, mood, sleep, energy, etc.)"
+            question="Overall comments/thoughts from the week (training, mood, energy, etc.)"
             answer={selectedDay?.comments}
+          />
+          <FormQuestionBox
+            question="Recovery/sleep analysis"
+            answer={selectedDay?.recoveryAnalysis}
           />
         </View>
       </Page>
