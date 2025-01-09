@@ -46,15 +46,15 @@ const ViewCheckIn = ({
           marginBottom: -5,
         }}
       >
-        {/* {selectedDay && !selectedDay?.recoveryAnalysis && ( */}
-        <Button
-          onClick={() => generateSleepSummary(selectedDay?.date)}
-          color="blue"
-          type="button"
-          content="AI Sleep Analysis"
-          icon="microchip"
-        />
-        {/* )} */}
+        {selectedDay && !selectedDay?.recoveryAnalysis && (
+          <Button
+            onClick={() => generateSleepSummary(selectedDay?.date)}
+            color="blue"
+            type="button"
+            content="AI Sleep Analysis"
+            icon="microchip"
+          />
+        )}
         <Button
           onClick={() => setFileOpen(true)}
           color="purple"
