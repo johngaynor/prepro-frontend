@@ -32,7 +32,7 @@ const Filter = ({
         <List>
           {items?.map((i) => {
             return (
-              <List.Item key={"pose-filter-" + i.name}>
+              <List.Item key={"filter-item-" + itemName + "-" + i.name}>
                 <Checkbox
                   value={i.name}
                   label={i.name}

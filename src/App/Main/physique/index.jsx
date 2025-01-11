@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Header, Segment, Accordion, Icon } from "semantic-ui-react";
+import {
+  Header,
+  Segment,
+  Accordion,
+  Icon,
+  List,
+  Checkbox,
+} from "semantic-ui-react";
 import { connect } from "react-redux";
 import { getPoses, getPhotos } from "./actions";
+import Filter from "../components/Filter";
 
 const Physique = ({
   poses,
@@ -22,20 +30,14 @@ const Physique = ({
   return (
     <Segment>
       <Header as="h3">Physique Comparison</Header>
-      <Accordion styled fluid>
-        <Accordion.Title
-          active={openFilter}
-          onClick={() => setOpenFilter(!openFilter)}
-        >
-          <Icon name="dropdown" />
-          {openFilter
-            ? "Hide Filters"
-            : `Open Filters (${activePoses.length} of ${poses.length} poses selected)`}
-        </Accordion.Title>
-        <Accordion.Content>
-          <p>Poses</p>
-        </Accordion.Content>
-      </Accordion>
+      <Filter
+        itemName="poses"
+        items={poses}
+        filters={activePoses}
+        setFilters={setActivePoses}
+        openFilter={openFilter}
+        setOpenFilter={setOpenFilter}
+      />
     </Segment>
   );
 };
