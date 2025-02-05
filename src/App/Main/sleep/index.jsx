@@ -17,13 +17,13 @@ const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
     {
       menuItem: "Statistics",
       render: () => {
-        return "Statistics";
+        return "TEST123";
       },
     },
     {
       menuItem: "Integrations",
       render: () => {
-        return "Integrations";
+        return "TEST123";
       },
     },
   ];
