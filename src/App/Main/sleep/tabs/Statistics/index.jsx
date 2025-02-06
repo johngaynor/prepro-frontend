@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getCheckIns } from "../../../checkIns/actions";
 import { Grid, Segment } from "semantic-ui-react";
 import OverviewStatistics from "./components/OverviewStatistics";
+import WeekTable from "./components/WeekTable";
 
 const SleepStatistics = ({
   sleepLogs,
@@ -19,7 +20,7 @@ const SleepStatistics = ({
   const sleepLogsThisWeek =
     lastCheckIn &&
     sleepLogs &&
-    sleepLogs.filter((l) => l.date >= lastCheckIn.date);
+    sleepLogs.filter((l) => l.date > lastCheckIn.date);
 
   return (
     <Segment>
@@ -29,6 +30,9 @@ const SleepStatistics = ({
             lastCheckIn={lastCheckIn}
             sleepLogsThisWeek={sleepLogsThisWeek}
           />
+        </Grid.Column>
+        <Grid.Column>
+          <WeekTable sleepLogsThisWeek={sleepLogsThisWeek} />
         </Grid.Column>
       </Grid>
     </Segment>
