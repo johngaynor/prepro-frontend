@@ -4,6 +4,7 @@ import Spinner from "../components/Spinner";
 import { connect } from "react-redux";
 import { getSleepLogs } from "./actions";
 import { useNavigate, useParams } from "react-router-dom";
+import SleepStatistics from "./tabs/Statistics";
 
 const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
   useEffect(() => {
@@ -17,13 +18,7 @@ const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
     {
       menuItem: "Statistics",
       render: () => {
-        return "TEST123";
-      },
-    },
-    {
-      menuItem: "Integrations",
-      render: () => {
-        return "TEST123";
+        return <SleepStatistics sleepLogs={sleepLogs} />;
       },
     },
   ];
@@ -31,12 +26,17 @@ const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
   const activeTab = mainPanes.findIndex(
     (pane) => pane.menuItem.toLowerCase() === maintab
   );
+
+  useEffect(() => {
+    if (activeTab < 0) navigate("/sleep/statistics");
+  });
+
   return (
     <>
       {sleepLogsLoading && <Spinner />}
       <Tab
         panes={mainPanes}
-        activeIndex={activeTab < 0 ? 0 : activeTab}
+        activeIndex={activeTab}
         onTabChange={(e, { activeIndex }) =>
           navigate(`/sleep/${mainPanes[activeIndex].menuItem.toLowerCase()}`)
         }
