@@ -58,7 +58,8 @@ const OverviewStatistics = ({ lastCheckIn, sleepLogsThisWeek }) => {
                 You need to sleep{" "}
                 <strong>
                   {calculateHoursMinutes(
-                    parseFloat(avgThisWeek) - parseFloat(targetAvg)
+                    parseFloat(lastCheckIn?.avgTotalSleep) -
+                      parseFloat(targetAvg)
                   )}
                 </strong>{" "}
                 over the next <strong>{daysLeft}</strong> night
