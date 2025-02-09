@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { getSleepLogs } from "./actions";
 import { useNavigate, useParams } from "react-router-dom";
 import SleepStatistics from "./tabs/Statistics";
+import SleepIntegrations from "./tabs/Integrations";
 
 const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
   useEffect(() => {
@@ -19,6 +20,12 @@ const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
       menuItem: "Statistics",
       render: () => {
         return <SleepStatistics sleepLogs={sleepLogs} />;
+      },
+    },
+    {
+      menuItem: "Integrations",
+      render: () => {
+        return <SleepIntegrations />;
       },
     },
   ];
