@@ -2,7 +2,11 @@ import { Grid, Header, Icon, Message, Segment } from "semantic-ui-react";
 import { calculateHoursMinutes } from "../../../components/helperFunctions";
 import { StatisticsBox } from "../../../components/DashboardComponents";
 
-const OverviewStatistics = ({ lastCheckIn, sleepLogsThisWeek }) => {
+const OverviewStatistics = ({ settings, lastCheckIn, sleepLogsThisWeek }) => {
+  const days =
+    settings && settings.checkInFrequency
+      ? parseInt(settings.checkInFrequency)
+      : 7;
   const avgThisWeek =
     sleepLogsThisWeek &&
     sleepLogsThisWeek.length &&
@@ -16,7 +20,7 @@ const OverviewStatistics = ({ lastCheckIn, sleepLogsThisWeek }) => {
   const avgCheckInDiff =
     avgThisWeek && lastCheckIn && avgThisWeek - lastCheckIn.avgTotalSleep;
 
-  const daysLeft = 7 - sleepLogsThisWeek?.length;
+  const daysLeft = days - sleepLogsThisWeek?.length;
 
   const targetAvg =
     avgCheckInDiff &&

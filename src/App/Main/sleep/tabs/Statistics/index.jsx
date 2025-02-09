@@ -6,10 +6,11 @@ import OverviewStatistics from "./components/OverviewStatistics";
 import WeekTable from "./components/WeekTable";
 
 const SleepStatistics = ({
-  sleepLogs,
+  logs,
   checkIns,
   checkInsLoading,
   getCheckIns,
+  settings,
 }) => {
   useEffect(() => {
     if (!checkIns && !checkInsLoading) getCheckIns();
@@ -18,15 +19,14 @@ const SleepStatistics = ({
   const lastCheckIn = checkIns?.sort((a, b) => b.date.localeCompare(a.date))[0];
 
   const sleepLogsThisWeek =
-    lastCheckIn &&
-    sleepLogs &&
-    sleepLogs.filter((l) => l.date > lastCheckIn.date);
+    lastCheckIn && logs && logs.filter((l) => l.date > lastCheckIn.date);
 
   return (
     <Segment>
       <Grid columns={2} doubling stackable>
         <Grid.Column>
           <OverviewStatistics
+            settings={settings}
             lastCheckIn={lastCheckIn}
             sleepLogsThisWeek={sleepLogsThisWeek}
           />
