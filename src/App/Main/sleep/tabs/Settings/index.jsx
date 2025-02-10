@@ -57,6 +57,20 @@ const SleepSettings = ({ settings, updateSleepSettings }) => {
               />
             </Grid>
           </Segment>
+          <Segment>
+            <Header as="h2">Goals</Header>
+            <Header as="h5">Set target amounts of sleep for each week.</Header>
+            <Grid columns={2} doubling stackable>
+              <InputSelector
+                label="Average Sleep (hrs)"
+                name="sleepGoal"
+                value={formValues?.sleepGoal || ""}
+                onChange={onSettingsChange}
+                onBlur={onSettingsBlur}
+                type="number"
+              />
+            </Grid>
+          </Segment>
         </Grid.Column>
       </Grid>
     </Segment>
