@@ -7,6 +7,8 @@ import {
   LOAD_SLEEP_SETTINGS,
   FETCH_UPDATE_SLEEP_SETTINGS,
   LOAD_UPDATE_SLEEP_SETTINGS,
+  FETCH_GET_OURA_LOG,
+  LOAD_GET_OURA_LOG,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -44,5 +46,14 @@ export function updateSleepSettings(name, value) {
     { [name]: value },
     (failed) => ({ type: LOAD_UPDATE_SLEEP_SETTINGS, failed }),
     () => ({ type: FETCH_UPDATE_SLEEP_SETTINGS, name, value })
+  );
+}
+
+export function checkOuraLogs(date) {
+  return API.get(
+    `/api/sleep/oura/${date}`,
+    "Error checking oura for logs",
+    () => ({ type: LOAD_GET_OURA_LOG }),
+    () => ({ type: FETCH_GET_OURA_LOG })
   );
 }

@@ -7,6 +7,8 @@ import {
   LOAD_SLEEP_SETTINGS,
   FETCH_UPDATE_SLEEP_SETTINGS,
   LOAD_UPDATE_SLEEP_SETTINGS,
+  FETCH_GET_OURA_LOG,
+  LOAD_GET_OURA_LOG,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -17,6 +19,7 @@ const DEFAULT_STATE = {
   integrationsLoading: false,
   settings: null,
   settingsLoading: false,
+  checkedOura: false,
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -53,6 +56,10 @@ export default (state = DEFAULT_STATE, action) => {
         editLoading: false,
         settings: action.failed ? null : state.settings,
       };
+    case FETCH_GET_OURA_LOG:
+      return { ...state, editLoading: true };
+    case LOAD_GET_OURA_LOG:
+      return { ...state, editLoading: false, checkedOura: true, logs: null };
     default:
       return state;
   }
