@@ -16,6 +16,7 @@ import WeightLog from "./nutrition/weight/log";
 import Dashboards from "./dashboards";
 import DietLog from "./nutrition/diet";
 import Physique from "./physique";
+import SleepApp from "./sleep";
 
 const Main = ({ user, apps, ...props }) => {
   const location = useLocation();
@@ -67,6 +68,8 @@ const Main = ({ user, apps, ...props }) => {
         <Route path="/dashboards" element={withAuth(Dashboards, 9)} />
         <Route path="/nutrition/diet" element={withAuth(DietLog, 10)} />
         <Route path="/physique" element={withAuth(Physique, 11)} />
+        <Route path="/sleep" element={withAuth(SleepApp, 12)} />
+        <Route path="/sleep/:maintab" element={withAuth(SleepApp, 12)} />
         <Route path="*" element={<Homepage startsWith={location.pathname} />} />
       </Routes>
     </div>
