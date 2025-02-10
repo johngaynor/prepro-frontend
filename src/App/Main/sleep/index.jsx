@@ -2,15 +2,32 @@ import React, { useEffect } from "react";
 import Tab from "../components/Tab";
 import Spinner from "../components/Spinner";
 import { connect } from "react-redux";
-import { getSleepLogs } from "./actions";
+import { getSleepLogs, getSleepSettings, updateSleepSettings } from "./actions";
 import { useNavigate, useParams } from "react-router-dom";
 import SleepStatistics from "./tabs/Statistics";
 import SleepIntegrations from "./tabs/Integrations";
+import SleepSettings from "./tabs/Settings";
 
-const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
+const SleepApp = ({
+  logs,
+  logsLoading,
+  getSleepLogs,
+  settings,
+  settingsLoading,
+  getSleepSettings,
+  updateSleepSettings,
+}) => {
   useEffect(() => {
-    if (!sleepLogs && !sleepLogsLoading) getSleepLogs();
-  }, [sleepLogs, sleepLogsLoading, getSleepLogs]);
+    if (!logs && !logsLoading) getSleepLogs();
+    if (!settings && !settingsLoading) getSleepSettings();
+  }, [
+    logs,
+    logsLoading,
+    getSleepLogs,
+    settings,
+    settingsLoading,
+    getSleepSettings,
+  ]);
 
   const { maintab } = useParams();
   const navigate = useNavigate();
@@ -19,13 +36,24 @@ const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
     {
       menuItem: "Statistics",
       render: () => {
-        return <SleepStatistics sleepLogs={sleepLogs} />;
+        return <SleepStatistics logs={logs} settings={settings} />;
       },
     },
     {
       menuItem: "Integrations",
       render: () => {
         return <SleepIntegrations />;
+      },
+    },
+    {
+      menuItem: "Settings",
+      render: () => {
+        return (
+          <SleepSettings
+            settings={settings}
+            updateSleepSettings={updateSleepSettings}
+          />
+        );
       },
     },
   ];
@@ -40,7 +68,7 @@ const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
 
   return (
     <>
-      {sleepLogsLoading && <Spinner />}
+      {(logsLoading || settingsLoading) && <Spinner />}
       <Tab
         panes={mainPanes}
         activeIndex={activeTab}
@@ -54,9 +82,15 @@ const SleepApp = ({ sleepLogs, sleepLogsLoading, getSleepLogs }) => {
 
 function mapStateToProps(state) {
   return {
-    sleepLogs: state.sleep.logs,
-    sleepLogsLoading: state.sleep.logsLoading,
+    logs: state.sleep.logs,
+    logsLoading: state.sleep.logsLoading,
+    settings: state.sleep.settings,
+    settingsLoading: state.sleep.settingsLoading,
   };
 }
 
-export default connect(mapStateToProps, { getSleepLogs })(SleepApp);
+export default connect(mapStateToProps, {
+  getSleepLogs,
+  getSleepSettings,
+  updateSleepSettings,
+})(SleepApp);
