@@ -27,6 +27,7 @@ const EditCheckIn = ({
     comments: "",
     training: "",
     recoveryAnalysis: "",
+    trainingAnalysis: "",
   });
 
   const defaultValues = {
@@ -38,6 +39,7 @@ const EditCheckIn = ({
     comments: "",
     training: "",
     recoveryAnalysis: "",
+    trainingAnalysis: "",
   };
 
   const navigate = useNavigate();
@@ -111,13 +113,22 @@ const EditCheckIn = ({
             fullWidth
           />
           {selectedDay && (
-            <TextAreaField
-              label="Sleep/recovery analysis"
-              name="recoveryAnalysis"
-              value={formValues.recoveryAnalysis || ""}
-              onChange={handleChange}
-              fullWidth
-            />
+            <>
+              <TextAreaField
+                label="Sleep/recovery analysis"
+                name="recoveryAnalysis"
+                value={formValues.recoveryAnalysis || ""}
+                onChange={handleChange}
+                fullWidth
+              />
+              <TextAreaField
+                label="Training analysis"
+                name="trainingAnalysis"
+                value={formValues.trainingAnalysis || ""}
+                onChange={handleChange}
+                fullWidth
+              />
+            </>
           )}
         </Grid>
         <Container

@@ -140,7 +140,7 @@ const ViewCheckIn = ({
           />
           <ViewInput
             value={selectedDay?.comments}
-            label="Overall comments/thoughts from the week (training, mood, energy, etc.)"
+            label="Overall comments/thoughts from the week"
             fullRow
           />
           <ViewInput
