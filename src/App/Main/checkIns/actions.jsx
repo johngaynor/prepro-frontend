@@ -11,8 +11,8 @@ import {
   LOAD_ADD_CHECKIN_COMMENTARY,
   FETCH_SEND_CHECKIN_PDF,
   LOAD_SEND_CHECKIN_PDF,
-  FETCH_CHECKIN_SLEEP_SUMMARY,
-  LOAD_CHECKIN_SLEEP_SUMMARY,
+  FETCH_CHECKIN_AI_SUMMARY,
+  LOAD_CHECKIN_AI_SUMMARY,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -77,12 +77,12 @@ export function sendPdfToCoach(formData) {
   );
 }
 
-export function generateSleepSummary(date) {
+export function generateAISummary(date) {
   return API.post(
-    "/api/checkins/sleep/summary",
-    "Error generating sleep summary",
+    "/api/checkins/ai/summary",
+    "Error generating AI summary",
     { date },
-    () => ({ type: LOAD_CHECKIN_SLEEP_SUMMARY }),
-    () => ({ type: FETCH_CHECKIN_SLEEP_SUMMARY })
+    () => ({ type: LOAD_CHECKIN_AI_SUMMARY }),
+    () => ({ type: FETCH_CHECKIN_AI_SUMMARY })
   );
 }

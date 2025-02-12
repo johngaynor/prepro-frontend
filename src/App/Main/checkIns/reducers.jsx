@@ -11,8 +11,8 @@ import {
   LOAD_ADD_CHECKIN_COMMENTARY,
   FETCH_SEND_CHECKIN_PDF,
   LOAD_SEND_CHECKIN_PDF,
-  FETCH_CHECKIN_SLEEP_SUMMARY,
-  LOAD_CHECKIN_SLEEP_SUMMARY,
+  FETCH_CHECKIN_AI_SUMMARY,
+  LOAD_CHECKIN_AI_SUMMARY,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -78,9 +78,9 @@ export default (state = DEFAULT_STATE, action) => {
       return { ...state, pdfLoading: true };
     case LOAD_SEND_CHECKIN_PDF:
       return { ...state, pdfLoading: false, commentaryId: null };
-    case FETCH_CHECKIN_SLEEP_SUMMARY:
+    case FETCH_CHECKIN_AI_SUMMARY:
       return { ...state, editLoading: true };
-    case LOAD_CHECKIN_SLEEP_SUMMARY:
+    case LOAD_CHECKIN_AI_SUMMARY:
       return { ...state, editLoading: false, checkIns: null };
     default:
       return state;
