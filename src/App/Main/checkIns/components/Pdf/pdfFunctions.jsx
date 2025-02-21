@@ -528,8 +528,10 @@ export function SupplementHeatmap({ last7Supplements, supplements }) {
 }
 
 export function getTime(time) {
-  const hours = Math.floor(time);
-  const minutes = Math.floor((time - hours) * 60);
+  const sign = time < 0 ? "-" : "";
+  const absTime = Math.abs(time);
+  const hours = Math.floor(absTime);
+  const minutes = Math.floor((absTime - hours) * 60);
 
-  return `${hours}h ${minutes}m`;
+  return `${sign}${hours}h${minutes}m`;
 }
