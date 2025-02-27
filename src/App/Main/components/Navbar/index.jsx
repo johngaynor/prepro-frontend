@@ -22,7 +22,7 @@ const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
   }, [auth, apps, appsLoading]);
 
   return (
-    <Menu fixed="top" inverted color="blue" size="tiny">
+    <Menu fixed="top" inverted color="blue" size="tiny" secondary>
       <Link to="/" className="normal item">
         {/* <Icon name="image outline" size="large" /> */}
         {/* <img
