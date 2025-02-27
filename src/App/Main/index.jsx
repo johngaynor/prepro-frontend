@@ -5,6 +5,7 @@ import BreadCrumb from "./components/Breadcrumb";
 import Spinner from "./components/Spinner";
 import { Segment } from "semantic-ui-react";
 import { connect } from "react-redux";
+import { motion } from "framer-motion";
 // page imports
 import ExerciseLog from "./fitness/log";
 import AdminConsole from "./admin";
@@ -24,7 +25,16 @@ const Main = ({ user, apps, ...props }) => {
   const withAuth = (Component, appId) => {
     const match = apps.find((a) => a.id === appId);
     if (match) {
-      return <Component {...props} />;
+      return (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }} // Initial scale and opacity
+          animate={{ opacity: 1, scale: 1 }} // Target scale and opacity
+          exit={{ opacity: 0, scale: 0.8 }} // Exit animation
+          transition={{ type: "spring", stiffness: 300, damping: 30 }} // Smooth transition
+        >
+          <Component {...props} />
+        </motion.div>
+      );
     } else {
       if (!user || !apps.length) {
         return <Spinner />;
