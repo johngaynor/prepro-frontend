@@ -6,31 +6,33 @@ import Spinner from "./components/Spinner";
 import { Segment } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { motion } from "framer-motion";
+import { isMobile } from "./customHooks";
 // page imports
-const ExerciseLog = lazy(() => import("./fitness/log"));
+import WeightLog from "./nutrition/weight/log";
+import SupplementLogPage from "./nutrition/supplements/log";
+import SleepApp from "./sleep";
+import ExerciseLog from "./fitness/log";
+import CheckInLogs from "./checkIns";
+// lazy page imports (less popular pages)
 const AdminConsole = lazy(() => import("./admin"));
 const FitnessLogAdmin = lazy(() => import("./fitness/admin"));
-const CheckInLogs = lazy(() => import("./checkIns"));
 const ActivityLogs = lazy(() => import("./activity"));
-const SupplementLogPage = lazy(() => import("./nutrition/supplements/log"));
-const WeightLog = lazy(() => import("./nutrition/weight/log"));
 const Dashboards = lazy(() => import("./dashboards"));
 const DietLog = lazy(() => import("./nutrition/diet"));
 const Physique = lazy(() => import("./physique"));
-const SleepApp = lazy(() => import("./sleep"));
 
 const Main = ({ user, apps, ...props }) => {
   const location = useLocation();
 
   const withAuth = (Component, appId) => {
-    const match = apps.find((a) => a.id === appId);
+    const match = apps?.find((a) => a.id === appId);
     if (match) {
       return (
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }} // Initial scale and opacity
-          animate={{ opacity: 1, scale: 1 }} // Target scale and opacity
-          exit={{ opacity: 0, scale: 0.8 }} // Exit animation
-          transition={{ type: "spring", stiffness: 300, damping: 30 }} // Smooth transition
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           <Component {...props} />
         </motion.div>
@@ -51,8 +53,15 @@ const Main = ({ user, apps, ...props }) => {
   };
 
   return (
-    <div style={{ margin: "1rem" }}>
-      <BreadCrumb path={location.pathname} />
+    <div
+      style={{
+        margin: "1rem",
+        paddingBottom: 50,
+        paddingTop: isMobile ? 10 : 0,
+      }}
+    >
+      {!isMobile && <BreadCrumb path={location.pathname} />}
+
       <Suspense fallback={<Spinner />}>
         <Routes>
           <Route path="/" element={<Homepage startsWith={"/"} />} />
