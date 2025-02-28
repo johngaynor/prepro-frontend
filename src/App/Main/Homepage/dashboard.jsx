@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import { getFavorites, updateFavorite } from "../actions";
 import { checkOuraLogs } from "../sleep/actions";
 import { DateTime } from "luxon";
+import { isMobile } from "../customHooks";
 
 const Dashboard = ({
   startsWith,
@@ -83,7 +84,7 @@ const Dashboard = ({
     );
   }
   return (
-    <div className="header" style={{ marginTop: "80px" }}>
+    <div className="header" style={{ marginTop: isMobile ? 40 : 80 }}>
       <Segment basic textAlign="center">
         <Header as="h2" textAlign="center">
           {user.name}
@@ -108,31 +109,33 @@ const Dashboard = ({
             />
           </Form>
         </Grid.Column>
-        <Grid.Column>
-          <Popup
-            hideOnScroll
-            content={
-              sort
-                ? "Click to sort alphabetically"
-                : "Click to show favorites first"
-            }
-            trigger={
-              sort ? (
-                <Button
-                  content="Sort"
-                  icon="sort alphabet down"
-                  onClick={() => setSort(!sort)}
-                />
-              ) : (
-                <Button
-                  content="Favorites"
-                  icon="favorite"
-                  onClick={() => setSort(!sort)}
-                />
-              )
-            }
-          />
-        </Grid.Column>
+        {!isMobile && (
+          <Grid.Column>
+            <Popup
+              hideOnScroll
+              content={
+                sort
+                  ? "Click to sort alphabetically"
+                  : "Click to show favorites first"
+              }
+              trigger={
+                sort ? (
+                  <Button
+                    content="Sort"
+                    icon="sort alphabet down"
+                    onClick={() => setSort(!sort)}
+                  />
+                ) : (
+                  <Button
+                    content="Favorites"
+                    icon="favorite"
+                    onClick={() => setSort(!sort)}
+                  />
+                )
+              }
+            />
+          </Grid.Column>
+        )}
       </Grid>
       {cardGroup.length || !apps.length ? (
         <Transition.Group
