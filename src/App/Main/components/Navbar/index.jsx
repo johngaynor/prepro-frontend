@@ -1,35 +1,80 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Menu, Button, Icon, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import HelpMenu from "../HelpMenu";
-// import Logo from "../../../images/logo-3.png";
-// import ChangeLog from "../ChangeLog";
 import { connect } from "react-redux";
+import { isMobile } from "../../customHooks";
+// actions
 import { authUser, getApps } from "../../actions";
+import { getSleepLogs } from "../../sleep/actions";
+import { getWeightLogs } from "../../nutrition/actions";
+import {
+  getSupplements,
+  getSupplementLogs,
+} from "../../nutrition/supplements/actions";
+import { getCheckIns } from "../../checkIns/actions";
 
-const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
+const Navbar = ({
+  authUser,
+  auth,
+  apps,
+  appsLoading,
+  getApps,
+  sleepLogs,
+  sleepLogsLoading,
+  getSleepLogs,
+  weightLogs,
+  weightLogsLoading,
+  getWeightLogs,
+  supplements,
+  supplementsLoading,
+  getSupplements,
+  supplementLogs,
+  supplementLogsLoading,
+  getSupplementLogs,
+  checkIns,
+  checkInsLoading,
+  getCheckIns,
+}) => {
   const [helpMenuOpen, setHelpMenuOpen] = React.useState(false);
-  // const [logOpen, setLogOpen] = React.useState(true);
-  const isMobile = false; // this wil get modified later to adjust for window dimensions
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!auth) {
       authUser();
     } else {
       if (!apps.length && !appsLoading) getApps();
-      // if (!changeLog && !logLoading) getChangeLog();
+      // pre-fetching other stuff
+      if (!sleepLogs && !sleepLogsLoading) getSleepLogs();
+      if (!weightLogs && !weightLogsLoading) getWeightLogs();
+      if (!supplements && !supplementsLoading) getSupplements();
+      if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
+      if (!checkIns && !checkInsLoading) getCheckIns();
     }
-  }, [auth, apps, appsLoading]);
+  }, [
+    auth,
+    apps,
+    appsLoading,
+    getApps,
+    sleepLogs,
+    sleepLogsLoading,
+    getSleepLogs,
+    weightLogs,
+    weightLogsLoading,
+    getWeightLogs,
+    supplements,
+    supplementsLoading,
+    getSupplements,
+    supplementLogs,
+    supplementLogsLoading,
+    getSupplementLogs,
+    checkIns,
+    checkInsLoading,
+    getCheckIns,
+  ]);
 
   return (
-    <Menu fixed="top" inverted color="blue" size="tiny">
+    <Menu fixed="top" inverted color="blue" size="tiny" secondary>
       <Link to="/" className="normal item">
-        {/* <Icon name="image outline" size="large" /> */}
-        {/* <img
-          src={Logo}
-          alt="logo"
-          style={{ height: "8rem", width: "8rem", marginRight: "10px" }}
-        /> */}
         <Header as="h4" style={{ color: "white" }}>
           PrePro Labs
         </Header>
@@ -37,14 +82,6 @@ const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
       {helpMenuOpen && (
         <HelpMenu isOpen={helpMenuOpen} setOpen={setHelpMenuOpen} />
       )}
-      {/* Removed changelog temporarily, showing up as a 0 for some reason */}
-      {/* {changeLog && changeLog.length && (
-        <ChangeLog
-          logOpen={logOpen}
-          setLogOpen={setLogOpen}
-          changeLog={changeLog}
-        />
-      )} */}
       <Menu.Item position="right">
         {auth ? (
           <Button
@@ -54,7 +91,7 @@ const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
             onClick={() => setHelpMenuOpen(true)}
           >
             <Icon name="question circle" />
-            {isMobile ? "" : "Help"}
+            Help
           </Button>
         ) : null}
         <Button
@@ -64,7 +101,7 @@ const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
           href="/logout"
         >
           <Icon name="log out" />
-          {isMobile ? "" : "Logout"}
+          Logout
         </Button>
       </Menu.Item>
     </Menu>
@@ -76,7 +113,25 @@ function mapStateToProps(state) {
     auth: state.app.auth,
     apps: state.app.apps,
     appsLoading: state.app.appsLoading,
+    sleepLogs: state.sleep.logs,
+    sleepLogsLoading: state.sleep.logsLoading,
+    weightLogs: state.nutrition.weightLogs,
+    weightLogsLoading: state.nutrition.logsLoading,
+    supplements: state.supplements.supplements,
+    supplementsLoading: state.supplements.supplementsLoading,
+    supplementLogs: state.supplements.logs,
+    supplementLogsLoading: state.supplements.logsLoading,
+    checkIns: state.checkIns.checkIns,
+    checkInsLoading: state.checkIns.checkInsLoading,
   };
 }
 
-export default connect(mapStateToProps, { authUser, getApps })(Navbar);
+export default connect(mapStateToProps, {
+  authUser,
+  getApps,
+  getSleepLogs,
+  getWeightLogs,
+  getSupplements,
+  getSupplementLogs,
+  getCheckIns,
+})(Navbar);

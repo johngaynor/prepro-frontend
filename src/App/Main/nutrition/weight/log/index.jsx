@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import Spinner from "../../../components/Spinner";
 import { InputField } from "../../../components/FormFields";
 import useDebounce from "../../../customHooks/useDebounce";
+import HorizontalSlide from "../../../components/Motion/HorizontalSlide";
 
 const WeightLog = ({
   weightLogs,
@@ -67,77 +68,79 @@ const WeightLog = ({
       {(logsLoading || editLoading) && <Spinner />}
       <Grid.Column>
         <Header>Daily Weight Log</Header>
-        <Segment
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <Grid
-            columns={3}
+        <HorizontalSlide handleChangeDate={handleChangeDate} pageKey={date}>
+          <Segment
             style={{
-              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
             }}
           >
-            <Grid.Column
-              width={2}
+            <Grid
+              columns={3}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end",
+                width: "100%",
               }}
             >
-              <Button
-                icon="arrow left"
-                onClick={() => handleChangeDate("left")}
-                style={{ margin: 0 }}
-                color="blue"
-              />
-            </Grid.Column>
-            <Grid.Column width={12}>
-              <InputField
-                type="date"
-                value={DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
-                onChange={(e, { value }) =>
-                  navigate(`/nutrition/weight/log/${value}`)
-                }
-              />
-            </Grid.Column>
-            <Grid.Column
-              width={2}
+              <Grid.Column
+                width={2}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Button
+                  icon="arrow left"
+                  onClick={() => handleChangeDate("left")}
+                  style={{ margin: 0 }}
+                  color="blue"
+                />
+              </Grid.Column>
+              <Grid.Column width={12}>
+                <InputField
+                  type="date"
+                  value={DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
+                  onChange={(e, { value }) =>
+                    navigate(`/nutrition/weight/log/${value}`)
+                  }
+                />
+              </Grid.Column>
+              <Grid.Column
+                width={2}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Button
+                  icon="arrow right"
+                  onClick={() => handleChangeDate("right")}
+                  style={{ margin: 0 }}
+                  color="blue"
+                />
+              </Grid.Column>
+            </Grid>
+            <Grid
+              columns={3}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end",
+                width: "100%",
               }}
             >
-              <Button
-                icon="arrow right"
-                onClick={() => handleChangeDate("right")}
-                style={{ margin: 0 }}
-                color="blue"
-              />
-            </Grid.Column>
-          </Grid>
-          <Grid
-            columns={3}
-            style={{
-              width: "100%",
-            }}
-          >
-            <Grid.Column width={2} />
-            <Grid.Column width={12}>
-              <InputField
-                placeholder="Weight (in LBS)"
-                type="number"
-                value={weight}
-                onChange={(e, { value }) => setWeight(value)}
-              />
-            </Grid.Column>
-            <Grid.Column width={2} />
-          </Grid>
-        </Segment>
+              <Grid.Column width={2} />
+              <Grid.Column width={12}>
+                <InputField
+                  placeholder="Weight (in LBS)"
+                  type="number"
+                  value={weight}
+                  onChange={(e, { value }) => setWeight(value)}
+                />
+              </Grid.Column>
+              <Grid.Column width={2} />
+            </Grid>
+          </Segment>
+        </HorizontalSlide>
       </Grid.Column>
     </Grid>
   );
