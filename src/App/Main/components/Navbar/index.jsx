@@ -50,27 +50,7 @@ const Navbar = ({
       if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
       if (!checkIns && !checkInsLoading) getCheckIns();
     }
-  }, [
-    auth,
-    apps,
-    appsLoading,
-    getApps,
-    sleepLogs,
-    sleepLogsLoading,
-    getSleepLogs,
-    weightLogs,
-    weightLogsLoading,
-    getWeightLogs,
-    supplements,
-    supplementsLoading,
-    getSupplements,
-    supplementLogs,
-    supplementLogsLoading,
-    getSupplementLogs,
-    checkIns,
-    checkInsLoading,
-    getCheckIns,
-  ]);
+  }, [auth, apps]);
 
   return (
     <Menu fixed="top" inverted color="blue" size="tiny" secondary>
