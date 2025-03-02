@@ -40,6 +40,7 @@ const DefaultError = ({ error }) => {
           style={{
             height: "60vh",
             width: "90vw",
+            maxWidth: 800,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
