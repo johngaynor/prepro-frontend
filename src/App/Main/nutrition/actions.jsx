@@ -24,8 +24,8 @@ export function editWeightLog(date, weight) {
     "/api/nutrition/weight/logs/log",
     "Error editing weight log",
     { date, weight },
-    () => ({ type: LOAD_EDIT_WEIGHT_LOG }),
-    () => ({ type: FETCH_EDIT_WEIGHT_LOG })
+    (failed) => ({ type: LOAD_EDIT_WEIGHT_LOG, failed }),
+    () => ({ type: FETCH_EDIT_WEIGHT_LOG, date, weight })
   );
 }
 
