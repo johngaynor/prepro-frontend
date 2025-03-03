@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Segment, Header, Button } from "semantic-ui-react";
+import { Grid, Segment, Header, Button, Icon, Input } from "semantic-ui-react";
 import { editWeightLog, getWeightLogs } from "../../actions";
 import { connect } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -63,85 +63,53 @@ const WeightLog = ({
   );
 
   return (
-    <Grid columns={1}>
+    <HorizontalSlide handleChangeDate={handleChangeDate} pageKey={date}>
       {(logsLoading || editLoading) && <Spinner />}
-      <Grid.Column>
-        <Header>Daily Weight Log</Header>
-        <HorizontalSlide handleChangeDate={handleChangeDate} pageKey={date}>
-          <Segment
+      <div
+        style={{
+          height: "80vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Segment
+          style={{
+            height: "60vh",
+            width: "90vw",
+            maxWidth: 800,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Header as="h1" style={{ textAlign: "center" }}>
+            {DateTime.fromISO(date).toFormat("MMMM dd, yyyy")}
+          </Header>
+          <Input
+            value={weight}
+            onChange={(e, { value }) => setWeight(value)}
+            type="number"
+            placeholder="Weight"
+            min={0}
             style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "column",
+              width: "80%",
+              maxWidth: 400,
+              height: 100,
             }}
           >
-            <Grid
-              columns={3}
+            <input
               style={{
-                width: "100%",
+                fontSize: 70,
+                textAlign: "center",
+                borderRadius: 10,
               }}
-            >
-              <Grid.Column
-                width={2}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                }}
-              >
-                <Button
-                  icon="arrow left"
-                  onClick={() => handleChangeDate("left")}
-                  style={{ margin: 0 }}
-                  color="blue"
-                />
-              </Grid.Column>
-              <Grid.Column width={12}>
-                <InputField
-                  type="date"
-                  value={DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
-                  onChange={(e, { value }) =>
-                    navigate(`/nutrition/weight/log/${value}`)
-                  }
-                />
-              </Grid.Column>
-              <Grid.Column
-                width={2}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                }}
-              >
-                <Button
-                  icon="arrow right"
-                  onClick={() => handleChangeDate("right")}
-                  style={{ margin: 0 }}
-                  color="blue"
-                />
-              </Grid.Column>
-            </Grid>
-            <Grid
-              columns={3}
-              style={{
-                width: "100%",
-              }}
-            >
-              <Grid.Column width={2} />
-              <Grid.Column width={12}>
-                <InputField
-                  placeholder="Weight (in LBS)"
-                  type="number"
-                  value={weight}
-                  onChange={(e, { value }) => setWeight(value)}
-                />
-              </Grid.Column>
-              <Grid.Column width={2} />
-            </Grid>
-          </Segment>
-        </HorizontalSlide>
-      </Grid.Column>
-    </Grid>
+            />
+          </Input>
+        </Segment>
+      </div>
+    </HorizontalSlide>
   );
 };
 
