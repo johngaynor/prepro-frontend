@@ -35,12 +35,8 @@ const WeightLog = ({
   });
 
   useEffect(() => {
-    if (activeDate) {
-      setWeight(activeDate.weight || "");
-    } else {
-      setWeight("");
-    }
-  }, [activeDate]);
+    setWeight(activeDate?.weight || "");
+  }, [date, activeDate]);
 
   function handleChangeDate(direction) {
     const currentDate = DateTime.fromISO(date);
@@ -57,7 +53,10 @@ const WeightLog = ({
 
   useDebounce(
     async () => {
-      await editWeightLog(date, weight);
+      // check to see if weight has changed
+      const match = weightLogs.find((l) => l.date === date);
+      if ((match && match.weight != weight) || (!match && weight !== ""))
+        await editWeightLog(date, weight);
     },
     [weight],
     600
