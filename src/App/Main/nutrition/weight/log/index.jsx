@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Segment, Header, Button, Icon, Input } from "semantic-ui-react";
+import { Segment, Header, Input } from "semantic-ui-react";
 import { editWeightLog, getWeightLogs } from "../../actions";
 import { connect } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { DateTime } from "luxon";
 import Spinner from "../../../components/Spinner";
-import { InputField } from "../../../components/FormFields";
 import useDebounce from "../../../customHooks/useDebounce";
 import HorizontalSlide from "../../../components/Motion/HorizontalSlide";
 
@@ -84,15 +83,6 @@ const WeightLog = ({
             flexDirection: "column",
           }}
         >
-          <Grid columns={1} style={{ width: 500 }}>
-            <InputField
-              type="date"
-              value={DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
-              onChange={(e, { value }) =>
-                navigate(`/nutrition/weight/log/${value}`)
-              }
-            />
-          </Grid>
           <Header as="h1" style={{ textAlign: "center" }}>
             {DateTime.fromISO(date).toFormat("MMMM dd, yyyy")}
           </Header>
