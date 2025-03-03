@@ -84,6 +84,15 @@ const WeightLog = ({
             flexDirection: "column",
           }}
         >
+          <Grid columns={1} style={{ width: 500 }}>
+            <InputField
+              type="date"
+              value={DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
+              onChange={(e, { value }) =>
+                navigate(`/nutrition/weight/log/${value}`)
+              }
+            />
+          </Grid>
           <Header as="h1" style={{ textAlign: "center" }}>
             {DateTime.fromISO(date).toFormat("MMMM dd, yyyy")}
           </Header>
