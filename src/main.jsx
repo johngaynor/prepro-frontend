@@ -5,6 +5,8 @@ import "./index.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { registerSW } from "virtual:pwa-register";
+import { ErrorBoundary } from "react-error-boundary";
+import DefaultError from "./App/Main/components/Errors/DefaultError.jsx";
 
 const updateSW = registerSW({
   onNeedRefresh() {
@@ -16,6 +18,8 @@ const updateSW = registerSW({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary FallbackComponent={DefaultError}>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>
 );

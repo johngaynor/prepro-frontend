@@ -39,8 +39,12 @@ const API = {
             resolve(res);
           })
           .catch((err) => {
-            console.log(err);
-            toast.error(`${errorMessage}: ${err}`);
+            console.error(err);
+
+            if (err.message) {
+              toast.error(`${errorMessage}: ${err.message}`);
+            } else toast.error(`${errorMessage}: ${err}`);
+
             if (loadAction) dispatch(loadAction()); // Should always work fine for each instance
             reject();
           });
