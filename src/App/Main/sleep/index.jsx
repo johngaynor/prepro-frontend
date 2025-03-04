@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import Tab from "../components/Tab";
 import Spinner from "../components/Spinner";
 import { connect } from "react-redux";
-import { getSleepLogs, getSleepSettings, updateSleepSettings } from "./actions";
+import {
+  checkOuraLogs,
+  getSleepLogs,
+  getSleepSettings,
+  updateSleepSettings,
+} from "./actions";
 import { useNavigate, useParams } from "react-router-dom";
 import SleepStatistics from "./tabs/Statistics";
 import SleepIntegrations from "./tabs/Integrations";
@@ -16,6 +21,8 @@ const SleepApp = ({
   settingsLoading,
   getSleepSettings,
   updateSleepSettings,
+  checkOuraLogs,
+  editLoading,
 }) => {
   useEffect(() => {
     if (!logs && !logsLoading) getSleepLogs();
@@ -28,6 +35,10 @@ const SleepApp = ({
     settingsLoading,
     getSleepSettings,
   ]);
+
+  useEffect(() => {
+    checkOuraLogs(DateTime.now().toFormat("yyyy-MM-dd"));
+  }, []);
 
   const { maintab } = useParams();
   const navigate = useNavigate();
@@ -68,7 +79,7 @@ const SleepApp = ({
 
   return (
     <>
-      {(logsLoading || settingsLoading) && <Spinner />}
+      {(logsLoading || settingsLoading || editLoading) && <Spinner />}
       <Tab
         panes={mainPanes}
         activeIndex={activeTab}
@@ -86,6 +97,7 @@ function mapStateToProps(state) {
     logsLoading: state.sleep.logsLoading,
     settings: state.sleep.settings,
     settingsLoading: state.sleep.settingsLoading,
+    editLoading: state.sleep.editLoading,
   };
 }
 
@@ -93,4 +105,5 @@ export default connect(mapStateToProps, {
   getSleepLogs,
   getSleepSettings,
   updateSleepSettings,
+  checkOuraLogs,
 })(SleepApp);
