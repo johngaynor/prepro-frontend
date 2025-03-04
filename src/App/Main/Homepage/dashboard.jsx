@@ -18,6 +18,7 @@ import { getFavorites, updateFavorite } from "../actions";
 import { checkOuraLogs } from "../sleep/actions";
 import { DateTime } from "luxon";
 import { isMobile } from "../customHooks";
+import PreFetch from "../components/PreFetch";
 
 const Dashboard = ({
   startsWith,
@@ -85,6 +86,7 @@ const Dashboard = ({
   }
   return (
     <div className="header" style={{ marginTop: isMobile ? 40 : 80 }}>
+      <PreFetch />
       <Segment basic textAlign="center">
         <Header as="h2" textAlign="center">
           {user.name}
