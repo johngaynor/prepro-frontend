@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 export function generateData(dietLogs, weightLogs) {
   const startDate = dietLogs.reduce((oldest, current) => {
     return current.effectiveDate < oldest.effectiveDate ? current : oldest;
-  })?.effectiveDate;
+  }, "")?.effectiveDate;
 
   const endDate = DateTime.now();
 

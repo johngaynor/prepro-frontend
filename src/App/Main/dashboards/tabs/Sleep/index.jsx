@@ -46,14 +46,70 @@ const Sleep = ({
   return (
     <Tab.Pane>
       {sleepLogsLoading && <Spinner />}
-      <Grid columns={2}>
-        <Grid.Column>
+      {!sleepLogs?.length ? (
+        <Header as="h5">
+          You do not have a sleep integration set up yet. Please contact your
+          coach for further details.
+        </Header>
+      ) : (
+        <React.Fragment>
+          <Grid columns={2} doubling stackable>
+            <Grid.Column>
+              <Segment>
+                <Grid columns={2}>
+                  <DropdownField
+                    options={smallOptions}
+                    value={primary}
+                    onChange={(e, { value }) => setPrimary(value)}
+                  />
+                  <Grid.Column
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Header as="h2">Recovery & Readiness</Header>
+                  </Grid.Column>
+                </Grid>
+                <SimpleChart
+                  data={sortedSleepLogs?.slice(-primary)}
+                  primaryLine="#086788"
+                  secondaryLine="#06AED5"
+                  style={{ marginTop: 30 }}
+                  dot={false}
+                />
+              </Segment>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment>
+                <Grid columns={2}>
+                  <DropdownField
+                    options={smallOptions}
+                    value={secondary}
+                    onChange={(e, { value }) => setSecondary(value)}
+                  />
+                  <Grid.Column
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Header as="h2">Time in Bed vs. Asleep</Header>
+                  </Grid.Column>
+                </Grid>
+                <EfficiencyChart
+                  data={sortedSleepLogs?.slice(-secondary)}
+                  style={{ marginTop: 30 }}
+                />
+              </Segment>
+            </Grid.Column>
+          </Grid>
           <Segment>
             <Grid columns={2}>
               <DropdownField
                 options={smallOptions}
-                value={primary}
-                onChange={(e, { value }) => setPrimary(value)}
+                value={tertiary}
+                onChange={(e, { value }) => setTertiary(value)}
               />
               <Grid.Column
                 style={{
@@ -61,63 +117,16 @@ const Sleep = ({
                   alignItems: "center",
                 }}
               >
-                <Header as="h2">Recovery & Readiness</Header>
+                <Header as="h2">Sleep Cycles</Header>
               </Grid.Column>
             </Grid>
-            <SimpleChart
-              data={sortedSleepLogs?.slice(-primary)}
-              primaryLine="#086788"
-              secondaryLine="#06AED5"
-              style={{ marginTop: 30 }}
-              dot={false}
-            />
-          </Segment>
-        </Grid.Column>
-        <Grid.Column>
-          <Segment>
-            <Grid columns={2}>
-              <DropdownField
-                options={smallOptions}
-                value={secondary}
-                onChange={(e, { value }) => setSecondary(value)}
-              />
-              <Grid.Column
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Header as="h2">Time in Bed vs. Asleep</Header>
-              </Grid.Column>
-            </Grid>
-            <EfficiencyChart
-              data={sortedSleepLogs?.slice(-secondary)}
+            <CycleChart
+              data={sortedSleepLogs?.slice(-tertiary)}
               style={{ marginTop: 30 }}
             />
           </Segment>
-        </Grid.Column>
-      </Grid>
-      <Segment>
-        <Grid columns={2}>
-          <DropdownField
-            options={smallOptions}
-            value={tertiary}
-            onChange={(e, { value }) => setTertiary(value)}
-          />
-          <Grid.Column
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <Header as="h2">Sleep Cycles</Header>
-          </Grid.Column>
-        </Grid>
-        <CycleChart
-          data={sortedSleepLogs?.slice(-tertiary)}
-          style={{ marginTop: 30 }}
-        />
-      </Segment>
+        </React.Fragment>
+      )}
     </Tab.Pane>
   );
 };
