@@ -19,7 +19,6 @@ const DEFAULT_STATE = {
   integrationsLoading: false,
   settings: null,
   settingsLoading: false,
-  checkedOura: false,
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -59,7 +58,7 @@ export default (state = DEFAULT_STATE, action) => {
     case FETCH_GET_OURA_LOG:
       return { ...state, editLoading: true };
     case LOAD_GET_OURA_LOG:
-      return { ...state, editLoading: false, checkedOura: true, logs: null };
+      return { ...state, editLoading: false, logs: null };
     default:
       return state;
   }

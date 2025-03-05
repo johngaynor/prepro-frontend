@@ -89,88 +89,120 @@ const Diet = ({
   return (
     <Tab.Pane>
       {(weightLogsLoading || dietLogsLoading) && <Spinner />}
-      <Grid columns={2}>
-        <Grid.Column>
-          <Segment>
-            <div style={{ maxHeight: 370, overflowY: "auto" }}>
-              <Table striped>
-                <TableHeader>
-                  <TableRow>
-                    <TableHeaderCell
-                      style={{ position: "sticky", top: 0, zIndex: 1 }}
-                    >
-                      Effective Date
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ position: "sticky", top: 0, zIndex: 1 }}
-                    >
-                      Calories
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ position: "sticky", top: 0, zIndex: 1 }}
-                    >
-                      Cardio
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ position: "sticky", top: 0, zIndex: 1 }}
-                    >
-                      Min / Week
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ position: "sticky", top: 0, zIndex: 1 }}
-                    >
-                      Weight Change (lbs)
-                    </TableHeaderCell>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {tableData?.reverse().map((d, index) => (
-                    <TableRow
-                      key={"diet-weight-table-" + index}
-                      positive={index === 0 ? true : false}
-                      onClick={() => navigate(`/nutrition/diet?active=${d.id}`)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <TableCell>
-                        {DateTime.fromISO(d.date).toFormat("MMM dd, yyyy")}
-                      </TableCell>
-                      <TableCell>{d.calories}</TableCell>
-                      <TableCell>{d.cardio}</TableCell>
-                      <TableCell>{d.cardioMinutes}</TableCell>
-                      <TableCell>
-                        {d.delta > 0 ? "+" : ""}
-                        {d.delta}
-                        <Popup
-                          content={
-                            <>
-                              Start weight: {d.start.weight}
-                              <br />
-                              End weight: {d.end.weight}
-                            </>
+      {!dietLogs?.length ? (
+        <Header as="h5">
+          You do not have diet functionality set up yet. Please contact your
+          coach for further details.
+        </Header>
+      ) : (
+        <React.Fragment>
+          <Grid columns={2} doubling stackable>
+            <Grid.Column>
+              <Segment>
+                <div style={{ maxHeight: 370, overflowY: "auto" }}>
+                  <Table striped>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHeaderCell
+                          style={{ position: "sticky", top: 0, zIndex: 1 }}
+                        >
+                          Effective Date
+                        </TableHeaderCell>
+                        <TableHeaderCell
+                          style={{ position: "sticky", top: 0, zIndex: 1 }}
+                        >
+                          Calories
+                        </TableHeaderCell>
+                        <TableHeaderCell
+                          style={{ position: "sticky", top: 0, zIndex: 1 }}
+                        >
+                          Cardio
+                        </TableHeaderCell>
+                        <TableHeaderCell
+                          style={{ position: "sticky", top: 0, zIndex: 1 }}
+                        >
+                          Min / Week
+                        </TableHeaderCell>
+                        <TableHeaderCell
+                          style={{ position: "sticky", top: 0, zIndex: 1 }}
+                        >
+                          Weight Change (lbs)
+                        </TableHeaderCell>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {tableData?.reverse().map((d, index) => (
+                        <TableRow
+                          key={"diet-weight-table-" + index}
+                          positive={index === 0 ? true : false}
+                          onClick={() =>
+                            navigate(`/nutrition/diet?active=${d.id}`)
                           }
-                          trigger={
-                            <Button
-                              icon="info circle"
-                              size="mini"
-                              style={{ marginLeft: 5 }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <TableCell>
+                            {DateTime.fromISO(d.date).toFormat("MMM dd, yyyy")}
+                          </TableCell>
+                          <TableCell>{d.calories}</TableCell>
+                          <TableCell>{d.cardio}</TableCell>
+                          <TableCell>{d.cardioMinutes}</TableCell>
+                          <TableCell>
+                            {d.delta > 0 ? "+" : ""}
+                            {d.delta}
+                            <Popup
+                              content={
+                                <>
+                                  Start weight: {d.start.weight}
+                                  <br />
+                                  End weight: {d.end.weight}
+                                </>
+                              }
+                              trigger={
+                                <Button
+                                  icon="info circle"
+                                  size="mini"
+                                  style={{ marginLeft: 5 }}
+                                />
+                              }
                             />
-                          }
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </Segment>
-        </Grid.Column>
-        <Grid.Column>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment>
+                <Grid columns={2}>
+                  <DropdownField
+                    options={largeOptions}
+                    value={secondary}
+                    onChange={(e, { value }) => setSecondary(value)}
+                  />
+                  <Grid.Column
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Header as="h2">Cardio (minutes / week)</Header>
+                  </Grid.Column>
+                </Grid>
+                <CardioChart
+                  data={macroData?.slice(-secondary)}
+                  style={{ marginTop: 30 }}
+                />
+              </Segment>
+            </Grid.Column>
+          </Grid>
           <Segment>
             <Grid columns={2}>
               <DropdownField
                 options={largeOptions}
-                value={secondary}
-                onChange={(e, { value }) => setSecondary(value)}
+                value={tertiary}
+                onChange={(e, { value }) => setTertiary(value)}
               />
               <Grid.Column
                 style={{
@@ -178,37 +210,16 @@ const Diet = ({
                   alignItems: "center",
                 }}
               >
-                <Header as="h2">Cardio (minutes / week)</Header>
+                <Header as="h2">Macro % of Calories</Header>
               </Grid.Column>
             </Grid>
-            <CardioChart
-              data={macroData?.slice(-secondary)}
+            <MacroChart
+              data={macroData?.slice(-tertiary)}
               style={{ marginTop: 30 }}
             />
           </Segment>
-        </Grid.Column>
-      </Grid>
-      <Segment>
-        <Grid columns={2}>
-          <DropdownField
-            options={largeOptions}
-            value={tertiary}
-            onChange={(e, { value }) => setTertiary(value)}
-          />
-          <Grid.Column
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <Header as="h2">Macro % of Calories</Header>
-          </Grid.Column>
-        </Grid>
-        <MacroChart
-          data={macroData?.slice(-tertiary)}
-          style={{ marginTop: 30 }}
-        />
-      </Segment>
+        </React.Fragment>
+      )}
     </Tab.Pane>
   );
 };

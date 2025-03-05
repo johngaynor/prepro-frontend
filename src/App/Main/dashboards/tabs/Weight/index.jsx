@@ -132,7 +132,7 @@ const Weight = ({
   return (
     <Tab.Pane>
       {(weightLogsLoading || dietLogsLoading) && <Spinner />}
-      <Grid columns={2}>
+      <Grid columns={2} doubling stackable>
         <Grid.Column>
           <Segment>
             <Grid columns={2}>

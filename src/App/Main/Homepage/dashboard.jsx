@@ -15,9 +15,8 @@ import {
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { getFavorites, updateFavorite } from "../actions";
-import { checkOuraLogs } from "../sleep/actions";
-import { DateTime } from "luxon";
 import { isMobile } from "../customHooks";
+import PreFetch from "../components/PreFetch";
 
 const Dashboard = ({
   startsWith,
@@ -27,9 +26,6 @@ const Dashboard = ({
   favoritesLoading,
   getFavorites,
   updateFavorite,
-  ouraLoading,
-  checkedOura,
-  checkOuraLogs,
 }) => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(true);
@@ -38,12 +34,6 @@ const Dashboard = ({
   useEffect(() => {
     if (!favorites && !favoritesLoading) getFavorites();
   }, [favorites, favoritesLoading]);
-
-  // check sleep logs
-  useEffect(() => {
-    if (!checkedOura && !ouraLoading)
-      checkOuraLogs(DateTime.now().toFormat("yyyy-MM-dd"));
-  }, [checkedOura, ouraLoading, checkOuraLogs]);
 
   const cardGroup = apps
     .filter(
@@ -85,6 +75,7 @@ const Dashboard = ({
   }
   return (
     <div className="header" style={{ marginTop: isMobile ? 40 : 80 }}>
+      <PreFetch />
       <Segment basic textAlign="center">
         <Header as="h2" textAlign="center">
           {user.name}
@@ -192,13 +183,10 @@ function mapStateToProps(state) {
     apps: state.app.apps,
     favorites: state.app.favorites,
     favoritesLoading: state.app.favoritesLoading,
-    ouraLoading: state.sleep.editLoading,
-    checkedOura: state.sleep.checkedOura,
   };
 }
 
 export default connect(mapStateToProps, {
   getFavorites,
   updateFavorite,
-  checkOuraLogs,
 })(Dashboard);
