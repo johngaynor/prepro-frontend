@@ -107,7 +107,10 @@ const Weight = ({
   const oldestDate = weightLogs
     ? weightLogs
         .map((log) => DateTime.fromISO(log.date))
-        .reduce((min, current) => (current < min ? current : min))
+        .reduce(
+          (min, current) => (current < min ? current : min),
+          DateTime.now().toISODate()
+        )
     : null;
 
   const tertiaryData = weightLogs

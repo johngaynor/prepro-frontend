@@ -59,7 +59,7 @@ const WeightLog = ({
         await editWeightLog(date, weight);
     },
     [weight],
-    600
+    1000
   );
 
   return (
