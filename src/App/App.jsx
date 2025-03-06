@@ -5,6 +5,8 @@ import { Toaster } from "react-hot-toast";
 import React from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "./store";
+import { ErrorBoundary } from "react-error-boundary";
+import DefaultError from "./Main/components/Errors/DefaultError";
 
 const store = configureStore();
 
@@ -12,22 +14,24 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <Toaster
-          toastOptions={{
-            style: {
-              width: "100%",
-              fontSize: "20px",
-            },
-          }}
-        />
-        <Navbar />
-        <div
-          style={{
-            paddingTop: "30px",
-          }}
-        >
-          <Main />
-        </div>
+        <ErrorBoundary FallbackComponent={DefaultError}>
+          <Toaster
+            toastOptions={{
+              style: {
+                width: "100%",
+                fontSize: "20px",
+              },
+            }}
+          />
+          <Navbar />
+          <div
+            style={{
+              paddingTop: "30px",
+            }}
+          >
+            <Main />
+          </div>
+        </ErrorBoundary>
       </Router>
     </Provider>
   );

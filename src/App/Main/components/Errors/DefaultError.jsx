@@ -1,8 +1,35 @@
+import React, { useEffect } from "react";
 import { Menu, Header, Button, Icon, Segment } from "semantic-ui-react";
 import { isMobile } from "../../customHooks";
+import { connect } from "react-redux";
+import axios from "axios";
 
 // also takes in resetErrorBoundary prop
-const DefaultError = ({ error }) => {
+const DefaultError = ({ error, user }) => {
+  useEffect(() => {
+    async function sendEmail() {
+      try {
+        if (window.location.href.includes("localhost")) return;
+        const params = {
+          error: { message: error.message, stack: error.stack },
+          user,
+          url: window.location.href,
+          apiKey: "notSensitiveKey",
+        };
+
+        await axios.post(
+          "https://b2lxumvszbgjxikiegjccytuxy0xurwf.lambda-url.us-east-2.on.aws/",
+          params
+        );
+
+        console.log("sent email");
+      } catch (e) {
+        console.log("error sending email", e);
+      }
+    }
+    sendEmail();
+  }, []);
+
   return (
     <div
       style={{
@@ -70,4 +97,10 @@ const DefaultError = ({ error }) => {
   );
 };
 
-export default DefaultError;
+function mapStateToProps(state) {
+  return {
+    user: state.app.user,
+  };
+}
+
+export default connect(mapStateToProps, {})(DefaultError);
