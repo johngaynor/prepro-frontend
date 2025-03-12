@@ -20,6 +20,8 @@ const ActivityLogs = lazy(() => import("./activity"));
 const Dashboards = lazy(() => import("./dashboards"));
 const DietLog = lazy(() => import("./nutrition/diet"));
 const Physique = lazy(() => import("./physique"));
+const ExerciseDatabase = lazy(() => import("./fitness/exercises"));
+const Exercise = lazy(() => import("./fitness/exercises/exercise"));
 
 const Main = ({ user, apps, ...props }) => {
   const location = useLocation();
@@ -93,6 +95,12 @@ const Main = ({ user, apps, ...props }) => {
           <Route path="/physique" element={withAuth(Physique, 11)} />
           <Route path="/sleep" element={withAuth(SleepApp, 12)} />
           <Route path="/sleep/:maintab" element={withAuth(SleepApp, 12)} />
+          <Route path="/TEST" element={withAuth(ExerciseDatabase, 13)} />
+          <Route
+            path="/TEST/exercise/:exerciseId"
+            element={withAuth(Exercise, 13)}
+          />
+
           <Route
             path="*"
             element={<Homepage startsWith={location.pathname} />}

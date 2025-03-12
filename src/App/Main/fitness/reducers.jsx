@@ -25,6 +25,8 @@ import {
   LOAD_COPY_WORKOUT_FROM_TEMPLATE,
   FETCH_CHANGE_EXERCISE_POSITION,
   LOAD_CHANGE_EXERCISE_POSITION,
+  FETCH_EDIT_EXERCISE_TYPE,
+  LOAD_EDIT_EXERCISE_TYPE,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -111,6 +113,18 @@ export default (state = DEFAULT_STATE, action) => {
         workoutLogs: action.exercise.workoutId ? null : state.workoutLogs,
         templates: action.exercise.templateId ? null : state.templates,
       };
+    case FETCH_EDIT_EXERCISE_TYPE:
+      const newTypes = state.exerciseTypes.map((t) =>
+        t.id === action.exercise.id ? { id: action.id, name: action.name } : t
+      );
+      return { ...state, exerciseTypes: newTypes, editLoading: true };
+    case LOAD_EDIT_EXERCISE_TYPE:
+      return {
+        ...state,
+        editLoading: false,
+        exerciseTypes: action.failed ? null : state.exerciseTypes,
+      };
+
     default:
       return state;
   }

@@ -25,6 +25,8 @@ import {
   LOAD_COPY_WORKOUT_FROM_TEMPLATE,
   FETCH_CHANGE_EXERCISE_POSITION,
   LOAD_CHANGE_EXERCISE_POSITION,
+  FETCH_EDIT_EXERCISE_TYPE,
+  LOAD_EDIT_EXERCISE_TYPE,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -148,5 +150,15 @@ export function deleteExerciseType(id) {
     "Error deleting exercise type",
     () => ({ type: LOAD_DELETE_EXERCISE_TYPE }),
     () => ({ type: FETCH_DELETE_EXERCISE_TYPE })
+  );
+}
+
+export function editExerciseType(id, name) {
+  return API.post(
+    "/api/fitness/exercises/type/edit",
+    "Error editing exercise type",
+    { id, name },
+    () => ({ type: LOAD_EDIT_EXERCISE_TYPE }),
+    () => ({ type: FETCH_EDIT_EXERCISE_TYPE })
   );
 }
