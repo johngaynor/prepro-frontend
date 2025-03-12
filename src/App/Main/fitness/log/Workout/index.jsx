@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Segment } from "semantic-ui-react";
 import { connect } from "react-redux";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../../components/Pagination";
 
 const WorkoutTab = (id) => {
   return (
