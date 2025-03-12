@@ -21,8 +21,6 @@ import {
   LOAD_EDIT_TEMPLATE_EXERCISE,
   FETCH_DELETE_TEMPLATE_EXERCISE,
   LOAD_DELETE_TEMPLATE_EXERCISE,
-  FETCH_COPY_WORKOUT_FROM_TEMPLATE,
-  LOAD_COPY_WORKOUT_FROM_TEMPLATE,
   FETCH_CHANGE_EXERCISE_POSITION,
   LOAD_CHANGE_EXERCISE_POSITION,
   FETCH_START_WORKOUT,
@@ -100,10 +98,6 @@ export default (state = DEFAULT_STATE, action) => {
       return { ...state, editLoading: true };
     case LOAD_DELETE_TEMPLATE_EXERCISE:
       return { ...state, editLoading: false, templates: null };
-    case FETCH_COPY_WORKOUT_FROM_TEMPLATE:
-      return { ...state, editLoading: true };
-    case LOAD_COPY_WORKOUT_FROM_TEMPLATE:
-      return { ...state, editLoading: false, workoutLogs: null };
     case FETCH_CHANGE_EXERCISE_POSITION:
       return { ...state, editLoading: true };
     case LOAD_CHANGE_EXERCISE_POSITION:

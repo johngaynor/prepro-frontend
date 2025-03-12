@@ -21,8 +21,6 @@ import {
   LOAD_EDIT_TEMPLATE_EXERCISE,
   FETCH_DELETE_TEMPLATE_EXERCISE,
   LOAD_DELETE_TEMPLATE_EXERCISE,
-  FETCH_COPY_WORKOUT_FROM_TEMPLATE,
-  LOAD_COPY_WORKOUT_FROM_TEMPLATE,
   FETCH_CHANGE_EXERCISE_POSITION,
   LOAD_CHANGE_EXERCISE_POSITION,
   FETCH_START_WORKOUT,
@@ -83,16 +81,6 @@ export function getExerciseTypes() {
     "Error getting exercise types",
     (exerciseTypes) => ({ type: LOAD_EXERCISE_TYPES, exerciseTypes }),
     () => ({ type: FETCH_EXERCISE_TYPES })
-  );
-}
-
-export function copyWorkoutFromTemplate(workoutId, templateId) {
-  return API.post(
-    "/api/fitness/logs/copy",
-    "Error copying workout from template",
-    { workoutId, templateId },
-    () => ({ type: LOAD_COPY_WORKOUT_FROM_TEMPLATE }),
-    () => ({ type: FETCH_COPY_WORKOUT_FROM_TEMPLATE })
   );
 }
 
