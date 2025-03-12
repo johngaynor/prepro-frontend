@@ -143,34 +143,3 @@ export default connect(mapStateToProps, {
   getExerciseTypes,
   getWorkoutTemplates,
 })(FitnessLog);
-
-{
-  /* <Accordion fluid styled>
-        {logsLoading && <Spinner />}
-        <Accordion.Title
-          active={activeTab === 1 || !selectedWorkout}
-          onClick={() => {
-            if (activeTab !== 1) {
-              setActiveTab(1);
-            } else setActiveTab(null);
-          }}
-        >
-          <Icon name="dropdown" />
-          Workout Information
-        </Accordion.Title>
-        <Accordion.Content active={activeTab === 1 || !selectedWorkout}>
-          <Summary
-            selectedWorkout={selectedWorkout}
-            setActiveTab={setActiveTab}
-            editMode={editMode}
-            setEditMode={setEditMode}
-          />
-        </Accordion.Content>
-      </Accordion>
-      {!editMode && selectedWorkout && (
-        <Exercises
-          selectedWorkout={selectedWorkout}
-          lastWorkout={lastWorkout}
-        />
-      )} */
-}
