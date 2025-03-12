@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, Icon } from "semantic-ui-react";
+import { Accordion, Icon, Segment } from "semantic-ui-react";
 import Summary from "./Summary";
 import Exercises from "./Exercises";
 import Spinner from "../../components/Spinner";
@@ -11,6 +11,9 @@ import {
   getExerciseTypes,
   getWorkoutTemplates,
 } from "../actions";
+
+// pages
+import LandingPage from "./LandingPage";
 
 const FitnessLog = ({
   workoutLogs,
@@ -50,12 +53,12 @@ const FitnessLog = ({
     }
   });
 
-  const selectedWorkout = workoutLogs?.find((l) => l.date === date);
+  const activeWorkout = workoutLogs?.find((l) => l.date === date);
   const lastWorkout = workoutLogs
     ?.filter(
       (l) =>
-        l.workoutTemplateId === selectedWorkout?.workoutTemplateId &&
-        l.date !== selectedWorkout.date
+        l.workoutTemplateId === activeWorkout?.workoutTemplateId &&
+        l.date !== activeWorkout.date
     )
     .sort((a, b) => {
       const dateA = DateTime.fromISO(a.date);
@@ -63,9 +66,86 @@ const FitnessLog = ({
       return dateB - dateA;
     })[0];
 
+  console.log(activeWorkout);
+
   return (
-    <React.Fragment>
-      <Accordion fluid styled>
+    <div
+      style={{
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Segment
+        style={{
+          height: "90%",
+          width: "90vw",
+          maxWidth: 800,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        {activeWorkout ? (
+          <React.Fragment>
+            <Accordion fluid styled>
+              {logsLoading && <Spinner />}
+              <Accordion.Title
+                active={activeTab === 1 || !activeWorkout}
+                onClick={() => {
+                  if (activeTab !== 1) {
+                    setActiveTab(1);
+                  } else setActiveTab(null);
+                }}
+              >
+                <Icon name="dropdown" />
+                Workout Information
+              </Accordion.Title>
+              <Accordion.Content active={activeTab === 1 || !activeWorkout}>
+                <Summary
+                  selectedWorkout={activeWorkout}
+                  setActiveTab={setActiveTab}
+                  editMode={editMode}
+                  setEditMode={setEditMode}
+                />
+              </Accordion.Content>
+            </Accordion>
+            {!editMode && activeWorkout && (
+              <Exercises
+                selectedWorkout={activeWorkout}
+                lastWorkout={lastWorkout}
+              />
+            )}
+          </React.Fragment>
+        ) : (
+          <LandingPage />
+        )}
+      </Segment>
+    </div>
+  );
+};
+
+function mapStateToProps(state) {
+  return {
+    workoutLogs: state.fitness.workoutLogs,
+    logsLoading: state.fitness.logsLoading,
+    exerciseTypes: state.fitness.exerciseTypes,
+    exerciseTypesLoading: state.fitness.typesLoading,
+    templates: state.fitness.templates,
+    templatesLoading: state.fitness.templatesLoading,
+  };
+}
+
+export default connect(mapStateToProps, {
+  getWorkoutLogs,
+  getExerciseTypes,
+  getWorkoutTemplates,
+})(FitnessLog);
+
+{
+  /* <Accordion fluid styled>
         {logsLoading && <Spinner />}
         <Accordion.Title
           active={activeTab === 1 || !selectedWorkout}
@@ -92,24 +172,5 @@ const FitnessLog = ({
           selectedWorkout={selectedWorkout}
           lastWorkout={lastWorkout}
         />
-      )}
-    </React.Fragment>
-  );
-};
-
-function mapStateToProps(state) {
-  return {
-    workoutLogs: state.fitness.workoutLogs,
-    logsLoading: state.fitness.logsLoading,
-    exerciseTypes: state.fitness.exerciseTypes,
-    exerciseTypesLoading: state.fitness.typesLoading,
-    templates: state.fitness.templates,
-    templatesLoading: state.fitness.templatesLoading,
-  };
+      )} */
 }
-
-export default connect(mapStateToProps, {
-  getWorkoutLogs,
-  getExerciseTypes,
-  getWorkoutTemplates,
-})(FitnessLog);

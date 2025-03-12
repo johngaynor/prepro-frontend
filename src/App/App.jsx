@@ -23,12 +23,12 @@ function App() {
               },
             }}
           />
-          <Navbar />
           <div
             style={{
-              paddingTop: "30px",
+              height: "100vh",
             }}
           >
+            <Navbar />
             <Main />
           </div>
         </ErrorBoundary>

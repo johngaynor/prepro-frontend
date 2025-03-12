@@ -25,6 +25,8 @@ import {
   LOAD_COPY_WORKOUT_FROM_TEMPLATE,
   FETCH_CHANGE_EXERCISE_POSITION,
   LOAD_CHANGE_EXERCISE_POSITION,
+  FETCH_START_WORKOUT,
+  LOAD_START_WORKOUT,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -111,6 +113,10 @@ export default (state = DEFAULT_STATE, action) => {
         workoutLogs: action.exercise.workoutId ? null : state.workoutLogs,
         templates: action.exercise.templateId ? null : state.templates,
       };
+    case FETCH_START_WORKOUT:
+      return { ...state, editLoading: true };
+    case LOAD_START_WORKOUT:
+      return { ...state, editLoading: false, workoutLogs: null };
     default:
       return state;
   }

@@ -33,6 +33,7 @@ const Main = ({ user, apps, ...props }) => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          style={{ height: "100%" }}
         >
           <Component {...props} />
         </motion.div>
@@ -55,9 +56,9 @@ const Main = ({ user, apps, ...props }) => {
   return (
     <div
       style={{
-        margin: "1rem",
-        paddingBottom: 50,
-        paddingTop: isMobile ? 10 : 0,
+        padding: "1rem",
+        paddingTop: 50,
+        height: "100%",
       }}
     >
       {!isMobile && <BreadCrumb path={location.pathname} />}

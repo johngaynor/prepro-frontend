@@ -25,6 +25,8 @@ import {
   LOAD_COPY_WORKOUT_FROM_TEMPLATE,
   FETCH_CHANGE_EXERCISE_POSITION,
   LOAD_CHANGE_EXERCISE_POSITION,
+  FETCH_START_WORKOUT,
+  LOAD_START_WORKOUT,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -148,5 +150,15 @@ export function deleteExerciseType(id) {
     "Error deleting exercise type",
     () => ({ type: LOAD_DELETE_EXERCISE_TYPE }),
     () => ({ type: FETCH_DELETE_EXERCISE_TYPE })
+  );
+}
+
+export function startWorkout(date, templateId, noTemplate) {
+  return API.post(
+    "/api/fitness/logs/new",
+    "Error starting workout",
+    { date, templateId, noTemplate },
+    () => ({ type: LOAD_START_WORKOUT }),
+    () => ({ type: FETCH_START_WORKOUT })
   );
 }
