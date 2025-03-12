@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Button, Form, Grid, Divider, Header, Icon } from "semantic-ui-react";
+import {
+  Button,
+  Form,
+  Grid,
+  Divider,
+  Header,
+  Icon,
+  Segment,
+} from "semantic-ui-react";
 import { DropdownField } from "../../../components/FormFields";
 import { connect } from "react-redux";
 import LandingChoice from "./LandingChoice";
@@ -13,7 +21,17 @@ const LandingPage = ({ templates, startWorkout }) => {
   const { date } = useParams();
 
   return (
-    <React.Fragment>
+    <Segment
+      style={{
+        height: "90%",
+        width: "90vw",
+        maxWidth: 800,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
       <Header as="h1" icon style={{ userSelect: "none" }}>
         <Icon name="fire" size="massive" color="orange" />
         Start Workout
@@ -69,7 +87,7 @@ const LandingPage = ({ templates, startWorkout }) => {
         disabled={choice === 1 && !template}
         onClick={() => startWorkout(date, template, choice === 2)}
       />
-    </React.Fragment>
+    </Segment>
   );
 };
 
