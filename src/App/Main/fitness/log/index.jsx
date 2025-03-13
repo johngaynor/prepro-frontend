@@ -7,6 +7,8 @@ import {
   getExerciseTypes,
   getWorkoutTemplates,
 } from "../actions";
+import HorizontalSlide from "../../components/Motion/HorizontalSlide";
+import Spinner from "../../components/Spinner";
 
 // pages
 import LandingPage from "./LandingPage";
@@ -60,8 +62,40 @@ const FitnessLog = ({
   //     return dateB - dateA;
   //   })[0];
 
+  function handleChangeDate(direction) {
+    const currentDate = DateTime.fromISO(date);
+    let newDate;
+
+    if (direction === "left") {
+      newDate = currentDate.minus({ days: 1 });
+    } else if (direction === "right") {
+      newDate = currentDate.plus({ days: 1 });
+    }
+
+    navigate(`/fitness/log/${newDate.toFormat("yyyy-MM-dd")}`);
+  }
+
+  if (logsLoading || exerciseTypesLoading || templatesLoading) {
+    return (
+      <HorizontalSlide
+        handleChangeDate={handleChangeDate}
+        pageKey={date}
+        style={{
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Spinner />
+      </HorizontalSlide>
+    );
+  }
+
   return (
-    <div
+    <HorizontalSlide
+      handleChangeDate={handleChangeDate}
+      pageKey={date}
       style={{
         height: "100%",
         display: "flex",
@@ -74,7 +108,7 @@ const FitnessLog = ({
       ) : (
         <LandingPage />
       )}
-    </div>
+    </HorizontalSlide>
   );
 };
 
