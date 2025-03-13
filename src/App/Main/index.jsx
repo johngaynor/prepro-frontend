@@ -11,7 +11,7 @@ import { isMobile } from "./customHooks";
 import WeightLog from "./nutrition/weight/log";
 import SupplementLogPage from "./nutrition/supplements/log";
 import SleepApp from "./sleep";
-import ExerciseLog from "./fitness/log";
+import ExerciseLog from "./fitness/log/History";
 import CheckInLogs from "./checkIns";
 // lazy page imports (less popular pages)
 const AdminConsole = lazy(() => import("./admin"));

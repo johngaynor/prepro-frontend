@@ -8,10 +8,10 @@ import {
   Icon,
   Segment,
 } from "semantic-ui-react";
-import { DropdownField } from "../../../components/FormFields";
+import { DropdownField } from "../../../../components/FormFields";
 import { connect } from "react-redux";
-import LandingChoice from "./LandingChoice";
-import { startWorkout } from "../../actions";
+import LandingChoice from "./StartChoice";
+import { startWorkout } from "../../../actions";
 import { useParams } from "react-router-dom";
 import { DateTime } from "luxon";
 

@@ -6,13 +6,13 @@ import {
   getWorkoutLogs,
   getExerciseTypes,
   getWorkoutTemplates,
-} from "../actions";
-import HorizontalSlide from "../../components/Motion/HorizontalSlide";
-import Spinner from "../../components/Spinner";
+} from "../../actions";
+import HorizontalSlide from "../../../components/Motion/HorizontalSlide";
+import Spinner from "../../../components/Spinner";
 
 // pages
-import LandingPage from "./LandingPage";
-import Workout from "./Workout";
+import Start from "./Start";
+import View from "./View";
 
 const FitnessLog = ({
   workoutLogs,
@@ -50,17 +50,6 @@ const FitnessLog = ({
   });
 
   const activeWorkout = workoutLogs?.find((l) => l.date === date);
-  // const lastWorkout = workoutLogs
-  //   ?.filter(
-  //     (l) =>
-  //       l.workoutTemplateId === activeWorkout?.workoutTemplateId &&
-  //       l.date !== activeWorkout.date
-  //   )
-  //   .sort((a, b) => {
-  //     const dateA = DateTime.fromISO(a.date);
-  //     const dateB = DateTime.fromISO(b.date);
-  //     return dateB - dateA;
-  //   })[0];
 
   function handleChangeDate(direction) {
     const currentDate = DateTime.fromISO(date);
@@ -75,23 +64,6 @@ const FitnessLog = ({
     navigate(`/fitness/log/${newDate.toFormat("yyyy-MM-dd")}`);
   }
 
-  if (logsLoading || exerciseTypesLoading || templatesLoading) {
-    return (
-      <HorizontalSlide
-        handleChangeDate={handleChangeDate}
-        pageKey={date}
-        style={{
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Spinner />
-      </HorizontalSlide>
-    );
-  }
-
   return (
     <HorizontalSlide
       handleChangeDate={handleChangeDate}
@@ -103,10 +75,12 @@ const FitnessLog = ({
         alignItems: "center",
       }}
     >
-      {activeWorkout ? (
-        <Workout activeWorkout={activeWorkout} />
+      {logsLoading || exerciseTypesLoading || templatesLoading ? (
+        <Spinner />
+      ) : activeWorkout ? (
+        <View activeWorkout={activeWorkout} />
       ) : (
-        <LandingPage />
+        <Start />
       )}
     </HorizontalSlide>
   );

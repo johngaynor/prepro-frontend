@@ -1,7 +1,7 @@
 import React from "react";
 import { Radio } from "semantic-ui-react";
 
-const LandingChoice = ({ choice, setChoice, children, id }) => {
+const StartChoice = ({ choice, setChoice, children, id }) => {
   return (
     <div
       style={{
@@ -30,4 +30,4 @@ const LandingChoice = ({ choice, setChoice, children, id }) => {
   );
 };
 
-export default LandingChoice;
+export default StartChoice;
