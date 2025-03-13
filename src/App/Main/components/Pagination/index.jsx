@@ -1,4 +1,5 @@
 import React from "react";
+import { Segment, Button } from "semantic-ui-react";
 
 const Circle = ({
   active = false,
@@ -29,11 +30,10 @@ const Circle = ({
 
 const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
   return (
-    <div
+    <Segment
       style={{
-        backgroundColor: "white",
         padding: 5,
-        border: "1px solid grey",
+        marginTop: -10,
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -41,19 +41,49 @@ const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
         userSelect: "none",
       }}
     >
+      <Button icon="backward" size="tiny" onClick={() => setActiveIndex(0)} />
+      <Button
+        icon="step backward"
+        size="tiny"
+        onClick={() => setActiveIndex(activeIndex > 0 ? activeIndex - 1 : 0)}
+      />
       {data.map((d, i) => {
-        // console.log(d);
         return (
           <Circle
             active={i === activeIndex}
             key={i}
-            completed={!d.exercise?.sets.find((e) => !e.weight || !e.reps)}
+            completed={
+              d.name === "Start"
+                ? d.workout.timeStarted
+                  ? true
+                  : false
+                : d.name === "End"
+                ? d.workout.timeCompleted && d.workout.comments
+                  ? true
+                  : false
+                : !d.exercise?.sets.find((e) => !e.weight || !e.reps)
+            }
             setActiveIndex={setActiveIndex}
             index={i}
           />
         );
       })}
-    </div>
+      <Button
+        icon="step forward"
+        size="tiny"
+        onClick={() =>
+          setActiveIndex(
+            activeIndex >= data.length - 1 ? data.length - 1 : activeIndex + 1
+          )
+        }
+        style={{ marginLeft: 5 }}
+      />
+      <Button
+        icon="forward"
+        size="tiny"
+        onClick={() => setActiveIndex(data.length - 1)}
+      />
+    </Segment>
   );
 };
 

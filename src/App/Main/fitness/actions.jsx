@@ -27,6 +27,8 @@ import {
   LOAD_START_WORKOUT,
   FETCH_EDIT_WORKOUT_START,
   LOAD_EDIT_WORKOUT_START,
+  FETCH_EDIT_WORKOUT_END,
+  LOAD_EDIT_WORKOUT_END,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -160,5 +162,18 @@ export function editWorkoutStart(id, timeStarted) {
     { id, timeStarted },
     (failed) => ({ type: LOAD_EDIT_WORKOUT_START, failed }),
     () => ({ type: FETCH_EDIT_WORKOUT_START, values: { id, timeStarted } })
+  );
+}
+
+export function editWorkoutEnd(id, timeCompleted, comments) {
+  return API.post(
+    "/api/fitness/logs/workout/end",
+    "Error editing workout end",
+    { id, timeCompleted, comments },
+    (failed) => ({ type: LOAD_EDIT_WORKOUT_END, failed }),
+    () => ({
+      type: FETCH_EDIT_WORKOUT_END,
+      values: { id, timeCompleted, comments },
+    })
   );
 }

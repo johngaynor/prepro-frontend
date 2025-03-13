@@ -51,8 +51,6 @@ const Workout = ({
     }
   }
 
-  console.log(workout);
-
   return (
     <HorizontalSlide
       handleSwipe={handleSwipe}

@@ -6,7 +6,7 @@ import Pagination from "../../../../components/Pagination";
 
 const EditWorkout = ({ workout, activeIndex, setActiveIndex }) => {
   const pages = [
-    { name: "Start", component: <StartPage workout={workout} /> },
+    { name: "Start", component: <StartPage workout={workout} />, workout },
     ...(workout
       ? workout.exercises
           .sort((a, b) => a.orderId - b.orderId)
@@ -16,7 +16,7 @@ const EditWorkout = ({ workout, activeIndex, setActiveIndex }) => {
             component: <Exercise exercise={e} />,
           }))
       : []),
-    { name: "End", component: <EndPage workout={workout} /> },
+    { name: "End", component: <EndPage workout={workout} />, workout },
   ];
 
   return (
