@@ -66,7 +66,7 @@ const FitnessLog = ({
 
   return (
     <HorizontalSlide
-      handleChangeDate={handleChangeDate}
+      handleSwipe={handleChangeDate}
       pageKey={date}
       style={{
         height: "100%",

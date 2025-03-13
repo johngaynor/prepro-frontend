@@ -12,6 +12,7 @@ import WeightLog from "./nutrition/weight/log";
 import SupplementLogPage from "./nutrition/supplements/log";
 import SleepApp from "./sleep";
 import ExerciseLog from "./fitness/log/History";
+import Workout from "./fitness/log/Workout";
 import CheckInLogs from "./checkIns";
 // lazy page imports (less popular pages)
 const AdminConsole = lazy(() => import("./admin"));
@@ -67,6 +68,7 @@ const Main = ({ user, apps, ...props }) => {
         <Routes>
           <Route path="/" element={<Homepage startsWith={"/"} />} />
           <Route path="/admin" element={withAuth(AdminConsole, 1)} />
+          <Route path="/fitness/workout/:id" element={withAuth(Workout, 3)} />
           <Route path="/fitness/log" element={withAuth(ExerciseLog, 3)} />
           <Route path="/fitness/log/:date" element={withAuth(ExerciseLog, 3)} />
           <Route

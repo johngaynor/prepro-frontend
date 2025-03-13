@@ -41,15 +41,17 @@ const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
         userSelect: "none",
       }}
     >
-      {data.map((d, i) => (
-        <Circle
-          active={i === activeIndex}
-          key={i}
-          completed={i % 2 === 0}
-          setActiveIndex={setActiveIndex}
-          index={i}
-        />
-      ))}
+      {data.map((d, i) => {
+        return (
+          <Circle
+            active={i === activeIndex}
+            key={i}
+            completed={!d.exercise?.sets.find((e) => !e.weight || !e.reps)}
+            setActiveIndex={setActiveIndex}
+            index={i}
+          />
+        );
+      })}
     </div>
   );
 };

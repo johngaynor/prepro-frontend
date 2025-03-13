@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 
-const HorizontalSlide = ({
-  children,
-  handleChangeDate,
-  pageKey,
-  style = {},
-}) => {
+const HorizontalSlide = ({ children, handleSwipe, pageKey, style = {} }) => {
   const [dragging, setDragging] = useState(false);
   const [dragDistance, setDragDistance] = useState(0);
   const controls = useAnimation(); // Framer Motion animation controller
@@ -23,9 +18,9 @@ const HorizontalSlide = ({
 
     // If the drag distance crosses a threshold, change date
     if (offsetX < -100) {
-      handleChangeDate("right");
+      handleSwipe("right");
     } else if (offsetX > 100) {
-      handleChangeDate("left");
+      handleSwipe("left");
     }
 
     setDragDistance(0);

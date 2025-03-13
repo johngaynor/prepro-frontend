@@ -72,7 +72,7 @@ const DailyView = ({
   }
 
   return (
-    <HorizontalSlide handleChangeDate={handleChangeDate} pageKey={selectedDay}>
+    <HorizontalSlide handleSwipe={handleChangeDate} pageKey={selectedDay}>
       <Tab.Pane>
         <MissedModal
           handleClose={() => setMissedItem(null)}
