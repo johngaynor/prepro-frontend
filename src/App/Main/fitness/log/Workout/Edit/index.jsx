@@ -1,11 +1,12 @@
 import React from "react";
-import Summary from "../components/Summary";
+import StartPage from "../components/Start";
+import EndPage from "../components/End";
 import Exercise from "../components/Exercise";
 import Pagination from "../../../../components/Pagination";
 
 const EditWorkout = ({ workout, activeIndex, setActiveIndex }) => {
   const pages = [
-    // { name: "Start", component: <Summary workout={workout} /> },
+    { name: "Start", component: <StartPage workout={workout} /> },
     ...(workout
       ? workout.exercises
           .sort((a, b) => a.orderId - b.orderId)
@@ -15,9 +16,8 @@ const EditWorkout = ({ workout, activeIndex, setActiveIndex }) => {
             component: <Exercise exercise={e} />,
           }))
       : []),
+    { name: "End", component: <EndPage workout={workout} /> },
   ];
-
-  //   console.log(pages);
 
   return (
     <div

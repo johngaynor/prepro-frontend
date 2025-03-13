@@ -42,6 +42,7 @@ const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
       }}
     >
       {data.map((d, i) => {
+        // console.log(d);
         return (
           <Circle
             active={i === activeIndex}

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import HorizontalSlide from "../../../components/Motion/HorizontalSlide";
-import { getExerciseTypes, getWorkoutLogs } from "../../actions";
+import {
+  getExerciseTypes,
+  getWorkoutLogs,
+  getWorkoutTemplates,
+} from "../../actions";
 import { useParams } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 import EditWorkout from "./Edit";
@@ -13,13 +17,24 @@ const Workout = ({
   exerciseTypes,
   exerciseTypesLoading,
   getExerciseTypes,
+  templates,
+  templatesLoading,
+  getWorkoutTemplates,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
     if (!workoutLogs && !logsLoading) getWorkoutLogs();
-  }, [exerciseTypes, exerciseTypesLoading, workoutLogs, logsLoading]);
+    if (!templates && !templatesLoading) getWorkoutTemplates();
+  }, [
+    exerciseTypes,
+    exerciseTypesLoading,
+    workoutLogs,
+    logsLoading,
+    templates,
+    templatesLoading,
+  ]);
 
   const { id } = useParams();
   const workout = workoutLogs?.find((l) => l.id === parseInt(id));
@@ -30,11 +45,13 @@ const Workout = ({
         setActiveIndex(activeIndex - 1);
       }
     } else if (direction === "right") {
-      if (activeIndex < workout?.exercises.length) {
+      if (activeIndex < workout?.exercises.length + 1) {
         setActiveIndex(activeIndex + 1);
       }
     }
   }
+
+  console.log(workout);
 
   return (
     <HorizontalSlide
@@ -47,7 +64,7 @@ const Workout = ({
         alignItems: "center",
       }}
     >
-      {logsLoading || exerciseTypesLoading ? (
+      {logsLoading || exerciseTypesLoading || templatesLoading ? (
         <Spinner />
       ) : workout ? (
         <EditWorkout
@@ -70,10 +87,13 @@ function mapStateToProps(state) {
     logsLoading: state.fitness.logsLoading,
     exerciseTypes: state.fitness.exerciseTypes,
     exerciseTypesLoading: state.fitness.typesLoading,
+    templates: state.fitness.templates,
+    templatesLoading: state.fitness.templatesLoading,
   };
 }
 
 export default connect(mapStateToProps, {
   getWorkoutLogs,
   getExerciseTypes,
+  getWorkoutTemplates,
 })(Workout);

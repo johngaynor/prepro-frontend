@@ -25,6 +25,8 @@ import {
   LOAD_CHANGE_EXERCISE_POSITION,
   FETCH_START_WORKOUT,
   LOAD_START_WORKOUT,
+  FETCH_EDIT_WORKOUT_START,
+  LOAD_EDIT_WORKOUT_START,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -148,5 +150,15 @@ export function startWorkout(date, templateId, noTemplate) {
     { date, templateId, noTemplate },
     () => ({ type: LOAD_START_WORKOUT }),
     () => ({ type: FETCH_START_WORKOUT })
+  );
+}
+
+export function editWorkoutStart(id, timeStarted) {
+  return API.post(
+    "/api/fitness/logs/workout/start",
+    "Error editing workout start",
+    { id, timeStarted },
+    (failed) => ({ type: LOAD_EDIT_WORKOUT_START, failed }),
+    () => ({ type: FETCH_EDIT_WORKOUT_START, values: { id, timeStarted } })
   );
 }

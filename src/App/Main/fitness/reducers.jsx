@@ -25,6 +25,8 @@ import {
   LOAD_CHANGE_EXERCISE_POSITION,
   FETCH_START_WORKOUT,
   LOAD_START_WORKOUT,
+  FETCH_EDIT_WORKOUT_START,
+  LOAD_EDIT_WORKOUT_START,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -111,6 +113,21 @@ export default (state = DEFAULT_STATE, action) => {
       return { ...state, editLoading: true };
     case LOAD_START_WORKOUT:
       return { ...state, editLoading: false, workoutLogs: null };
+    // optimistically update
+    case FETCH_EDIT_WORKOUT_START:
+      const updatedStart = state.workoutLogs.map((l) => {
+        if (l.id === action.values.id) {
+          return { ...l, ...action.values };
+        }
+        return l;
+      });
+      return { ...state, editLoading: true, workoutLogs: updatedStart };
+    case LOAD_EDIT_WORKOUT_START:
+      return {
+        ...state,
+        editLoading: false,
+        workoutLogs: action.failed ? null : state.workoutLogs,
+      };
     default:
       return state;
   }
