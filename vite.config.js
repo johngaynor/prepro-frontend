@@ -35,41 +35,10 @@ export default defineConfig({
         ],
       },
       workbox: {
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // Increased limit to 10MB
+        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024, // Increased limit to 10MB
         cleanupOutdatedCaches: true, // Automatically remove old caches
         clientsClaim: true, // Take control immediately
         skipWaiting: true, // Activate immediately
-
-        // runtimeCaching: [
-        //   {
-        //     urlPattern: ({ request }) =>
-        //       request.destination === "script" ||
-        //       request.destination === "style",
-        //     handler: "StaleWhileRevalidate",
-        //     options: {
-        //       cacheName: "assets-cache",
-        //       plugins: [
-        //         new ExpirationPlugin({
-        //           maxEntries: 50, // Store up to 50 files
-        //           maxAgeSeconds: 7 * 24 * 60 * 60, // Expire cache after 7 days
-        //         }),
-        //       ],
-        //     },
-        //   },
-        //   {
-        //     urlPattern: ({ request }) => request.destination === "image",
-        //     handler: "CacheFirst",
-        //     options: {
-        //       cacheName: "images-cache",
-        //       plugins: [
-        //         new workboxExpiration.ExpirationPlugin({
-        //           maxEntries: 30, // Store up to 30 images
-        //           maxAgeSeconds: 14 * 24 * 60 * 60, // Expire images after 14 days
-        //         }),
-        //       ],
-        //     },
-        //   },
-        // ],
       },
     }),
   ],
