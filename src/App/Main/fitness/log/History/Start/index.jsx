@@ -12,13 +12,14 @@ import { DropdownField } from "../../../../components/FormFields";
 import { connect } from "react-redux";
 import LandingChoice from "./StartChoice";
 import { startWorkout } from "../../../actions";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 
 const LandingPage = ({ templates, startWorkout }) => {
   const [choice, setChoice] = useState(1);
   const [template, setTemplate] = useState(null);
 
+  const navigate = useNavigate();
   const { date } = useParams();
 
   return (
@@ -89,7 +90,11 @@ const LandingPage = ({ templates, startWorkout }) => {
         color="blue"
         style={{ marginTop: 40 }}
         disabled={choice === 1 && !template}
-        onClick={() => startWorkout(date, template, choice === 2)}
+        onClick={() =>
+          startWorkout(date, template, choice === 2).then((data) =>
+            navigate(`/fitness/workout/${data.workoutId}`)
+          )
+        }
       />
     </Segment>
   );

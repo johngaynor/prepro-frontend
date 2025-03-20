@@ -1,9 +1,19 @@
 import React from "react";
-import { Segment, Header, Icon, List, ListItem } from "semantic-ui-react";
+import {
+  Segment,
+  Header,
+  Icon,
+  List,
+  ListItem,
+  Button,
+} from "semantic-ui-react";
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
+import { useNavigate } from "react-router-dom";
 
 const Workout = ({ activeWorkout, exerciseTypes }) => {
+  const navigate = useNavigate();
+
   const startTime = activeWorkout.timeStarted
     ? DateTime.fromFormat(activeWorkout.timeStarted, "HH:mm:ss").toFormat(
         "hh:mm a"
@@ -37,6 +47,11 @@ const Workout = ({ activeWorkout, exerciseTypes }) => {
         {DateTime.fromISO(activeWorkout.date).toFormat("cccc MM/dd/yyyy")}
       </Header>
 
+      <Button
+        content="View"
+        icon="eye"
+        onClick={() => navigate(`/fitness/workout/${activeWorkout.id}`)}
+      />
       <Header as="h3" textAlign="center">
         Time: {startTime} - {endTime}
       </Header>

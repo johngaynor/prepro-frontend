@@ -14,10 +14,18 @@ import { InputField } from "../../../../components/FormFields";
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
 import useDebounce from "../../../../customHooks/useDebounce";
-import { editWorkoutStart } from "../../../actions";
+import { editWorkoutStart, deleteWorkout } from "../../../actions";
+import { useNavigate } from "react-router-dom";
 
-const StartPage = ({ workout, templates, exerciseTypes, editWorkoutStart }) => {
+const StartPage = ({
+  workout,
+  templates,
+  exerciseTypes,
+  editWorkoutStart,
+  deleteWorkout,
+}) => {
   const [formValues, setFormValues] = useState({ ...workout });
+  const navigate = useNavigate();
 
   const template = templates.find((t) => t.id === workout.workoutTemplateId);
 
@@ -97,11 +105,11 @@ const StartPage = ({ workout, templates, exerciseTypes, editWorkoutStart }) => {
           type="button"
           icon="trash"
           color="red"
-          onClick={() => {
-            // deleteWorkoutSummary(selectedWorkout.id);
-            // setFormValues(defaultValues);
-            console.log("deleting");
-          }}
+          onClick={() =>
+            deleteWorkout(workout.id).then(() =>
+              navigate(`/fitness/log/${workout.date}`)
+            )
+          }
         />
       </Container>
     </Segment>
@@ -115,4 +123,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { editWorkoutStart })(StartPage);
+export default connect(mapStateToProps, { editWorkoutStart, deleteWorkout })(
+  StartPage
+);
