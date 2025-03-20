@@ -466,10 +466,41 @@ export default defineConfig({
         ],
       },
       workbox: {
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-        cleanupOutdatedCaches: true, // Removes old caches
-        clientsClaim: true, // Ensures the new service worker takes control immediately
-        skipWaiting: true, // Forces new service worker activation
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // Increase limit to 10MB
+        cleanupOutdatedCaches: true, // Removes old caches when SW updates
+        clientsClaim: true, // New SW takes control immediately
+        skipWaiting: true, // Forces SW activation immediately
+        // runtimeCaching is new
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) =>
+              request.destination === "script" ||
+              request.destination === "style",
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "assets-cache",
+              plugins: [
+                new workbox.expiration.Plugin({
+                  maxEntries: 50, // Store up to 50 files
+                  maxAgeSeconds: 7 * 24 * 60 * 60, // Expire cache after 7 days
+                }),
+              ],
+            },
+          },
+          {
+            urlPattern: ({ request }) => request.destination === "image",
+            handler: "CacheFirst",
+            options: {
+              cacheName: "images-cache",
+              plugins: [
+                new workbox.expiration.Plugin({
+                  maxEntries: 30, // Store up to 30 images
+                  maxAgeSeconds: 14 * 24 * 60 * 60, // Expire images after 14 days
+                }),
+              ],
+            },
+          },
+        ],
       },
     }),
   ],
