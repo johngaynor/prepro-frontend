@@ -118,6 +118,12 @@ const StartPage = ({
       >
         <Button
           type="button"
+          icon="home"
+          color="blue"
+          onClick={() => navigate(`/fitness/log/${workout.date}`)}
+        />
+        <Button
+          type="button"
           icon="trash"
           color="red"
           onClick={() => setConfirmOpen(true)}

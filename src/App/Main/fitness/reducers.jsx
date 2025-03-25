@@ -46,10 +46,27 @@ export default (state = DEFAULT_STATE, action) => {
     case LOAD_WORKOUT_LOGS:
       return { ...state, workoutLogs: action.workoutLogs, logsLoading: false };
     case FETCH_EDIT_WORKOUT_EXERCISE:
-      return { ...state, editLoading: true };
+      const updatedLogs = state.workoutLogs.map((w) => {
+        if (w.id === action.values.workoutId) {
+          return {
+            ...w,
+            exercises: w.exercises.map((e) => {
+              if (e.id === action.values.id) {
+                return { ...action.values };
+              }
+              return e;
+            }),
+          };
+        }
+        return w;
+      });
+      return { ...state, editLoading: true, workoutLogs: updatedLogs };
     case LOAD_EDIT_WORKOUT_EXERCISE:
-      // will want to optimistically update the state here
-      return { ...state, editLoading: false, workoutLogs: null };
+      return {
+        ...state,
+        editLoading: false,
+        workoutLogs: action.failed ? null : state.workoutLogs,
+      };
     case FETCH_DELETE_WORKOUT_EXERCISE:
       // will want to set this up to only modify the active workout and not refresh the entire state
       return { ...state, editLoading: true };

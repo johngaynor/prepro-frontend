@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Segment,
   Form,
@@ -15,22 +15,30 @@ import {
 } from "../../../../components/FormFields";
 import { connect } from "react-redux";
 import { cloneDeep } from "lodash";
+import toast from "react-hot-toast";
+import useDebounce from "../../../../customHooks/useDebounce";
+import { editWorkoutExercise } from "../../../actions";
 
-const defaultValues = {
-  exerciseId: "",
-  restTime: "",
-  comments: "",
-  sets: [{ weight: "", reps: "" }],
-};
+const Exercise = ({ exercise, exerciseTypes, index, editWorkoutExercise }) => {
+  const [formValues, setFormValues] = useState(cloneDeep(exercise));
 
-const Exercise = ({ exercise, exerciseTypes, index }) => {
-  const [formValues, setFormValues] = useState(defaultValues);
-
-  useEffect(() => {
-    if (exercise) {
-      setFormValues(cloneDeep(exercise));
-    }
-  }, [exercise]);
+  useDebounce(
+    async () => {
+      const promise = editWorkoutExercise(formValues);
+      toast.promise(promise, {
+        loading: "Saving...",
+        success: "Save Complete!",
+        error: "Save failed. Please refresh.",
+      });
+      try {
+        await promise;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [formValues],
+    1000
+  );
 
   return (
     <Segment
@@ -183,4 +191,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {})(Exercise);
+export default connect(mapStateToProps, { editWorkoutExercise })(Exercise);

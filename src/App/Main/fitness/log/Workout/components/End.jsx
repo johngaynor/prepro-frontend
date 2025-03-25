@@ -4,6 +4,7 @@ import { InputField, TextAreaField } from "../../../../components/FormFields";
 import useDebounce from "../../../../customHooks/useDebounce";
 import { connect } from "react-redux";
 import { editWorkoutEnd } from "../../../actions";
+import toast from "react-hot-toast";
 
 const EndPage = ({ workout, editWorkoutEnd }) => {
   const [formValues, setFormValues] = useState({ ...workout });
@@ -11,7 +12,19 @@ const EndPage = ({ workout, editWorkoutEnd }) => {
   useDebounce(
     async () => {
       const { id, timeCompleted, comments } = formValues;
-      await editWorkoutEnd(id, timeCompleted, comments);
+      const promise = editWorkoutEnd(id, timeCompleted, comments);
+
+      toast.promise(promise, {
+        loading: "Saving...",
+        success: "Save Complete!",
+        error: "Save failed. Please refresh.",
+      });
+
+      try {
+        await promise;
+      } catch (error) {
+        console.error(error);
+      }
     },
     [formValues],
     1000

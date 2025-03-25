@@ -145,8 +145,8 @@ export function editWorkoutExercise(values) {
     "/api/fitness/logs/exercise",
     "Error updating workout exercise",
     values,
-    () => ({ type: LOAD_EDIT_WORKOUT_EXERCISE }),
-    () => ({ type: FETCH_EDIT_WORKOUT_EXERCISE })
+    (failed) => ({ type: LOAD_EDIT_WORKOUT_EXERCISE, failed }),
+    () => ({ type: FETCH_EDIT_WORKOUT_EXERCISE, values })
   );
 }
 
