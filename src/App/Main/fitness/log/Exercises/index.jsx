@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Button, Segment } from "semantic-ui-react";
-import CopyFromTemplate from "./components/CopyFromTemplate";
+import { Grid, Button } from "semantic-ui-react";
 import EditExerciseModal from "../../components/Modals/EditExerciseModal";
 import ViewExerciseCard from "../../components/Cards/ViewExerciseCard";
 import { connect } from "react-redux";
@@ -14,7 +13,6 @@ const Exercises = ({
   deleteWorkoutExercise,
   changeExercisePosition,
 }) => {
-  const [copyOpen, setCopyOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [activeExercise, setActiveExercise] = useState(null);
 
@@ -32,7 +30,7 @@ const Exercises = ({
   );
 
   return (
-    <Segment>
+    <div>
       <EditExerciseModal
         modalOpen={editOpen}
         setModalOpen={setEditOpen}
@@ -46,19 +44,6 @@ const Exercises = ({
         parentId={selectedWorkout.id}
         prevExercise={prevExercise}
       />
-      <CopyFromTemplate
-        open={copyOpen}
-        setOpen={setCopyOpen}
-        selectedWorkout={selectedWorkout}
-      />
-
-      {!selectedWorkout.exercises.length && (
-        <Button
-          color="blue"
-          content="Copy from Template"
-          onClick={() => setCopyOpen(true)}
-        />
-      )}
       <Grid
         stackable
         columns={3}
@@ -85,7 +70,7 @@ const Exercises = ({
         color="green"
         style={{ marginTop: selectedWorkout.exercises.length ? 20 : 40 }}
       />
-    </Segment>
+    </div>
   );
 };
 

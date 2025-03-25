@@ -1,12 +1,8 @@
 import {
   FETCH_WORKOUT_LOGS,
   LOAD_WORKOUT_LOGS,
-  FETCH_EDIT_WORKOUT_SUMMARY,
-  LOAD_EDIT_WORKOUT_SUMMARY,
   FETCH_EDIT_WORKOUT_EXERCISE,
   LOAD_EDIT_WORKOUT_EXERCISE,
-  FETCH_DELETE_WORKOUT_SUMMARY,
-  LOAD_DELETE_WORKOUT_SUMMARY,
   FETCH_DELETE_WORKOUT_EXERCISE,
   LOAD_DELETE_WORKOUT_EXERCISE,
   FETCH_EXERCISE_TYPES,
@@ -21,10 +17,16 @@ import {
   LOAD_EDIT_TEMPLATE_EXERCISE,
   FETCH_DELETE_TEMPLATE_EXERCISE,
   LOAD_DELETE_TEMPLATE_EXERCISE,
-  FETCH_COPY_WORKOUT_FROM_TEMPLATE,
-  LOAD_COPY_WORKOUT_FROM_TEMPLATE,
   FETCH_CHANGE_EXERCISE_POSITION,
   LOAD_CHANGE_EXERCISE_POSITION,
+  FETCH_START_WORKOUT,
+  LOAD_START_WORKOUT,
+  FETCH_EDIT_WORKOUT_START,
+  LOAD_EDIT_WORKOUT_START,
+  FETCH_EDIT_WORKOUT_END,
+  LOAD_EDIT_WORKOUT_END,
+  FETCH_DELETE_WORKOUT,
+  LOAD_DELETE_WORKOUT,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -43,23 +45,23 @@ export default (state = DEFAULT_STATE, action) => {
       return { ...state, logsLoading: true };
     case LOAD_WORKOUT_LOGS:
       return { ...state, workoutLogs: action.workoutLogs, logsLoading: false };
-    case FETCH_EDIT_WORKOUT_SUMMARY:
-      return { ...state, editLoading: true };
-    case LOAD_EDIT_WORKOUT_SUMMARY:
-      return { ...state, editLoading: false, workoutLogs: null };
     case FETCH_EDIT_WORKOUT_EXERCISE:
-      return { ...state, editLoading: true };
+      const updatedLogs = state.workoutLogs.map((w) => {
+        if (w.id === action.values.workoutId) {
+          return {
+            ...w,
+            exercises: w.exercises.map((e) => {
+              if (e.id === action.values.id) {
+                return { ...action.values };
+              }
+              return e;
+            }),
+          };
+        }
+        return w;
+      });
+      return { ...state, editLoading: true, workoutLogs: updatedLogs };
     case LOAD_EDIT_WORKOUT_EXERCISE:
-      // will want to optimistically update the state here
-      return { ...state, editLoading: false, workoutLogs: null };
-    case FETCH_DELETE_WORKOUT_SUMMARY:
-      // update locally
-      const newLogs = state.workoutLogs.filter(
-        (l) => l.id !== action.workoutId
-      );
-      return { ...state, workoutLogs: newLogs, editLoading: true };
-    case LOAD_DELETE_WORKOUT_SUMMARY:
-      // handle failure case
       return {
         ...state,
         editLoading: false,
@@ -98,10 +100,6 @@ export default (state = DEFAULT_STATE, action) => {
       return { ...state, editLoading: true };
     case LOAD_DELETE_TEMPLATE_EXERCISE:
       return { ...state, editLoading: false, templates: null };
-    case FETCH_COPY_WORKOUT_FROM_TEMPLATE:
-      return { ...state, editLoading: true };
-    case LOAD_COPY_WORKOUT_FROM_TEMPLATE:
-      return { ...state, editLoading: false, workoutLogs: null };
     case FETCH_CHANGE_EXERCISE_POSITION:
       return { ...state, editLoading: true };
     case LOAD_CHANGE_EXERCISE_POSITION:
@@ -110,6 +108,48 @@ export default (state = DEFAULT_STATE, action) => {
         editLoading: false,
         workoutLogs: action.exercise.workoutId ? null : state.workoutLogs,
         templates: action.exercise.templateId ? null : state.templates,
+      };
+    case FETCH_START_WORKOUT:
+      return { ...state, editLoading: true };
+    case LOAD_START_WORKOUT:
+      return { ...state, editLoading: false, workoutLogs: null };
+    // optimistically update
+    case FETCH_EDIT_WORKOUT_START:
+      const updatedStart = state.workoutLogs.map((l) => {
+        if (l.id === action.values.id) {
+          return { ...l, ...action.values };
+        }
+        return l;
+      });
+      return { ...state, editLoading: true, workoutLogs: updatedStart };
+    case LOAD_EDIT_WORKOUT_START:
+      return {
+        ...state,
+        editLoading: false,
+        workoutLogs: action.failed ? null : state.workoutLogs,
+      };
+    case FETCH_EDIT_WORKOUT_END:
+      const updatedEnd = state.workoutLogs.map((l) => {
+        if (l.id === action.values.id) {
+          return { ...l, ...action.values };
+        }
+        return l;
+      });
+      return { ...state, editLoading: true, workoutLogs: updatedEnd };
+    case LOAD_EDIT_WORKOUT_END:
+      return {
+        ...state,
+        editLoading: false,
+        workoutLogs: action.failed ? null : state.workoutLogs,
+      };
+    case FETCH_DELETE_WORKOUT:
+      const remainingLogs = state.workoutLogs.filter((l) => l.id !== action.id); // optimistic update
+      return { ...state, editLoading: true, workoutLogs: remainingLogs };
+    case LOAD_DELETE_WORKOUT:
+      return {
+        ...state,
+        editLoading: false,
+        workoutLogs: action.failed ? null : state.workoutLogs,
       };
     default:
       return state;
