@@ -96,8 +96,8 @@ const ViewExerciseCard = ({ exercise, index, handleEdit, exerciseTypes }) => {
                 </Grid.Row>
               ))}
             <ViewInput
-              value={exercise.comments}
-              label="Comments"
+              value={exercise.instructions}
+              label="Instructions"
               fullRow
               height={90}
             />
