@@ -24,13 +24,6 @@ const ViewSummary = ({ selectedWorkout, setEditMode }) => {
           label="Time Started"
         />
         <ViewInput
-          value={DateTime.fromFormat(
-            selectedWorkout.timeCompleted,
-            "HH:mm:ss"
-          ).toFormat("hh:mm a")}
-          label="Time Completed"
-        />
-        <ViewInput
           value={selectedWorkout.comments}
           label="Workout Comments"
           fullRow
