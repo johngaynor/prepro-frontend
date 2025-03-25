@@ -10,10 +10,10 @@ const EditWorkout = ({ workout, activeIndex, setActiveIndex }) => {
     ...(workout
       ? workout.exercises
           .sort((a, b) => a.orderId - b.orderId)
-          .map((e) => ({
+          .map((e, index) => ({
             name: e.id,
             exercise: e,
-            component: <Exercise exercise={e} />,
+            component: <Exercise exercise={e} index={index} />,
           }))
       : []),
     { name: "End", component: <EndPage workout={workout} />, workout },

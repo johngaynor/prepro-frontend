@@ -9,6 +9,7 @@ import {
   HeaderSubheader,
   List,
   ListItem,
+  Confirm,
 } from "semantic-ui-react";
 import { InputField } from "../../../../components/FormFields";
 import { connect } from "react-redux";
@@ -16,6 +17,7 @@ import { DateTime } from "luxon";
 import useDebounce from "../../../../customHooks/useDebounce";
 import { editWorkoutStart, deleteWorkout } from "../../../actions";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const StartPage = ({
   workout,
@@ -25,6 +27,7 @@ const StartPage = ({
   deleteWorkout,
 }) => {
   const [formValues, setFormValues] = useState({ ...workout });
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const navigate = useNavigate();
 
   const template = templates.find((t) => t.id === workout.workoutTemplateId);
@@ -32,7 +35,19 @@ const StartPage = ({
   useDebounce(
     async () => {
       const { id, timeStarted } = formValues;
-      await editWorkoutStart(id, timeStarted);
+      const promise = editWorkoutStart(id, timeStarted);
+
+      toast.promise(promise, {
+        loading: "Saving...",
+        success: "Save Complete!",
+        error: "Save failed. Please refresh.",
+      });
+
+      try {
+        await promise;
+      } catch (error) {
+        console.error(error);
+      }
     },
     [formValues],
     1000
@@ -105,11 +120,16 @@ const StartPage = ({
           type="button"
           icon="trash"
           color="red"
-          onClick={() =>
+          onClick={() => setConfirmOpen(true)}
+        />
+        <Confirm
+          open={confirmOpen}
+          onConfirm={() =>
             deleteWorkout(workout.id).then(() =>
               navigate(`/fitness/log/${workout.date}`)
             )
           }
+          onCancel={() => setConfirmOpen(false)}
         />
       </Container>
     </Segment>

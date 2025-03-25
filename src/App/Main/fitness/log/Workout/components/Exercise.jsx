@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Segment, Form, Grid, Label, Button, Input } from "semantic-ui-react";
+import {
+  Segment,
+  Form,
+  Grid,
+  Label,
+  Button,
+  Input,
+  Header,
+} from "semantic-ui-react";
 import {
   DropdownField,
   InputField,
@@ -15,7 +23,7 @@ const defaultValues = {
   sets: [{ weight: "", reps: "" }],
 };
 
-const Exercise = ({ exercise, exerciseTypes }) => {
+const Exercise = ({ exercise, exerciseTypes, index }) => {
   const [formValues, setFormValues] = useState(defaultValues);
 
   useEffect(() => {
@@ -36,6 +44,9 @@ const Exercise = ({ exercise, exerciseTypes }) => {
         flexDirection: "column",
       }}
     >
+      <Header as="h1" style={{ marginBottom: 30 }} textAlign="center">
+        Exercise {index + 1}
+      </Header>
       <Form>
         <Grid columns={2} stackable>
           <DropdownField
