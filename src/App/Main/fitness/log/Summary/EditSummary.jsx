@@ -9,7 +9,6 @@ import { connect } from "react-redux";
 const defaultValues = {
   comments: "",
   timeStarted: "",
-  timeCompleted: "",
 };
 
 const EditSummary = ({
@@ -80,14 +79,7 @@ const EditSummary = ({
           }
           error={formErrors.timeStarted}
         />
-        <InputField
-          type="time"
-          label="Time Completed"
-          value={formValues.timeCompleted}
-          onChange={(e, { value }) =>
-            setFormValues({ ...formValues, timeCompleted: value })
-          }
-        />
+
         <TextAreaField
           label="Workout Comments"
           fullWidth

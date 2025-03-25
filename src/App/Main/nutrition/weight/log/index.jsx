@@ -67,7 +67,7 @@ const WeightLog = ({
       {(logsLoading || editLoading) && <Spinner />}
       <Grid.Column>
         <Header>Daily Weight Log</Header>
-        <HorizontalSlide handleChangeDate={handleChangeDate} pageKey={date}>
+        <HorizontalSlide handleSwipe={handleChangeDate} pageKey={date}>
           <Segment
             style={{
               display: "flex",
