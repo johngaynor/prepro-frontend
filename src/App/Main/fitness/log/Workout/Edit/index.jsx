@@ -4,7 +4,13 @@ import EndPage from "../components/End";
 import Exercise from "../components/Exercise";
 import Pagination from "../../../../components/Pagination";
 
-const EditWorkout = ({ workout, activeIndex, setActiveIndex }) => {
+const EditWorkout = ({
+  workout,
+  activeIndex,
+  setActiveIndex,
+  template,
+  lastWorkout,
+}) => {
   const pages = [
     { name: "Start", component: <StartPage workout={workout} />, workout },
     ...(workout
@@ -13,7 +19,14 @@ const EditWorkout = ({ workout, activeIndex, setActiveIndex }) => {
           .map((e, index) => ({
             name: e.id,
             exercise: e,
-            component: <Exercise exercise={e} index={index} />,
+            component: (
+              <Exercise
+                exercise={e}
+                index={index}
+                template={template}
+                lastWorkout={lastWorkout}
+              />
+            ),
           }))
       : []),
     { name: "End", component: <EndPage workout={workout} />, workout },

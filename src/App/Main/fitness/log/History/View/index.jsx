@@ -6,10 +6,32 @@ import {
   List,
   ListItem,
   Button,
+  Divider,
+  Message,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
 import { useNavigate } from "react-router-dom";
+
+function convertTime(start, end) {
+  const format = "HH:mm:ss";
+
+  const startTime = DateTime.fromFormat(start, format);
+  const endTime = DateTime.fromFormat(end, format);
+  const diff = endTime.diff(startTime, ["hours", "minutes"]);
+
+  const {
+    values: { hours, minutes },
+  } = diff;
+
+  if (hours < 0 || minutes < 0) {
+    return "--";
+  } else if (hours === 0) {
+    return `${minutes}m`;
+  } else {
+    return `${hours}h ${minutes}m`;
+  }
+}
 
 const Workout = ({ activeWorkout, exerciseTypes }) => {
   const navigate = useNavigate();
@@ -26,6 +48,11 @@ const Workout = ({ activeWorkout, exerciseTypes }) => {
       )
     : "??";
 
+  const totalTime =
+    activeWorkout.timeStarted && activeWorkout.timeCompleted
+      ? convertTime(activeWorkout.timeStarted, activeWorkout.timeCompleted)
+      : "--";
+
   return (
     <Segment
       style={{
@@ -38,24 +65,33 @@ const Workout = ({ activeWorkout, exerciseTypes }) => {
         flexDirection: "column",
       }}
     >
+      {!activeWorkout.timeCompleted && (
+        <Message negative>
+          Warning: workout is not complete until an end time is entered.
+        </Message>
+      )}
+      <Header as="h2" textAlign="center">
+        {DateTime.fromISO(activeWorkout.date).toFormat("cccc MM/dd/yyyy")}
+      </Header>
       <Header as="h1" icon style={{ userSelect: "none" }}>
         <Icon name="history" size="massive" color="blue" />
         Workout Summary
       </Header>
-
-      <Header as="h2" textAlign="center">
-        {DateTime.fromISO(activeWorkout.date).toFormat("cccc MM/dd/yyyy")}
-      </Header>
-
-      <Button
-        content="View"
-        icon="eye"
-        onClick={() => navigate(`/fitness/workout/${activeWorkout.id}`)}
-      />
-      <Header as="h3" textAlign="center">
-        Time: {startTime} - {endTime}
-      </Header>
-
+      <div>
+        <Header
+          icon
+          style={{
+            fontSize: 60,
+            marginBottom: 0,
+          }}
+          color="teal"
+        >
+          {totalTime}
+        </Header>
+        <Header as="h4" icon style={{ marginTop: 0 }}>
+          Time: {startTime} - {endTime}
+        </Header>
+      </div>
       <List>
         {activeWorkout.exercises
           .sort((a, b) => a.orderId - b.orderId)
@@ -65,39 +101,25 @@ const Workout = ({ activeWorkout, exerciseTypes }) => {
               style={{ margin: 0 }}
               icon="check"
               content={
-                <div>
-                  <strong>
-                    {exerciseTypes.find((t) => t.id === e.exerciseId)?.name}
-                  </strong>
-                  <p>
-                    {e.sets.reduce((acc, val, i) => {
-                      return `${acc} ${val.weight}x${val.reps}${
-                        i < e.sets.length - 1 ? "," : ""
-                      } `;
-                    }, "")}
-                  </p>
-                </div>
+                <strong>
+                  {exerciseTypes.find((t) => t.id === e.exerciseId)?.name}
+                </strong>
               }
             />
           ))}
       </List>
-
-      {/* <p>Comments: {activeWorkout.comments}</p> */}
-      {/* <Container
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
-        <Button
-          type="button"
-          content="Edit"
-          icon="pencil"
-          color="orange"
-          onClick={() => setEditMode(true)}
-        />
-      </Container> */}
+      {activeWorkout.comments && (
+        <>
+          <Divider horizontal>Comments</Divider>
+          <i style={{ width: "80%" }}>"{activeWorkout.comments}"</i>
+        </>
+      )}
+      <Button
+        style={{ marginTop: 40 }}
+        content="View"
+        icon="eye"
+        onClick={() => navigate(`/fitness/workout/${activeWorkout.id}`)}
+      />
     </Segment>
   );
 };
