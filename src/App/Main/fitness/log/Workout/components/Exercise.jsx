@@ -18,10 +18,19 @@ import { cloneDeep } from "lodash";
 import toast from "react-hot-toast";
 import useDebounce from "../../../../customHooks/useDebounce";
 import { editWorkoutExercise } from "../../../actions";
+import { ViewInput } from "../../../../components/FormFields/view";
 
-const Exercise = ({ exercise, exerciseTypes, index, editWorkoutExercise }) => {
+const Exercise = ({
+  exercise,
+  exerciseTypes,
+  index,
+  editWorkoutExercise,
+  template,
+  lastWorkout,
+}) => {
   const [formValues, setFormValues] = useState(cloneDeep(exercise));
 
+  // debounce for updating workout
   useDebounce(
     async () => {
       const promise = editWorkoutExercise(formValues);
@@ -38,6 +47,10 @@ const Exercise = ({ exercise, exerciseTypes, index, editWorkoutExercise }) => {
     },
     [formValues],
     1000
+  );
+
+  const lastWorkoutExercise = lastWorkout?.exercises.find(
+    (e) => e.exerciseId === exercise.exerciseId
   );
 
   return (
@@ -77,6 +90,17 @@ const Exercise = ({ exercise, exerciseTypes, index, editWorkoutExercise }) => {
               setFormValues({ ...formValues, restTime: value })
             }
           />
+          {template && (
+            <ViewInput
+              label="Instructions"
+              value={
+                template.exercises.find(
+                  (e) => e.exerciseId === exercise.exerciseId
+                )?.instructions
+              }
+              fullRow
+            />
+          )}
         </Grid>
         {/* Labels */}
         <Grid columns={3} style={{ marginBottom: "-35px" }}>
@@ -124,11 +148,11 @@ const Exercise = ({ exercise, exerciseTypes, index, editWorkoutExercise }) => {
               </Grid.Column>
               <Grid.Column width={5}>
                 <Input
-                  //   placeholder={
-                  //     prevExercise
-                  //       ? prevExercise.sets[i]?.weight || "Weight"
-                  //       : "Weight"
-                  //   }
+                  placeholder={
+                    lastWorkoutExercise
+                      ? lastWorkoutExercise.sets[i]?.weight || "Weight"
+                      : "Weight"
+                  }
                   type="number"
                   value={s.weight || ""}
                   onChange={(e, { value }) => {
@@ -140,9 +164,11 @@ const Exercise = ({ exercise, exerciseTypes, index, editWorkoutExercise }) => {
               </Grid.Column>
               <Grid.Column width={5}>
                 <Input
-                  //   placeholder={
-                  //     prevExercise ? prevExercise.sets[i]?.reps || "Reps" : "Reps"
-                  //   }
+                  placeholder={
+                    lastWorkoutExercise
+                      ? lastWorkoutExercise.sets[i]?.reps || "Reps"
+                      : "Reps"
+                  }
                   type="number"
                   value={s.reps || ""}
                   onChange={(e, { value }) => {
@@ -173,9 +199,11 @@ const Exercise = ({ exercise, exerciseTypes, index, editWorkoutExercise }) => {
           fullWidth
           label="comments"
           value={formValues.comments}
-          // placeholder={
-          //   prevExercise ? prevExercise.comments || "Comments" : "Comments"
-          // }
+          placeholder={
+            lastWorkoutExercise
+              ? lastWorkoutExercise.comments || "Comments"
+              : "Comments"
+          }
           onChange={(e, { value }) =>
             setFormValues({ ...formValues, comments: value })
           }

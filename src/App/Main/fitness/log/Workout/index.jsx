@@ -38,6 +38,10 @@ const Workout = ({
 
   const { id } = useParams();
   const workout = workoutLogs?.find((l) => l.id === parseInt(id));
+  const template = templates?.find((t) => t.id === workout?.workoutTemplateId);
+  const lastWorkout = workoutLogs
+    ?.filter((l) => l.workoutTemplateId === template?.id)
+    .sort((a, b) => b.date.localeCompare(a.date))[1];
 
   function handleSwipe(direction) {
     if (direction === "left") {
@@ -69,6 +73,8 @@ const Workout = ({
           workout={workout}
           activeIndex={activeIndex}
           setActiveIndex={setActiveIndex}
+          template={template}
+          lastWorkout={lastWorkout}
         />
       ) : (
         <em>
