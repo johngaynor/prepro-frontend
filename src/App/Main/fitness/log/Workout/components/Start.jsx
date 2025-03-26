@@ -63,8 +63,16 @@ const StartPage = ({
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        position: "relative",
       }}
     >
+      <Button
+        style={{ position: "absolute", top: 10, left: 10 }}
+        type="button"
+        icon="undo"
+        onClick={() => navigate(`/fitness/log/${workout.date}`)}
+        content="Go Back"
+      />
       <Header as="h1" icon>
         <Icon name="lightning" />
         {DateTime.fromISO(workout.date).toFormat("cccc MMMM dd, yyyy")}
@@ -86,7 +94,6 @@ const StartPage = ({
           onChange={(e, { value }) =>
             setFormValues({ ...formValues, timeStarted: value })
           }
-          // error={formErrors.timeStarted}
         />
       </Grid>
       <Header as="h3" textAlign="center">
@@ -97,9 +104,9 @@ const StartPage = ({
           <ListItem
             key={e.id}
             icon={
-              e.sets.find((e) => !e.weight || !e.reps)
-                ? "square outline"
-                : "check square outline"
+              e.sets.find((e) => e.weight || e.reps)
+                ? "check square outline"
+                : "square outline"
             }
             content={
               <div>
@@ -109,35 +116,23 @@ const StartPage = ({
           />
         ))}
       </List>
-      <Container
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
-        <Button
-          type="button"
-          icon="home"
-          color="blue"
-          onClick={() => navigate(`/fitness/log/${workout.date}`)}
-        />
-        <Button
-          type="button"
-          icon="trash"
-          color="red"
-          onClick={() => setConfirmOpen(true)}
-        />
-        <Confirm
-          open={confirmOpen}
-          onConfirm={() =>
-            deleteWorkout(workout.id).then(() =>
-              navigate(`/fitness/log/${workout.date}`)
-            )
-          }
-          onCancel={() => setConfirmOpen(false)}
-        />
-      </Container>
+      <Button
+        style={{ position: "absolute", right: 10, bottom: 10 }}
+        type="button"
+        icon="trash"
+        color="red"
+        onClick={() => setConfirmOpen(true)}
+        content="Delete Workout"
+      />
+      <Confirm
+        open={confirmOpen}
+        onConfirm={() =>
+          deleteWorkout(workout.id).then(() =>
+            navigate(`/fitness/log/${workout.date}`)
+          )
+        }
+        onCancel={() => setConfirmOpen(false)}
+      />
     </Segment>
   );
 };

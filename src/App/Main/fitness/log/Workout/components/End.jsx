@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { Segment, Grid, Form, Header, Divider } from "semantic-ui-react";
+import {
+  Segment,
+  Grid,
+  Form,
+  Header,
+  Divider,
+  Button,
+} from "semantic-ui-react";
 import { InputField, TextAreaField } from "../../../../components/FormFields";
 import useDebounce from "../../../../customHooks/useDebounce";
 import { connect } from "react-redux";
 import { editWorkoutEnd } from "../../../actions";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const EndPage = ({ workout, editWorkoutEnd }) => {
   const [formValues, setFormValues] = useState({ ...workout });
+  const navigate = useNavigate();
 
   useDebounce(
     async () => {
@@ -109,7 +118,6 @@ const EndPage = ({ workout, editWorkoutEnd }) => {
             onChange={(e, { value }) =>
               setFormValues({ ...formValues, timeCompleted: value })
             }
-            // error={formErrors.timeStarted}
           />
 
           <TextAreaField
@@ -124,6 +132,15 @@ const EndPage = ({ workout, editWorkoutEnd }) => {
             }
           />
         </Grid>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            type="button"
+            content="Return to Home"
+            icon="home"
+            color="blue"
+            onClick={() => navigate(`/`)}
+          />
+        </div>
       </Form>
     </Segment>
   );
