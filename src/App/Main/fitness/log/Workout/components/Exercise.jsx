@@ -198,7 +198,7 @@ const Exercise = ({
         <TextAreaField
           fullWidth
           label="comments"
-          value={formValues.comments}
+          value={formValues.comments || ""}
           placeholder={
             lastWorkoutExercise
               ? lastWorkoutExercise.comments || "Comments"

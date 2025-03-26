@@ -34,16 +34,25 @@ const LandingPage = ({ templates, startWorkout }) => {
         flexDirection: "column",
       }}
     >
+      <Header as="h2" textAlign="center">
+        {DateTime.fromISO(date).toFormat("cccc MM/dd/yyyy")}
+      </Header>
       <Header as="h1" icon style={{ userSelect: "none" }}>
         <Icon name="fire" size="massive" color="orange" />
         Start Workout
       </Header>
-      <Header as="h2" textAlign="center">
-        {DateTime.fromISO(date).toFormat("cccc MM/dd/yyyy")}
-      </Header>
       <Header as="h4" textAlign="center">
         Choose one of the following options:
       </Header>
+      <LandingChoice choice={choice} setChoice={setChoice} id={3}>
+        <Header
+          as="h3"
+          style={{ margin: 0, textAlign: "center", userSelect: "none" }}
+        >
+          Scheduled Workout (Pull V3)
+        </Header>
+      </LandingChoice>
+      <Divider horizontal>Or</Divider>
       <LandingChoice choice={choice} setChoice={setChoice} id={1}>
         <Header
           as="h3"
@@ -89,7 +98,7 @@ const LandingPage = ({ templates, startWorkout }) => {
         labelPosition="right"
         color="blue"
         style={{ marginTop: 40 }}
-        disabled={choice === 1 && !template}
+        disabled={(choice === 1 && !template) || choice === 3 || choice === 2} // clear out the last 2 once they are functional
         onClick={() =>
           startWorkout(date, template, choice === 2).then((data) =>
             navigate(`/fitness/workout/${data.workoutId}`)

@@ -61,7 +61,7 @@ const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
                 ? d.workout.timeCompleted && d.workout.comments
                   ? true
                   : false
-                : !d.exercise?.sets.find((e) => !e.weight || !e.reps)
+                : d.exercise?.sets.find((e) => e.weight || e.reps)
             }
             setActiveIndex={setActiveIndex}
             index={i}
