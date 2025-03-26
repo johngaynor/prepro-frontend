@@ -6,8 +6,8 @@ import {
   List,
   ListItem,
   Button,
-  Label,
   Divider,
+  Message,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
@@ -59,72 +59,67 @@ const Workout = ({ activeWorkout, exerciseTypes }) => {
         height: "90%",
         width: "90vw",
         maxWidth: 800,
-        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
       }}
     >
-      <Label
-        style={{ position: "absolute", left: -14 }}
-        ribbon
-        color={activeWorkout.timeCompleted ? "green" : "orange"}
-      >
-        {activeWorkout.timeCompleted ? "Completed" : "Incomplete"}
-      </Label>
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
-        <Header as="h2" textAlign="center">
-          {DateTime.fromISO(activeWorkout.date).toFormat("cccc MM/dd/yyyy")}
+      {!activeWorkout.timeCompleted && (
+        <Message negative>
+          Warning: workout is not complete until an end time is entered.
+        </Message>
+      )}
+      <Header as="h2" textAlign="center">
+        {DateTime.fromISO(activeWorkout.date).toFormat("cccc MM/dd/yyyy")}
+      </Header>
+      <Header as="h1" icon style={{ userSelect: "none" }}>
+        <Icon name="history" size="massive" color="blue" />
+        Workout Summary
+      </Header>
+      <div>
+        <Header
+          icon
+          style={{
+            fontSize: 60,
+            marginBottom: 0,
+          }}
+          color="teal"
+        >
+          {totalTime}
         </Header>
-        <Header as="h1" icon style={{ userSelect: "none" }}>
-          <Icon name="history" size="massive" color="blue" />
-          Workout Summary
+        <Header as="h4" icon style={{ marginTop: 0 }}>
+          Time: {startTime} - {endTime}
         </Header>
-        <div>
-          <Header
-            icon
-            style={{
-              fontSize: 60,
-              marginBottom: 0,
-            }}
-            color="teal"
-          >
-            {totalTime}
-          </Header>
-          <Header as="h4" icon style={{ marginTop: 0 }}>
-            Time: {startTime} - {endTime}
-          </Header>
-        </div>
-        <List>
-          {activeWorkout.exercises
-            .sort((a, b) => a.orderId - b.orderId)
-            .map((e) => (
-              <ListItem
-                key={e.id}
-                style={{ margin: 0 }}
-                icon="check"
-                content={
-                  <strong>
-                    {exerciseTypes.find((t) => t.id === e.exerciseId)?.name}
-                  </strong>
-                }
-              />
-            ))}
-        </List>
-        <Divider horizontal>Comments</Divider>
-        <i style={{ width: "80%" }}>"{activeWorkout.comments}"</i>
-        <Button
-          style={{ marginTop: 40 }}
-          content="View"
-          icon="eye"
-          onClick={() => navigate(`/fitness/workout/${activeWorkout.id}`)}
-        />
       </div>
+      <List>
+        {activeWorkout.exercises
+          .sort((a, b) => a.orderId - b.orderId)
+          .map((e) => (
+            <ListItem
+              key={e.id}
+              style={{ margin: 0 }}
+              icon="check"
+              content={
+                <strong>
+                  {exerciseTypes.find((t) => t.id === e.exerciseId)?.name}
+                </strong>
+              }
+            />
+          ))}
+      </List>
+      {activeWorkout.comments && (
+        <>
+          <Divider horizontal>Comments</Divider>
+          <i style={{ width: "80%" }}>"{activeWorkout.comments}"</i>{" "}
+        </>
+      )}
+      <Button
+        style={{ marginTop: 40 }}
+        content="View"
+        icon="eye"
+        onClick={() => navigate(`/fitness/workout/${activeWorkout.id}`)}
+      />
     </Segment>
   );
 };
