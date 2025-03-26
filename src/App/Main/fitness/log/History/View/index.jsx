@@ -111,7 +111,7 @@ const Workout = ({ activeWorkout, exerciseTypes }) => {
       {activeWorkout.comments && (
         <>
           <Divider horizontal>Comments</Divider>
-          <i style={{ width: "80%" }}>"{activeWorkout.comments}"</i>{" "}
+          <i style={{ width: "80%" }}>"{activeWorkout.comments}"</i>
         </>
       )}
       <Button
