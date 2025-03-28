@@ -2,18 +2,16 @@ import React, { useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 
 const HorizontalSlide = ({ children, handleSwipe, pageKey, style = {} }) => {
-  const [dragging, setDragging] = useState(false);
-  const [dragDistance, setDragDistance] = useState(0);
-  const controls = useAnimation(); // Framer Motion animation controller
-
-  // functions to handle dragging box
-  function handleDragStart() {
-    setDragging(true);
-  }
+  const controls = useAnimation();
 
   function handleDragEnd(_, info) {
-    setDragging(false);
     const offsetX = info.offset.x;
+    const offsetY = info.offset.y;
+
+    // Ignore if vertical movement is greater than horizontal movement
+    if (Math.abs(offsetY) > Math.abs(offsetX)) {
+      return;
+    }
 
     // If the drag distance crosses a threshold, change date
     if (offsetX < -100) {
@@ -21,29 +19,20 @@ const HorizontalSlide = ({ children, handleSwipe, pageKey, style = {} }) => {
     } else if (offsetX > 100) {
       handleSwipe("left");
     }
-
-    setDragDistance(0);
-  }
-
-  function handleDrag(event, info) {
-    setDragDistance(info.offset.x);
   }
 
   return (
     <motion.div
       key={pageKey}
       drag="x"
+      dragDirectionLock
+      dragElastic={0.2}
       dragConstraints={{ left: 0, right: 0 }}
-      onDragStart={handleDragStart}
-      onDrag={handleDrag}
       onDragEnd={handleDragEnd}
       style={{
-        x: dragDistance,
-        transition: dragging ? "none" : "transform 0.3s ease",
-        pointerEvents: dragging ? "none" : "auto",
         ...style,
       }}
-      animate={controls} // Controlled animation
+      animate={controls}
     >
       {children}
     </motion.div>
