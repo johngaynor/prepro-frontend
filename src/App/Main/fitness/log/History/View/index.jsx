@@ -92,7 +92,7 @@ const Workout = ({ activeWorkout, exerciseTypes }) => {
           Time: {startTime} - {endTime}
         </Header>
       </div>
-      <List>
+      <List style={{ height: "100px", overflowY: "scroll", width: "80%" }}>
         {activeWorkout.exercises
           .sort((a, b) => a.orderId - b.orderId)
           .map((e) => (
@@ -111,7 +111,15 @@ const Workout = ({ activeWorkout, exerciseTypes }) => {
       {activeWorkout.comments && (
         <>
           <Divider horizontal>Comments</Divider>
-          <i style={{ width: "80%" }}>"{activeWorkout.comments}"</i>
+          <i
+            style={{
+              width: "80%",
+              height: "50px",
+              overflowY: "scroll",
+            }}
+          >
+            "{activeWorkout.comments}"
+          </i>
         </>
       )}
       <Button
