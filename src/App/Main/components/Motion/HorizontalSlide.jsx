@@ -5,7 +5,6 @@ const HorizontalSlide = ({ children, handleSwipe, pageKey, style = {} }) => {
   const [dragging, setDragging] = useState(false);
   const [dragDistance, setDragDistance] = useState(0);
   const controls = useAnimation(); // Framer Motion animation controller
-  let holdTimeout;
 
   // functions to handle dragging box
   function handleDragStart() {
@@ -30,16 +29,6 @@ const HorizontalSlide = ({ children, handleSwipe, pageKey, style = {} }) => {
     setDragDistance(info.offset.x);
   }
 
-  function handlePointerDown() {
-    holdTimeout = setTimeout(() => {
-      controls.start({ scale: 0.95 });
-    }, 100); // 1-second hold before scaling
-  }
-
-  function handlePointerUp() {
-    clearTimeout(holdTimeout);
-    controls.start({ scale: 1 });
-  }
   return (
     <motion.div
       key={pageKey}
@@ -55,9 +44,6 @@ const HorizontalSlide = ({ children, handleSwipe, pageKey, style = {} }) => {
         ...style,
       }}
       animate={controls} // Controlled animation
-      onPointerDown={handlePointerDown} // Detect press start
-      onPointerUp={handlePointerUp} // Reset on release
-      onPointerLeave={handlePointerUp} // Reset if user moves pointer away
     >
       {children}
     </motion.div>
