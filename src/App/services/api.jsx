@@ -96,7 +96,10 @@ const API = {
             resolve(res);
           })
           .catch((err) => {
-            toast.error(`${errorMessage}: ${err}`);
+            if (err.message) {
+              toast.error(`${errorMessage}: ${err.message}`);
+            } else toast.error(`${errorMessage}: ${err}`);
+
             if (loadAction) dispatch(loadAction({ failed: true }));
             reject(err);
           });

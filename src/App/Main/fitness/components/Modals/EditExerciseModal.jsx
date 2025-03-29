@@ -23,7 +23,7 @@ import { connect } from "react-redux";
 const defaultValues = {
   exerciseId: "",
   restTime: "",
-  comments: "",
+  instructions: "",
   sets: [{ weight: "", reps: "" }],
 };
 
@@ -221,15 +221,15 @@ const EditExerciseModal = ({
               </Grid.Row>
               <TextAreaField
                 fullWidth
-                label="comments"
-                value={formValues.comments}
+                label="instructions"
+                value={formValues.instructions}
                 placeholder={
                   prevExercise
-                    ? prevExercise.comments || "Comments"
-                    : "Comments"
+                    ? prevExercise.instructions || "Instructions"
+                    : "Instructions"
                 }
                 onChange={(e, { value }) =>
-                  setFormValues({ ...formValues, comments: value })
+                  setFormValues({ ...formValues, instructions: value })
                 }
               />
             </Grid>

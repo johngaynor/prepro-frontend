@@ -58,12 +58,13 @@ const WeightLog = ({
         await editWeightLog(date, weight);
     },
     [weight],
-    600
+    1000
   );
 
   return (
     <HorizontalSlide handleChangeDate={handleChangeDate} pageKey={date}>
       {(logsLoading || editLoading) && <Spinner />}
+<<<<<<< HEAD
       <div
         style={{
           height: "80vh",
@@ -92,6 +93,12 @@ const WeightLog = ({
             type="number"
             placeholder="Weight"
             min={0}
+=======
+      <Grid.Column>
+        <Header>Daily Weight Log</Header>
+        <HorizontalSlide handleSwipe={handleChangeDate} pageKey={date}>
+          <Segment
+>>>>>>> Dev
             style={{
               width: "80%",
               maxWidth: 400,

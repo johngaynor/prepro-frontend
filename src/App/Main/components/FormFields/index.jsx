@@ -1,4 +1,6 @@
 import { Grid, Label, Input, TextArea, Dropdown } from "semantic-ui-react";
+import React, { useEffect, useState } from "react";
+import { DateTime } from "luxon";
 
 /**
  * InputField global component
@@ -11,6 +13,8 @@ import { Grid, Label, Input, TextArea, Dropdown } from "semantic-ui-react";
  * @param {boolean} [props.disabled] - Whether the input field should be disabled
  * @param {boolean} [props.loading] - Whether to show a loading indicator in the input field
  * @param {boolean|string} [props.error=false] - Error message or flag to display error state
+ * @param {number} [props.width=8] - Width of the input field
+ * @param {boolean} [props.fullWidth=false] - Whether the input field takes up the full width of the grid
  *
  * @returns {JSX.Element} The rendered InputField component
  */
@@ -24,9 +28,11 @@ export const InputField = ({
   loading = false,
   error = false,
   name,
+  width = 8,
+  fullWidth = false,
 }) => {
   return (
-    <Grid.Column>
+    <Grid.Column width={fullWidth ? 16 : width}>
       {label && (
         <Label
           horizontal

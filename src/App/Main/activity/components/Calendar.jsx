@@ -26,10 +26,13 @@ const Calendar = ({ activities, activitiesLoading, getActivities }) => {
 
     switch (event.type) {
       case "workout":
-        backgroundColor = "#0E6EB8";
+        backgroundColor = "#086788";
         break;
       case "checkin":
-        backgroundColor = "#016936";
+        backgroundColor = "#0E6EB8";
+        break;
+      case "weight":
+        backgroundColor = "#06AED5";
         break;
       default:
         backgroundColor = "#909399";
@@ -55,6 +58,9 @@ const Calendar = ({ activities, activitiesLoading, getActivities }) => {
       case "workout":
         navigate(`/fitness/log/${item.date}`);
         break;
+      case "weight":
+        navigate(`/nutrition/weight/log/${item.date}`);
+        break;
       default:
         toast.error("Invalid calendar event type");
     }
@@ -70,7 +76,7 @@ const Calendar = ({ activities, activitiesLoading, getActivities }) => {
         startAccessor="date"
         endAccessor="date"
         titleAccessor="title"
-        style={{ height: 500 }}
+        style={{ height: 700 }}
         eventPropGetter={eventStyleGetter}
         onSelectEvent={(e) => handleClickItem(e)}
       />
