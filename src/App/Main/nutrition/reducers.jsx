@@ -55,7 +55,7 @@ export default (state = DEFAULT_STATE, action) => {
       return {
         ...state,
         editLoading: false,
-        weightLogs: action.failed ? null : action.weightLogs,
+        weightLogs: action.failed ? null : state.weightLogs,
       };
     case FETCH_DIET_LOGS:
       return { ...state, dietLogsLoading: true };
