@@ -21,8 +21,6 @@ const WeightLog = ({
     if (!weightLogs && !logsLoading) getWeightLogs();
   }, [weightLogs, logsLoading]);
 
-  console.log(weightLogs?.length, logsLoading); // for some reason updating is setting logs to undefined
-
   const { date } = useParams();
   const navigate = useNavigate();
 
@@ -75,53 +73,53 @@ const WeightLog = ({
   );
 
   return (
-    <HorizontalSlide handleSwipe={handleChangeDate} pageKey={date}>
+    <HorizontalSlide
+      handleSwipe={handleChangeDate}
+      pageKey={date}
+      style={{
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {logsLoading && <Spinner />}
-      <div
+      <Segment
         style={{
-          height: "80vh",
+          height: "60%",
+          width: "90vw",
+          maxWidth: 800,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          flexDirection: "column",
         }}
       >
-        <Segment
+        <Header as="h1" style={{ textAlign: "center" }}>
+          {DateTime.fromISO(date).toFormat("MMMM dd, yyyy")}
+        </Header>
+        <Input
+          value={weight}
+          onChange={(e, { value }) => setWeight(value)}
+          type="number"
+          min={0}
           style={{
-            height: "60vh",
-            width: "90vw",
-            maxWidth: 800,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
+            width: "80%",
+            maxWidth: 400,
+            height: 100,
           }}
         >
-          <Header as="h1" style={{ textAlign: "center" }}>
-            {DateTime.fromISO(date).toFormat("MMMM dd, yyyy")}
-          </Header>
-          <Input
-            value={weight}
-            onChange={(e, { value }) => setWeight(value)}
-            type="number"
-            min={0}
+          <input
             style={{
-              width: "80%",
-              maxWidth: 400,
-              height: 100,
+              fontSize: 70,
+              textAlign: "center",
+              borderRadius: 10,
+              padding: 0,
+              border: "1px solid gray",
             }}
-          >
-            <input
-              style={{
-                fontSize: 70,
-                textAlign: "center",
-                borderRadius: 10,
-                padding: 0,
-                border: "1px solid gray",
-              }}
-            />
-          </Input>
-        </Segment>
-      </div>
+          />
+        </Input>
+      </Segment>
     </HorizontalSlide>
   );
 };
