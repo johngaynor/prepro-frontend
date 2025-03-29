@@ -7,19 +7,21 @@ import { DateTime } from "luxon";
 import Spinner from "../../../components/Spinner";
 import useDebounce from "../../../customHooks/useDebounce";
 import HorizontalSlide from "../../../components/Motion/HorizontalSlide";
+import toast from "react-hot-toast";
 
 const WeightLog = ({
   weightLogs,
   logsLoading,
   getWeightLogs,
   editWeightLog,
-  editLoading,
 }) => {
   const [weight, setWeight] = useState("");
 
   useEffect(() => {
     if (!weightLogs && !logsLoading) getWeightLogs();
   }, [weightLogs, logsLoading]);
+
+  console.log(weightLogs?.length, logsLoading); // for some reason updating is setting logs to undefined
 
   const { date } = useParams();
   const navigate = useNavigate();
@@ -54,17 +56,27 @@ const WeightLog = ({
     async () => {
       // check to see if weight has changed
       const match = weightLogs.find((l) => l.date === date);
-      if ((match && match.weight != weight) || (!match && weight !== ""))
-        await editWeightLog(date, weight);
+      if ((match && match.weight != weight) || (!match && weight !== "")) {
+        const promise = editWeightLog(date, weight);
+        toast.promise(promise, {
+          loading: "Saving...",
+          success: "Save Complete!",
+          error: "Save failed. Please refresh.",
+        });
+        try {
+          await promise;
+        } catch (error) {
+          console.error(error);
+        }
+      }
     },
     [weight],
-    1000
+    2000
   );
 
   return (
-    <HorizontalSlide handleChangeDate={handleChangeDate} pageKey={date}>
-      {(logsLoading || editLoading) && <Spinner />}
-<<<<<<< HEAD
+    <HorizontalSlide handleSwipe={handleChangeDate} pageKey={date}>
+      {logsLoading && <Spinner />}
       <div
         style={{
           height: "80vh",
@@ -91,14 +103,7 @@ const WeightLog = ({
             value={weight}
             onChange={(e, { value }) => setWeight(value)}
             type="number"
-            placeholder="Weight"
             min={0}
-=======
-      <Grid.Column>
-        <Header>Daily Weight Log</Header>
-        <HorizontalSlide handleSwipe={handleChangeDate} pageKey={date}>
-          <Segment
->>>>>>> Dev
             style={{
               width: "80%",
               maxWidth: 400,
@@ -110,6 +115,8 @@ const WeightLog = ({
                 fontSize: 70,
                 textAlign: "center",
                 borderRadius: 10,
+                padding: 0,
+                border: "1px solid gray",
               }}
             />
           </Input>
@@ -123,7 +130,6 @@ function mapStateToProps(state) {
   return {
     weightLogs: state.nutrition.weightLogs,
     logsLoading: state.nutrition.logsLoading,
-    editLoading: state.nutrition.editLoading,
   };
 }
 
