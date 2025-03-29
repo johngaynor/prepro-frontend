@@ -29,6 +29,15 @@ const Circle = ({
 };
 
 const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
+  const maxItems = 9;
+
+  const startPos =
+    data.length - activeIndex < maxItems ? data.length - maxItems : activeIndex;
+  const endPos =
+    activeIndex + maxItems > data.length ? data.length : activeIndex + maxItems;
+
+  const items = data.slice(startPos, endPos);
+
   return (
     <Segment
       style={{
@@ -47,10 +56,14 @@ const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
         size="tiny"
         onClick={() => setActiveIndex(activeIndex > 0 ? activeIndex - 1 : 0)}
       />
-      {data.map((d, i) => {
+      {items.map((d, i) => {
         return (
           <Circle
-            active={i === activeIndex}
+            active={
+              activeIndex > data.length - 1
+                ? data.length - 1
+                : activeIndex === startPos + i
+            }
             key={i}
             completed={
               d.name === "Start"
