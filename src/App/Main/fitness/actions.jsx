@@ -98,11 +98,11 @@ export function getWorkoutLogs() {
   );
 }
 
-export function startWorkout(date, templateId, noTemplate) {
+export function startWorkout(date, time, templateId, noTemplate) {
   return API.post(
     "/api/fitness/logs/new",
     "Error starting workout",
-    { date, templateId, noTemplate },
+    { date, time, templateId, noTemplate },
     () => ({ type: LOAD_START_WORKOUT }),
     () => ({ type: FETCH_START_WORKOUT })
   );

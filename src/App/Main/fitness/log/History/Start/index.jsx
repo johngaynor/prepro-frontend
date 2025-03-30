@@ -99,11 +99,12 @@ const LandingPage = ({ templates, startWorkout }) => {
         color="blue"
         style={{ marginTop: 40 }}
         disabled={(choice === 1 && !template) || choice === 3 || choice === 2} // clear out the last 2 once they are functional
-        onClick={() =>
-          startWorkout(date, template, choice === 2).then((data) =>
+        onClick={() => {
+          const time = DateTime.now().setZone("local").toFormat("HH:mm");
+          startWorkout(date, time, template, choice === 2).then((data) =>
             navigate(`/fitness/workout/${data.workoutId}`)
-          )
-        }
+          );
+        }}
       />
     </Segment>
   );

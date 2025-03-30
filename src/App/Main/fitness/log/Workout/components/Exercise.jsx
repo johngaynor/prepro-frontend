@@ -46,7 +46,7 @@ const Exercise = ({
       }
     },
     [formValues],
-    1000
+    3000
   );
 
   const lastWorkoutExercise = lastWorkout?.exercises.find(

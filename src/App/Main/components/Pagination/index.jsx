@@ -29,6 +29,35 @@ const Circle = ({
 };
 
 const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
+  const maxItems = 9;
+
+  const startPos =
+    data.length - activeIndex < maxItems ? data.length - maxItems : activeIndex;
+  const endPos =
+    activeIndex + maxItems > data.length ? data.length : activeIndex + maxItems;
+
+  const circles = data.map((d, i) => (
+    <Circle
+      active={i === activeIndex}
+      key={i}
+      completed={
+        d.name === "Start"
+          ? d.workout.timeStarted
+            ? true
+            : false
+          : d.name === "End"
+          ? d.workout.timeCompleted && d.workout.comments
+            ? true
+            : false
+          : d.exercise?.sets.find((e) => e.weight || e.reps)
+      }
+      setActiveIndex={setActiveIndex}
+      index={i}
+    />
+  ));
+
+  const items = circles.slice(startPos, endPos);
+
   return (
     <Segment
       style={{
@@ -47,27 +76,7 @@ const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
         size="tiny"
         onClick={() => setActiveIndex(activeIndex > 0 ? activeIndex - 1 : 0)}
       />
-      {data.map((d, i) => {
-        return (
-          <Circle
-            active={i === activeIndex}
-            key={i}
-            completed={
-              d.name === "Start"
-                ? d.workout.timeStarted
-                  ? true
-                  : false
-                : d.name === "End"
-                ? d.workout.timeCompleted && d.workout.comments
-                  ? true
-                  : false
-                : d.exercise?.sets.find((e) => e.weight || e.reps)
-            }
-            setActiveIndex={setActiveIndex}
-            index={i}
-          />
-        );
-      })}
+      {items.map((circle, i) => circle)}
       <Button
         icon="step forward"
         size="tiny"

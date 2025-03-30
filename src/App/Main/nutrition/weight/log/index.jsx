@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Segment, Header, Button } from "semantic-ui-react";
+import { Segment, Header, Input } from "semantic-ui-react";
 import { editWeightLog, getWeightLogs } from "../../actions";
 import { connect } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { DateTime } from "luxon";
 import Spinner from "../../../components/Spinner";
-import { InputField } from "../../../components/FormFields";
 import useDebounce from "../../../customHooks/useDebounce";
 import HorizontalSlide from "../../../components/Motion/HorizontalSlide";
+import toast from "react-hot-toast";
 
 const WeightLog = ({
   weightLogs,
   logsLoading,
   getWeightLogs,
   editWeightLog,
-  editLoading,
 }) => {
   const [weight, setWeight] = useState("");
 
@@ -55,93 +54,73 @@ const WeightLog = ({
     async () => {
       // check to see if weight has changed
       const match = weightLogs.find((l) => l.date === date);
-      if ((match && match.weight != weight) || (!match && weight !== ""))
-        await editWeightLog(date, weight);
+      if ((match && match.weight != weight) || (!match && weight !== "")) {
+        const promise = editWeightLog(date, weight);
+        toast.promise(promise, {
+          loading: "Saving...",
+          success: "Save Complete!",
+          error: "Save failed. Please refresh.",
+        });
+        try {
+          await promise;
+        } catch (error) {
+          console.error(error);
+        }
+      }
     },
     [weight],
-    1000
+    2000
   );
 
   return (
-    <Grid columns={1}>
-      {(logsLoading || editLoading) && <Spinner />}
-      <Grid.Column>
-        <Header>Daily Weight Log</Header>
-        <HorizontalSlide handleSwipe={handleChangeDate} pageKey={date}>
-          <Segment
+    <HorizontalSlide
+      handleSwipe={handleChangeDate}
+      pageKey={date}
+      style={{
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      {logsLoading && <Spinner />}
+      <Segment
+        style={{
+          height: "60%",
+          width: "90vw",
+          maxWidth: 800,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Header as="h1" style={{ textAlign: "center" }}>
+          {DateTime.fromISO(date).toFormat("MMMM dd, yyyy")}
+        </Header>
+        <Input
+          value={weight}
+          onChange={(e, { value }) => setWeight(value)}
+          type="number"
+          min={0}
+          style={{
+            width: "80%",
+            maxWidth: 400,
+            height: 100,
+          }}
+        >
+          <input
             style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "column",
+              fontSize: 70,
+              textAlign: "center",
+              borderRadius: 10,
+              padding: 0,
+              border: "1px solid gray",
             }}
-          >
-            <Grid
-              columns={3}
-              style={{
-                width: "100%",
-              }}
-            >
-              <Grid.Column
-                width={2}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                }}
-              >
-                <Button
-                  icon="arrow left"
-                  onClick={() => handleChangeDate("left")}
-                  style={{ margin: 0 }}
-                  color="blue"
-                />
-              </Grid.Column>
-              <Grid.Column width={12}>
-                <InputField
-                  type="date"
-                  value={DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
-                  onChange={(e, { value }) =>
-                    navigate(`/nutrition/weight/log/${value}`)
-                  }
-                />
-              </Grid.Column>
-              <Grid.Column
-                width={2}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                }}
-              >
-                <Button
-                  icon="arrow right"
-                  onClick={() => handleChangeDate("right")}
-                  style={{ margin: 0 }}
-                  color="blue"
-                />
-              </Grid.Column>
-            </Grid>
-            <Grid
-              columns={3}
-              style={{
-                width: "100%",
-              }}
-            >
-              <Grid.Column width={2} />
-              <Grid.Column width={12}>
-                <InputField
-                  placeholder="Weight (in LBS)"
-                  type="number"
-                  value={weight}
-                  onChange={(e, { value }) => setWeight(value)}
-                />
-              </Grid.Column>
-              <Grid.Column width={2} />
-            </Grid>
-          </Segment>
-        </HorizontalSlide>
-      </Grid.Column>
-    </Grid>
+          />
+        </Input>
+      </Segment>
+    </HorizontalSlide>
   );
 };
 
@@ -149,7 +128,6 @@ function mapStateToProps(state) {
   return {
     weightLogs: state.nutrition.weightLogs,
     logsLoading: state.nutrition.logsLoading,
-    editLoading: state.nutrition.editLoading,
   };
 }
 

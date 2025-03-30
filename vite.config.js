@@ -46,6 +46,13 @@ export default defineConfig({
   build: {
     outDir: "./build",
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        assetFileNames: "assets/[name]-[hash].[ext]",
+        chunkFileNames: "assets/[name]-[hash].js",
+        entryFileNames: "assets/[name]-[hash].js",
+      },
+    },
   },
   server: {
     port: 3001,
