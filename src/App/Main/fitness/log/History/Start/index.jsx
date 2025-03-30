@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Form,
@@ -15,12 +15,15 @@ import { startWorkout } from "../../../actions";
 import { useParams, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 
-const LandingPage = ({ templates, startWorkout }) => {
-  const [choice, setChoice] = useState(1);
+const LandingPage = ({ templates, programs, startWorkout }) => {
+  const { date } = useParams();
+  const dayOfWeek = DateTime.fromISO(date).weekday;
+  const programmedWorkout = programs?.days?.find((d) => d.day === dayOfWeek);
+
+  const [choice, setChoice] = useState(programmedWorkout ? 3 : 1);
   const [template, setTemplate] = useState(null);
 
   const navigate = useNavigate();
-  const { date } = useParams();
 
   return (
     <Segment
@@ -44,12 +47,18 @@ const LandingPage = ({ templates, startWorkout }) => {
       <Header as="h4" textAlign="center">
         Choose one of the following options:
       </Header>
-      <LandingChoice choice={choice} setChoice={setChoice} id={3}>
+      <LandingChoice
+        choice={choice}
+        setChoice={setChoice}
+        id={3}
+        disabled={!programmedWorkout}
+      >
         <Header
           as="h3"
           style={{ margin: 0, textAlign: "center", userSelect: "none" }}
         >
-          Scheduled Workout (Pull V3)
+          Scheduled Workout{" "}
+          {programmedWorkout ? `- ${programmedWorkout.name}` : ""}
         </Header>
       </LandingChoice>
       <Divider horizontal>Or</Divider>
@@ -98,12 +107,19 @@ const LandingPage = ({ templates, startWorkout }) => {
         labelPosition="right"
         color="blue"
         style={{ marginTop: 40 }}
-        disabled={(choice === 1 && !template) || choice === 3 || choice === 2} // clear out the last 2 once they are functional
+        disabled={
+          (choice === 1 && !template) ||
+          choice === 2 ||
+          (choice === 3 && !programmedWorkout)
+        } // clear out the manual workout if it is not selected
         onClick={() => {
           const time = DateTime.now().setZone("local").toFormat("HH:mm");
-          startWorkout(date, time, template, choice === 2).then((data) =>
-            navigate(`/fitness/workout/${data.workoutId}`)
-          );
+          startWorkout(
+            date,
+            time,
+            choice === 3 ? programmedWorkout.templateId : template,
+            choice === 2
+          ).then((data) => navigate(`/fitness/workout/${data.workoutId}`));
         }}
       />
     </Segment>
@@ -113,6 +129,7 @@ const LandingPage = ({ templates, startWorkout }) => {
 function mapStateToProps(state) {
   return {
     templates: state.fitness.templates,
+    programs: state.fitness.programs,
   };
 }
 

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Segment,
   Grid,
-  Container,
   Button,
   Header,
   Icon,
