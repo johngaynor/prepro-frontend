@@ -27,6 +27,8 @@ import {
   LOAD_EDIT_WORKOUT_END,
   FETCH_DELETE_WORKOUT,
   LOAD_DELETE_WORKOUT,
+  FETCH_WORKOUT_PROGRAMS,
+  LOAD_WORKOUT_PROGRAMS,
 } from "../../store/actionTypes";
 
 const DEFAULT_STATE = {
@@ -37,6 +39,8 @@ const DEFAULT_STATE = {
   templates: null,
   templatesLoading: false,
   editLoading: false,
+  programs: null,
+  programsLoading: false,
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -151,6 +155,10 @@ export default (state = DEFAULT_STATE, action) => {
         editLoading: false,
         workoutLogs: action.failed ? null : state.workoutLogs,
       };
+    case FETCH_WORKOUT_PROGRAMS:
+      return { ...state, programs: true };
+    case LOAD_WORKOUT_PROGRAMS:
+      return { ...state, programs: action.programs, programsLoading: false };
     default:
       return state;
   }

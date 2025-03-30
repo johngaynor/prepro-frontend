@@ -1,7 +1,7 @@
 import React from "react";
 import { Radio } from "semantic-ui-react";
 
-const StartChoice = ({ choice, setChoice, children, id }) => {
+const StartChoice = ({ choice, setChoice, children, id, disabled = false }) => {
   return (
     <div
       style={{
@@ -24,6 +24,7 @@ const StartChoice = ({ choice, setChoice, children, id }) => {
       <Radio
         checked={choice === id}
         style={{ position: "absolute", left: 10 }}
+        disabled={disabled}
       />
       {children}
     </div>

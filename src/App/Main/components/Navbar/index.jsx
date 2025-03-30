@@ -28,7 +28,7 @@ const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
         <HelpMenu isOpen={helpMenuOpen} setOpen={setHelpMenuOpen} />
       )}
       <Menu.Item position="right">
-        {auth ? (
+        {/* {auth ? (
           <Button
             basic
             inverted
@@ -38,15 +38,26 @@ const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
             <Icon name="question circle" />
             Help
           </Button>
-        ) : null}
-        <Button
-          style={isMobile ? { marginLeft: "10px" } : { marginLeft: "0px" }}
-          basic
-          inverted
-          href="/logout"
-        >
-          <Icon name="log out" />
-          Logout
+        ) : null} */}
+        {isMobile && (
+          <Button
+            basic
+            inverted
+            onClick={() => window.location.reload()}
+            style={{ marginRight: "10px" }}
+          >
+            <Icon
+              name="refresh"
+              style={{ margin: isMobile ? "0 auto" : "0 10px 0 0" }}
+            />
+          </Button>
+        )}
+        <Button basic inverted href="/logout">
+          <Icon
+            name="log out"
+            style={{ margin: isMobile ? "0 auto" : "0 10px 0 0" }}
+          />
+          {isMobile ? "" : "Logout"}
         </Button>
       </Menu.Item>
     </Menu>
