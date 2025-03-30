@@ -6,6 +6,7 @@ import {
   getWorkoutLogs,
   getExerciseTypes,
   getWorkoutTemplates,
+  getWorkoutPrograms,
 } from "../../actions";
 import HorizontalSlide from "../../../components/Motion/HorizontalSlide";
 import Spinner from "../../../components/Spinner";
@@ -24,11 +25,15 @@ const FitnessLog = ({
   templates,
   templatesLoading,
   getWorkoutTemplates,
+  programs,
+  programsLoading,
+  getWorkoutPrograms,
 }) => {
   useEffect(() => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
     if (!workoutLogs && !logsLoading) getWorkoutLogs();
     if (!templates && !templatesLoading) getWorkoutTemplates();
+    if (!programs && !programsLoading) getWorkoutPrograms();
   }, [
     exerciseTypes,
     exerciseTypesLoading,
@@ -36,6 +41,8 @@ const FitnessLog = ({
     logsLoading,
     templates,
     templatesLoading,
+    programs,
+    programsLoading,
   ]);
 
   const { date } = useParams();
@@ -75,7 +82,11 @@ const FitnessLog = ({
         alignItems: "center",
       }}
     >
-      {logsLoading || exerciseTypesLoading || templatesLoading ? (
+      {logsLoading ||
+      exerciseTypesLoading ||
+      templatesLoading ||
+      programsLoading ||
+      !programs ? (
         <Spinner />
       ) : activeWorkout ? (
         <View activeWorkout={activeWorkout} />
@@ -94,6 +105,8 @@ function mapStateToProps(state) {
     exerciseTypesLoading: state.fitness.typesLoading,
     templates: state.fitness.templates,
     templatesLoading: state.fitness.templatesLoading,
+    programs: state.fitness.programs,
+    programsLoading: state.fitness.programsLoading,
   };
 }
 
@@ -101,4 +114,5 @@ export default connect(mapStateToProps, {
   getWorkoutLogs,
   getExerciseTypes,
   getWorkoutTemplates,
+  getWorkoutPrograms,
 })(FitnessLog);

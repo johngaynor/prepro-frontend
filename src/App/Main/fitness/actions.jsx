@@ -27,6 +27,8 @@ import {
   LOAD_EDIT_WORKOUT_END,
   FETCH_DELETE_WORKOUT,
   LOAD_DELETE_WORKOUT,
+  FETCH_WORKOUT_PROGRAMS,
+  LOAD_WORKOUT_PROGRAMS,
 } from "../../store/actionTypes";
 import API from "../../services/api";
 
@@ -166,5 +168,14 @@ export function changeExercisePosition(direction, exercise) {
     { direction, exercise },
     () => ({ type: LOAD_CHANGE_EXERCISE_POSITION, exercise }),
     () => ({ type: FETCH_CHANGE_EXERCISE_POSITION })
+  );
+}
+
+export function getWorkoutPrograms() {
+  return API.get(
+    "/api/fitness/programs",
+    "Error getting workout programs",
+    (programs) => ({ type: LOAD_WORKOUT_PROGRAMS, programs }),
+    () => ({ type: FETCH_WORKOUT_PROGRAMS })
   );
 }
