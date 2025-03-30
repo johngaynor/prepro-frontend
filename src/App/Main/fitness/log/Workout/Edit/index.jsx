@@ -41,7 +41,7 @@ const EditWorkout = ({
         justifyContent: "center",
       }}
     >
-      {pages[activeIndex].component}
+      {pages[activeIndex || 0].component}
       <Pagination
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}

@@ -31,14 +31,16 @@ const Circle = ({
 const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
   const maxItems = 9;
 
+  const indexToUse = isNaN(activeIndex) ? 0 : activeIndex;
+
   const startPos =
-    data.length - activeIndex < maxItems ? data.length - maxItems : activeIndex;
+    data.length - indexToUse < maxItems ? data.length - maxItems : indexToUse;
   const endPos =
-    activeIndex + maxItems > data.length ? data.length : activeIndex + maxItems;
+    indexToUse + maxItems > data.length ? data.length : indexToUse + maxItems;
 
   const circles = data.map((d, i) => (
     <Circle
-      active={i === activeIndex}
+      active={i === indexToUse}
       key={i}
       completed={
         d.name === "Start"
@@ -74,7 +76,7 @@ const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
       <Button
         icon="step backward"
         size="tiny"
-        onClick={() => setActiveIndex(activeIndex > 0 ? activeIndex - 1 : 0)}
+        onClick={() => setActiveIndex(indexToUse > 0 ? indexToUse - 1 : 0)}
       />
       {items.map((circle, i) => circle)}
       <Button
@@ -82,7 +84,7 @@ const Pagination = ({ data = [], activeIndex = 0, setActiveIndex }) => {
         size="tiny"
         onClick={() =>
           setActiveIndex(
-            activeIndex >= data.length - 1 ? data.length - 1 : activeIndex + 1
+            indexToUse >= data.length - 1 ? data.length - 1 : indexToUse + 1
           )
         }
         style={{ marginLeft: 5 }}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import HorizontalSlide from "../../../components/Motion/HorizontalSlide";
 import {
@@ -6,7 +6,7 @@ import {
   getWorkoutLogs,
   getWorkoutTemplates,
 } from "../../actions";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 import EditWorkout from "./Edit";
 
@@ -21,7 +21,9 @@ const Workout = ({
   templatesLoading,
   getWorkoutTemplates,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [searchParams] = useSearchParams();
+  const activeIndex = parseInt(searchParams.get("activeIndex"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!exerciseTypes && !exerciseTypesLoading) getExerciseTypes();
@@ -43,13 +45,21 @@ const Workout = ({
     ?.filter((l) => l.workoutTemplateId === template?.id)
     .sort((a, b) => b.date.localeCompare(a.date))[1];
 
+  function setActiveIndex(newIndex) {
+    navigate(`/fitness/workout/${id}?activeIndex=${newIndex}`);
+  }
+
   function handleSwipe(direction) {
     if (direction === "left") {
-      if (activeIndex !== 0) {
+      if (isNaN(activeIndex)) {
+        setActiveIndex(0);
+      } else if (activeIndex !== 0) {
         setActiveIndex(activeIndex - 1);
       }
     } else if (direction === "right") {
-      if (activeIndex < workout?.exercises.length + 1) {
+      if (isNaN(activeIndex)) {
+        setActiveIndex(1);
+      } else if (activeIndex < workout?.exercises.length + 1) {
         setActiveIndex(activeIndex + 1);
       }
     }
