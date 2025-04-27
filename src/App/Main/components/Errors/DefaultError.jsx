@@ -85,7 +85,11 @@ const DefaultError = ({ error, user }) => {
           </div>
           <Button
             icon
-            onClick={() => window.location.reload()}
+            onClick={() =>
+              window.location.replace(
+                window.location.pathname + "?reload=" + Date.now()
+              )
+            }
             color="blue"
             style={{ marginTop: 20 }}
           >
