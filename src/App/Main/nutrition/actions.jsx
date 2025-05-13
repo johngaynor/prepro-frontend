@@ -19,13 +19,13 @@ export function getWeightLogs() {
   );
 }
 
-export function editWeightLog(date, weight) {
+export function editWeightLog(date, weight, steps) {
   return API.post(
     "/api/nutrition/weight/logs/log",
     "Error editing weight log",
-    { date, weight },
+    { date, weight, steps },
     (failed) => ({ type: LOAD_EDIT_WEIGHT_LOG, failed }),
-    () => ({ type: FETCH_EDIT_WEIGHT_LOG, date, weight })
+    () => ({ type: FETCH_EDIT_WEIGHT_LOG, date, weight, steps })
   );
 }
 
