@@ -24,8 +24,8 @@ export default (state = DEFAULT_STATE, action) => {
     case LOAD_WEIGHT_LOGS:
       return { ...state, weightLogs: action.weightLogs, logsLoading: false };
     case FETCH_EDIT_WEIGHT_LOG:
-      // delete if weight is empty
-      if (action.weight === "") {
+      // delete if weight and steps is empty
+      if (action.weight === "" && action.steps === "") {
         const newLogs = state.weightLogs.filter((l) => l.date !== action.date);
         return { ...state, weightLogs: newLogs, editLoading: true };
       }
@@ -37,7 +37,7 @@ export default (state = DEFAULT_STATE, action) => {
           ...state,
           weightLogs: [
             ...state.weightLogs,
-            { date: action.date, weight: action.weight },
+            { date: action.date, weight: action.weight, steps: action.steps },
           ],
           editLoading: true,
         };
@@ -45,7 +45,7 @@ export default (state = DEFAULT_STATE, action) => {
         // update existing log
         const newLogs = state.weightLogs.map((l) => {
           if (l.date === action.date) {
-            return { ...l, weight: action.weight };
+            return { ...l, weight: action.weight, steps: action.steps };
           }
           return l;
         });
