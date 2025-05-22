@@ -110,6 +110,7 @@ const WeightLog = ({
             justifyContent: "center",
             position: "relative",
             margin: "20px auto",
+            width: "100%",
           }}
         >
           <Input
@@ -133,7 +134,7 @@ const WeightLog = ({
               }}
             />
           </Input>
-          <h1 style={{ position: "absolute", right: 30, bottom: 0 }}>lbs</h1>
+          <h1 style={{ position: "absolute", right: 25, bottom: 0 }}>lbs</h1>
         </div>
         <div
           style={{
@@ -141,6 +142,7 @@ const WeightLog = ({
             justifyContent: "center",
             position: "relative",
             margin: "20px auto",
+            width: "100%",
           }}
         >
           <Input
@@ -165,7 +167,7 @@ const WeightLog = ({
               }}
             />
           </Input>
-          <h1 style={{ position: "absolute", right: 0, bottom: 0 }}>steps</h1>
+          <h1 style={{ position: "absolute", right: -5, bottom: 0 }}>steps</h1>
         </div>
       </Segment>
     </HorizontalSlide>
