@@ -42,7 +42,7 @@ const DefaultError = ({ error, user }) => {
       <Menu fixed="top" inverted color="blue" size="tiny" secondary>
         <a href="/" className="normal item">
           <Header as="h4" style={{ color: "white" }}>
-            PrePro Labs
+            physiQ
           </Header>
         </a>
         <Menu.Item position="right">
