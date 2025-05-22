@@ -173,6 +173,7 @@ export function DrawLineGraph({
     return dataset.reduce((acc, datapoint, datapointI) => {
       const retArr = [...acc];
       const currentPoint = {
+        flagged: datapoint.flagged,
         value: datapoint.value,
         x: columnSpacing * (datapointI + 2.5),
         y:
@@ -322,7 +323,10 @@ export function DrawLineGraph({
                   strokeWidth={0.5}
                 />
               ) : null}
-              {drawShape(shape, { ...datapoint, color: color })}
+              {drawShape(datapoint.flagged ? "square" : shape, {
+                ...datapoint,
+                color: datapoint.flagged ? "blue" : color,
+              })}
             </G>
           );
         })}
@@ -534,4 +538,27 @@ export function getTime(time) {
   const minutes = Math.floor((absTime - hours) * 60);
 
   return `${sign}${hours}h${minutes}m`;
+}
+
+export function getMax(values) {
+  const filteredValues = values
+    .map((v) => v.value)
+    .filter((v) => v !== null && v !== undefined);
+  return filteredValues.length > 0 ? Math.max(...filteredValues) : null;
+}
+
+export function getMin(values) {
+  const filteredValues = values
+    .map((v) => v.value)
+    .filter((v) => v !== null && v !== undefined);
+  return filteredValues.length > 0 ? Math.min(...filteredValues) : null;
+}
+
+export function getAvg(values) {
+  const filteredValues = values
+    .map((v) => v.value)
+    .filter((v) => v !== null && v !== undefined);
+  return filteredValues.length > 0
+    ? filteredValues.reduce((acc, cur) => acc + cur, 0) / filteredValues.length
+    : null;
 }
