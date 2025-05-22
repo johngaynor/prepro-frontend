@@ -9,22 +9,9 @@ const CheckInDoc = ({
   supplements,
   sleepLogs,
   activeDietLog,
+  options = {},
 }) => {
-  const last7Weight = selectedDay
-    ? Array.from({ length: 7 })
-        .map((_, index) => {
-          const currentDay = DateTime.fromISO(selectedDay.date);
-          const day = currentDay
-            .minus({ days: index })
-            .startOf("day")
-            .toISODate();
-          const log = dailyLogs.find((l) => l.date === day);
-          return { date: day, value: log?.weight || null };
-        })
-        .reverse()
-    : [];
-
-  const last30Weight = selectedDay
+  const last30Logs = selectedDay
     ? Array.from({ length: 30 })
         .map((_, index) => {
           const currentDay = DateTime.fromISO(selectedDay.date);
@@ -33,15 +20,26 @@ const CheckInDoc = ({
             .startOf("day")
             .toISODate();
           const log = dailyLogs.find((l) => l.date === day);
-          return { date: day, value: log?.weight || null };
+          return {
+            date: day,
+            weight: log?.weight || null,
+            steps: log?.steps || null,
+            flagged: index < 7,
+          };
         })
         .reverse()
     : [];
 
+  const last30Steps = last30Logs.map((l) => ({ ...l, value: l.steps }));
+  const last30Weight = last30Logs.map((l) => {
+    const { flagged, weight, date } = l;
+    return { flagged, value: weight, date };
+  });
+
   const lastWeight = dailyLogs.length
     ? dailyLogs.find((l) => l.date === lastCheckIn?.date)?.weight
     : null;
-  const todayWeight = [...last7Weight].reverse()[0]?.value;
+  const todayWeight = [...last30Weight].reverse()[0]?.value;
 
   const last7Supplements =
     supplementLogs &&
@@ -102,14 +100,15 @@ const CheckInDoc = ({
       selectedDay={selectedDay}
       lastWeight={lastWeight}
       todayWeight={todayWeight}
-      last7Weight={last7Weight}
       last30Weight={last30Weight}
+      last30Steps={last30Steps}
       last7Supplements={last7Supplements}
       supplements={supplements}
       supplementLogs={supplementLogs}
       last7Sleep={last7Sleep}
       last30Sleep={last30Sleep}
       activeDietLog={activeDietLog}
+      options={options}
     />
   );
 };

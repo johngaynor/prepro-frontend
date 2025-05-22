@@ -17,7 +17,7 @@ import {
   PDFViewer,
   pdf as reactPDF,
 } from "@react-pdf/renderer";
-import CheckInDoc from "./Pdf/ReportPdf";
+import CheckInDoc from "./Pdf/CheckInDoc";
 import { DateTime } from "luxon";
 import Spinner from "../../components/Spinner";
 import {
@@ -83,7 +83,11 @@ const ReportModal = ({
       const dateB = DateTime.fromISO(b.date);
       return dateA - dateB;
     })
-    .map((l) => ({ date: l.date, weight: parseFloat(l.weight) }));
+    .map((l) => ({
+      date: l.date,
+      weight: parseFloat(l.weight),
+      steps: l.steps,
+    }));
 
   const activeDietLog = dietLogs
     ?.filter((l) => {

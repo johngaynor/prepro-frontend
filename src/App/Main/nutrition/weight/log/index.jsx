@@ -16,6 +16,7 @@ const WeightLog = ({
   editWeightLog,
 }) => {
   const [weight, setWeight] = useState("");
+  const [steps, setSteps] = useState("");
 
   useEffect(() => {
     if (!weightLogs && !logsLoading) getWeightLogs();
@@ -35,6 +36,7 @@ const WeightLog = ({
 
   useEffect(() => {
     setWeight(activeDate?.weight || "");
+    setSteps(activeDate?.steps || "");
   }, [date, activeDate]);
 
   function handleChangeDate(direction) {
@@ -54,8 +56,12 @@ const WeightLog = ({
     async () => {
       // check to see if weight has changed
       const match = weightLogs.find((l) => l.date === date);
-      if ((match && match.weight != weight) || (!match && weight !== "")) {
-        const promise = editWeightLog(date, weight);
+      if (
+        (match && (match.weight != weight || match.steps != steps)) ||
+        (!match && (weight !== "" || steps !== ""))
+      ) {
+        console.log(match, weight, steps);
+        const promise = editWeightLog(date, weight, steps);
         toast.promise(promise, {
           loading: "Saving...",
           success: "Save Complete!",
@@ -68,8 +74,8 @@ const WeightLog = ({
         }
       }
     },
-    [weight],
-    2000
+    [weight, steps],
+    1000
   );
 
   return (
@@ -98,27 +104,69 @@ const WeightLog = ({
         <Header as="h1" style={{ textAlign: "center" }}>
           {DateTime.fromISO(date).toFormat("MMMM dd, yyyy")}
         </Header>
-        <Input
-          value={weight}
-          onChange={(e, { value }) => setWeight(value)}
-          type="number"
-          min={0}
+        <div
           style={{
-            width: "80%",
-            maxWidth: 400,
-            height: 100,
+            display: "flex",
+            justifyContent: "center",
+            position: "relative",
+            margin: "20px auto",
           }}
         >
-          <input
+          <Input
+            value={weight}
+            onChange={(e, { value }) => setWeight(value)}
+            type="number"
+            min={0}
             style={{
-              fontSize: 70,
-              textAlign: "center",
-              borderRadius: 10,
-              padding: 0,
-              border: "1px solid gray",
+              width: "60%",
+              maxWidth: 400,
+              height: 100,
             }}
-          />
-        </Input>
+          >
+            <input
+              style={{
+                fontSize: 70,
+                textAlign: "center",
+                borderRadius: 10,
+                padding: 0,
+                border: "1px solid gray",
+              }}
+            />
+          </Input>
+          <h1 style={{ position: "absolute", right: 30, bottom: 0 }}>lbs</h1>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            position: "relative",
+            margin: "20px auto",
+          }}
+        >
+          <Input
+            value={steps}
+            onChange={(e, { value }) => setSteps(value)}
+            type="number"
+            min={0}
+            style={{
+              width: "60%",
+              maxWidth: 400,
+              height: 100,
+            }}
+            disabled={!weight}
+          >
+            <input
+              style={{
+                fontSize: 70,
+                textAlign: "center",
+                borderRadius: 10,
+                padding: 0,
+                border: "1px solid gray",
+              }}
+            />
+          </Input>
+          <h1 style={{ position: "absolute", right: 0, bottom: 0 }}>steps</h1>
+        </div>
       </Segment>
     </HorizontalSlide>
   );
