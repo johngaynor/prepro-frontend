@@ -28,8 +28,8 @@ const PreFetch = ({
   useEffect(() => {
     if (!sleepLogs && !sleepLogsLoading) getSleepLogs();
     if (!weightLogs && !weightLogsLoading) getWeightLogs();
-    if (!supplements && !supplementsLoading) getSupplements();
-    if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
+    // if (!supplements && !supplementsLoading) getSupplements();
+    // if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
     if (!checkIns && !checkInsLoading) getCheckIns();
   }, []);
 

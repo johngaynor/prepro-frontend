@@ -15,8 +15,8 @@ const SupplementLog = ({
   getSupplementLogs,
 }) => {
   useEffect(() => {
-    if (!supplements && !supplementsLoading) getSupplements();
-    if (!logs && !logsLoading) getSupplementLogs();
+    // if (!supplements && !supplementsLoading) getSupplements();
+    // if (!logs && !logsLoading) getSupplementLogs();
   }, [supplements, supplementsLoading, logs, logsLoading]);
 
   const mainPanes = [

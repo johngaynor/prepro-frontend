@@ -57,8 +57,8 @@ const ReportModal = ({
   const [coachNotes, setCoachNotes] = useState("");
 
   useEffect(() => {
-    if (!supplements && !supplementsLoading) getSupplements();
-    if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
+    // if (!supplements && !supplementsLoading) getSupplements();
+    // if (!supplementLogs && !supplementLogsLoading) getSupplementLogs();
     if (!weightLogs && !weightLogsLoading) getWeightLogs();
     if (!sleepLogs && !sleepLogsLoading) getSleepLogs();
     if (!dietLogs && !dietLogsLoading) getDietLogs();
