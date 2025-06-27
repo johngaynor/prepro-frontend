@@ -10,8 +10,8 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "PrePro Labs",
-        short_name: "PrePro",
+        name: "physiQ",
+        short_name: "physiQ",
         description: "Your AI-powered bodybuilding assistant!",
         theme_color: "#2185d1",
         background_color: "#2185d1",

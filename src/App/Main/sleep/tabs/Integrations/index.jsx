@@ -96,7 +96,7 @@ const SleepIntegrations = ({
               Latest Integrations
               <HeaderSubheader>
                 Integrate with external platforms to consolidate your health
-                data on PreProLabs.
+                data on physiQ.
               </HeaderSubheader>
             </Header>
             {integrations.map((i) => (

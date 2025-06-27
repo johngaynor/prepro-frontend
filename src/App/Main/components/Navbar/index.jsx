@@ -21,7 +21,7 @@ const Navbar = ({ authUser, auth, apps, appsLoading, getApps }) => {
     <Menu fixed="top" inverted color="blue" size="tiny" secondary>
       <Link to="/" className="normal item">
         <Header as="h4" style={{ color: "white" }}>
-          PrePro Labs
+          physiQ
         </Header>
       </Link>
       {helpMenuOpen && (
